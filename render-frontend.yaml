@@ -1,0 +1,11 @@
+services:
+  - type: static
+    name: mangos-frontend
+    env: node
+    rootDir: ./Frontend-master/Frontend-master
+    buildCommand: npm ci && npm run build
+    staticPublishPath: ./dist
+    plan: free
+    envVars:
+      - key: VITE_API_URL
+        value: https://mangos-backend.onrender.com
