@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,16 +22,32 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djiangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-%)bidc1v0ah61r*i(&lmv*_-sj-6kf!flj0#wv61ba$t47)!vo'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-%)bidc1v0ah61r*i(&lmv*_-sj-6kf!flj0#wv61ba$t47)!vo')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
 
 ALLOWED_HOSTS = ['*']
-CORS_ALLOW_ALL_ORIGINS = True
+
+# CORS settings for production
+CORS_ALLOW_ALL_ORIGINS = False  # More secure for production
 CORS_ALLOW_CREDENTIALS = True
-CORS_ORIGIN_ALLOW_ALL = True
-CORS_ALLOW_HEADERS = ['*']
+
+# Specify allowed origins for production
+CORS_ALLOWED_ORIGINS = [
+    "https://mangos-frontend.onrender.com",  # Your actual frontend URL
+    "http://localhost:3000",  # For local development
+    "http://127.0.0.1:3000",
+    "http://localhost:5173",  # Vite dev server
+    "http://127.0.0.1:5173",
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://mangos-frontend.onrender.com",
+    "http://127.0.0.1:3000",
+    "http://localhost:3000",
+    "http://localhost:5173/"
+]
 
 
 # Application definition
@@ -50,6 +67,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # For static files
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -83,16 +101,22 @@ WSGI_APPLICATION = 'configurations.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'mango_db',
-        'USER': 'mangoes_user',
-        'PASSWORD': 'm@1#go$s',
-        'HOST': '43.204.203.153',
-        'PORT': '5432',
+# Use PostgreSQL in production, SQLite in development
+if os.environ.get('DATABASE_URL'):
+    DATABASES = {
+        'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'mango_db',
+            'USER': 'mangoes_user',
+            'PASSWORD': 'm@1#go$s',
+            'HOST': '43.204.203.153',
+            'PORT': '5432',
+        }
+    }
 
 
 # Password validation
@@ -114,28 +138,6 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-
-
-
-CORS_ALLOW_CREDENTIALS = True  # Only if sending cookies/authentication
-CORS_ALLOW_ALL_ORIGINS = True
-
-CSRF_TRUSTED_ORIGINS = [
-    "http://127.0.0.1:3000",
-    "http://localhost:3000",
-    "http://localhost:5173/"
-     
-]
-CORS_ALLOW_ALL_ORIGINS = True
-
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-]
-
-
-
-
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
@@ -151,10 +153,15 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
+STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# Media files
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-STATIC_URL = 'static/'
+# Static files configuration for production
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
