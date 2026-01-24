@@ -7,9 +7,9 @@ services:
   - type: web
     name: mangos-backend
     env: python
-    rootDir: ./AIS-main/AIS-main
+    rootDir: ./MangOS_backend/MangOS
     buildCommand: "./build.sh"
-    startCommand: "gunicorn tally_project.wsgi:application --bind 0.0.0.0:$PORT"
+    startCommand: "gunicorn configurations.wsgi:application --bind 0.0.0.0:$PORT"
     plan: free
     envVars:
       - key: DATABASE_URL
