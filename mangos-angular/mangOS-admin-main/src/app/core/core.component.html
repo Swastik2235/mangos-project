@@ -55,6 +55,13 @@
 					
 					<!-- <a mat-list-item routerLinkActive="active" routerLink="/inventory/category"><mat-icon>view_quilt</mat-icon>Category</a> -->
 				</mat-expansion-panel>
+				<mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false" [expanded]="router.isActive('ais',false)">
+					<mat-expansion-panel-header  [class.active]="router.isActive('ais',false)">
+						<mat-panel-title>
+							<mat-icon>integration_instructions</mat-icon>AIS (Integrations)</mat-panel-title>
+					</mat-expansion-panel-header>
+					<a mat-list-item routerLinkActive="active" routerLink="/ais/zoho-crm"><mat-icon>business</mat-icon>Zoho CRM</a>
+				</mat-expansion-panel>
 				<mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false" [expanded]="router.isActive('document',false)">
 					<mat-expansion-panel-header  [class.active]="router.isActive('document',false)">
 						<mat-panel-title>

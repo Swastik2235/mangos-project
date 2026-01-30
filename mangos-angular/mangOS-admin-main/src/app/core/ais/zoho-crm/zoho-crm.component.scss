@@ -1,0 +1,401 @@
+.zoho-crm-container {
+  padding: 24px;
+  background-color: #f5f5f5;
+  min-height: calc(100vh - 64px);
+
+  .header-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+    background: white;
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+
+    .title-section {
+      h1 {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin: 0 0 8px 0;
+        color: #333;
+        font-weight: 500;
+
+        mat-icon {
+          color: #3f51b5;
+          font-size: 32px;
+          width: 32px;
+          height: 32px;
+        }
+      }
+
+      .subtitle {
+        color: #666;
+        margin: 0;
+        font-size: 16px;
+      }
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 12px;
+
+      button {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 24px;
+        font-weight: 500;
+      }
+    }
+  }
+
+  .loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 64px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+
+    mat-spinner {
+      margin-bottom: 24px;
+    }
+
+    p {
+      color: #666;
+      font-size: 16px;
+    }
+  }
+
+  .auth-required {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+
+    .auth-card {
+      max-width: 500px;
+      text-align: center;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+
+      mat-card-header {
+        mat-card-title {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 12px;
+          color: #3f51b5;
+
+          mat-icon {
+            font-size: 28px;
+            width: 28px;
+            height: 28px;
+          }
+        }
+      }
+
+      mat-card-content {
+        padding: 24px;
+
+        p {
+          font-size: 16px;
+          line-height: 1.6;
+          margin-bottom: 20px;
+        }
+
+        ul {
+          text-align: left;
+          color: #666;
+
+          li {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+
+            &:before {
+              content: '✓';
+              color: #4caf50;
+              font-weight: bold;
+              margin-right: 8px;
+            }
+          }
+        }
+      }
+
+      mat-card-actions {
+        padding: 24px;
+
+        button {
+          padding: 12px 32px;
+          font-size: 16px;
+          font-weight: 500;
+        }
+      }
+    }
+  }
+
+  .main-content {
+    .stats-section {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 24px;
+      margin-bottom: 32px;
+
+      .stat-card {
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        border-radius: 12px;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+        }
+
+        &.contacts {
+          border-left: 4px solid #3f51b5;
+        }
+
+        &.leads {
+          border-left: 4px solid #ff9800;
+        }
+
+        &.deals {
+          border-left: 4px solid #4caf50;
+        }
+
+        &.revenue {
+          border-left: 4px solid #e91e63;
+        }
+
+        mat-card-content {
+          padding: 24px;
+
+          .stat-content {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+
+            mat-icon {
+              font-size: 40px;
+              width: 40px;
+              height: 40px;
+              color: #666;
+            }
+
+            .stat-info {
+              h3 {
+                margin: 0 0 4px 0;
+                font-size: 28px;
+                font-weight: 600;
+                color: #333;
+              }
+
+              p {
+                margin: 0;
+                color: #666;
+                font-size: 14px;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .data-card {
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      border-radius: 12px;
+
+      ::ng-deep .mat-tab-group {
+        .mat-tab-header {
+          border-bottom: 1px solid #e0e0e0;
+
+          .mat-tab-label {
+            padding: 12px 24px;
+            min-width: 160px;
+
+            .mat-tab-label-content {
+              display: flex;
+              align-items: center;
+              gap: 8px;
+
+              mat-icon {
+                font-size: 20px;
+                width: 20px;
+                height: 20px;
+              }
+
+              mat-chip-list {
+                mat-chip {
+                  font-size: 12px;
+                  height: 20px;
+                  line-height: 20px;
+                }
+              }
+            }
+          }
+        }
+
+        .mat-tab-body-wrapper {
+          .tab-content {
+            padding: 24px;
+
+            .tab-header {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              margin-bottom: 24px;
+
+              .search-field {
+                width: 300px;
+              }
+
+              button {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                padding: 12px 24px;
+              }
+            }
+
+            .table-container {
+              background: white;
+              border-radius: 8px;
+              overflow: hidden;
+              box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+
+              .data-table {
+                width: 100%;
+
+                th {
+                  background-color: #fafafa;
+                  font-weight: 600;
+                  color: #333;
+                  border-bottom: 2px solid #e0e0e0;
+                }
+
+                td {
+                  border-bottom: 1px solid #f0f0f0;
+
+                  &.amount-cell {
+                    font-weight: 600;
+                    color: #4caf50;
+                  }
+
+                  .email-link {
+                    color: #3f51b5;
+                    text-decoration: none;
+
+                    &:hover {
+                      text-decoration: underline;
+                    }
+                  }
+
+                  mat-chip {
+                    font-size: 12px;
+                    height: 24px;
+                    line-height: 24px;
+                  }
+
+                  button {
+                    margin: 0 4px;
+
+                    &:first-child {
+                      margin-left: 0;
+                    }
+
+                    &:last-child {
+                      margin-right: 0;
+                    }
+                  }
+                }
+
+                tr:hover {
+                  background-color: #f9f9f9;
+                }
+              }
+
+              mat-paginator {
+                border-top: 1px solid #e0e0e0;
+                background-color: #fafafa;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // Responsive Design
+  @media (max-width: 768px) {
+    padding: 16px;
+
+    .header-section {
+      flex-direction: column;
+      gap: 16px;
+      text-align: center;
+
+      .action-buttons {
+        justify-content: center;
+      }
+    }
+
+    .stats-section {
+      grid-template-columns: 1fr;
+    }
+
+    .main-content .data-card ::ng-deep .mat-tab-group .mat-tab-body-wrapper .tab-content {
+      padding: 16px;
+
+      .tab-header {
+        flex-direction: column;
+        gap: 16px;
+
+        .search-field {
+          width: 100%;
+        }
+      }
+
+      .table-container {
+        overflow-x: auto;
+
+        .data-table {
+          min-width: 600px;
+        }
+      }
+    }
+  }
+}
+
+// Custom color classes for chips
+::ng-deep {
+  .mat-chip.mat-primary {
+    background-color: #3f51b5;
+    color: white;
+  }
+
+  .mat-chip.mat-accent {
+    background-color: #ff9800;
+    color: white;
+  }
+
+  .mat-chip.mat-warn {
+    background-color: #f44336;
+    color: white;
+  }
+
+  .mat-chip.success {
+    background-color: #4caf50;
+    color: white;
+  }
+
+  .mat-chip.info {
+    background-color: #2196f3;
+    color: white;
+  }
+}

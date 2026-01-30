@@ -4,7 +4,11 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'http://127.0.0.1:8000/mosapi/v1/'
+  apiUrl: 'http://127.0.0.1:8000/mosapi/v1/',
+  zoho: {
+    clientId: 'YOUR_ZOHO_CLIENT_ID', // Replace with actual Zoho Client ID
+    clientSecret: 'YOUR_ZOHO_CLIENT_SECRET' // Replace with actual Zoho Client Secret
+  }
 };
 
 /*

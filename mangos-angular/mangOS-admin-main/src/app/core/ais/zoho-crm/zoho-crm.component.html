@@ -1,0 +1,364 @@
+<div class="zoho-crm-container">
+  <!-- Header Section -->
+  <div class="header-section">
+    <div class="title-section">
+      <h1>
+        <mat-icon>business</mat-icon>
+        Zoho CRM Integration
+      </h1>
+      <p class="subtitle">Manage your customer relationships seamlessly within MangOS</p>
+    </div>
+    
+    <div class="action-buttons">
+      <button mat-raised-button color="primary" (click)="refreshData()" *ngIf="isAuthenticated" [disabled]="isLoading">
+        <mat-icon>refresh</mat-icon>
+        Refresh
+      </button>
+      
+      <button mat-raised-button color="accent" (click)="connectToZoho()" *ngIf="!isAuthenticated" [disabled]="isLoading">
+        <mat-icon>link</mat-icon>
+        Connect to Zoho CRM
+      </button>
+      
+      <button mat-raised-button color="warn" (click)="disconnect()" *ngIf="isAuthenticated">
+        <mat-icon>link_off</mat-icon>
+        Disconnect
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div class="loading-container" *ngIf="isLoading">
+    <mat-spinner></mat-spinner>
+    <p>Loading Zoho CRM data...</p>
+  </div>
+
+  <!-- Authentication Required -->
+  <div class="auth-required" *ngIf="!isAuthenticated && !isLoading">
+    <mat-card class="auth-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>security</mat-icon>
+          Authentication Required
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p>To access Zoho CRM features, you need to connect your Zoho account with MangOS.</p>
+        <ul>
+          <li>Secure OAuth 2.0 authentication</li>
+          <li>Access to your Contacts, Leads, and Deals</li>
+          <li>Real-time synchronization</li>
+          <li>Full CRUD operations</li>
+        </ul>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button color="primary" (click)="connectToZoho()">
+          <mat-icon>link</mat-icon>
+          Connect Now
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+
+  <!-- Main Content - Dashboard -->
+  <div class="main-content" *ngIf="isAuthenticated && !isLoading">
+    
+    <!-- Statistics Cards -->
+    <div class="stats-section">
+      <mat-card class="stat-card contacts">
+        <mat-card-content>
+          <div class="stat-content">
+            <mat-icon>contacts</mat-icon>
+            <div class="stat-info">
+              <h3>{{stats.totalContacts}}</h3>
+              <p>Total Contacts</p>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="stat-card leads">
+        <mat-card-content>
+          <div class="stat-content">
+            <mat-icon>person_add</mat-icon>
+            <div class="stat-info">
+              <h3>{{stats.totalLeads}}</h3>
+              <p>Active Leads</p>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="stat-card deals">
+        <mat-card-content>
+          <div class="stat-content">
+            <mat-icon>handshake</mat-icon>
+            <div class="stat-info">
+              <h3>{{stats.totalDeals}}</h3>
+              <p>Open Deals</p>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="stat-card revenue">
+        <mat-card-content>
+          <div class="stat-content">
+            <mat-icon>attach_money</mat-icon>
+            <div class="stat-info">
+              <h3>${{stats.totalRevenue | number:'1.0-0'}}</h3>
+              <p>Total Revenue</p>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Tabs Section -->
+    <mat-card class="data-card">
+      <mat-tab-group (selectedTabChange)="onTabChange($event.index)">
+        
+        <!-- Contacts Tab -->
+        <mat-tab label="Contacts" [badge]="stats.totalContacts">
+          <ng-template mat-tab-label>
+            <mat-icon>contacts</mat-icon>
+            Contacts
+            <mat-chip-list>
+              <mat-chip color="primary" selected>{{stats.totalContacts}}</mat-chip>
+            </mat-chip-list>
+          </ng-template>
+          
+          <div class="tab-content">
+            <div class="tab-header">
+              <mat-form-field appearance="outline" class="search-field">
+                <mat-label>Search Contacts</mat-label>
+                <input matInput (keyup)="applyFilter($event, contactsDataSource)" placeholder="Search by name, email...">
+                <mat-icon matSuffix>search</mat-icon>
+              </mat-form-field>
+              
+              <button mat-raised-button color="primary" (click)="createContact()">
+                <mat-icon>add</mat-icon>
+                Add Contact
+              </button>
+            </div>
+
+            <div class="table-container">
+              <table mat-table [dataSource]="contactsDataSource" matSort class="data-table">
+                <ng-container matColumnDef="First_Name">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>First Name</th>
+                  <td mat-cell *matCellDef="let contact">{{contact.First_Name}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="Last_Name">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Last Name</th>
+                  <td mat-cell *matCellDef="let contact">{{contact.Last_Name}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="Email">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
+                  <td mat-cell *matCellDef="let contact">
+                    <a href="mailto:{{contact.Email}}" class="email-link">{{contact.Email}}</a>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Phone">
+                  <th mat-header-cell *matHeaderCellDef>Phone</th>
+                  <td mat-cell *matCellDef="let contact">{{contact.Phone || 'N/A'}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="Account_Name">
+                  <th mat-header-cell *matHeaderCellDef>Company</th>
+                  <td mat-cell *matCellDef="let contact">{{contact.Account_Name || 'N/A'}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="Created_Time">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Created</th>
+                  <td mat-cell *matCellDef="let contact">{{contact.Created_Time | date:'short'}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="actions">
+                  <th mat-header-cell *matHeaderCellDef>Actions</th>
+                  <td mat-cell *matCellDef="let contact">
+                    <button mat-icon-button color="primary" (click)="editContact(contact)" matTooltip="Edit">
+                      <mat-icon>edit</mat-icon>
+                    </button>
+                    <button mat-icon-button color="warn" (click)="deleteContact(contact)" matTooltip="Delete">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="contactColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: contactColumns;"></tr>
+              </table>
+
+              <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]" showFirstLastButtons></mat-paginator>
+            </div>
+          </div>
+        </mat-tab>
+
+        <!-- Leads Tab -->
+        <mat-tab label="Leads" [badge]="stats.totalLeads">
+          <ng-template mat-tab-label>
+            <mat-icon>person_add</mat-icon>
+            Leads
+            <mat-chip-list>
+              <mat-chip color="accent" selected>{{stats.totalLeads}}</mat-chip>
+            </mat-chip-list>
+          </ng-template>
+          
+          <div class="tab-content">
+            <div class="tab-header">
+              <mat-form-field appearance="outline" class="search-field">
+                <mat-label>Search Leads</mat-label>
+                <input matInput (keyup)="applyFilter($event, leadsDataSource)" placeholder="Search by name, company...">
+                <mat-icon matSuffix>search</mat-icon>
+              </mat-form-field>
+              
+              <button mat-raised-button color="accent">
+                <mat-icon>add</mat-icon>
+                Add Lead
+              </button>
+            </div>
+
+            <div class="table-container">
+              <table mat-table [dataSource]="leadsDataSource" matSort class="data-table">
+                <ng-container matColumnDef="First_Name">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>First Name</th>
+                  <td mat-cell *matCellDef="let lead">{{lead.First_Name}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="Last_Name">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Last Name</th>
+                  <td mat-cell *matCellDef="let lead">{{lead.Last_Name}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="Email">
+                  <th mat-header-cell *matHeaderCellDef>Email</th>
+                  <td mat-cell *matCellDef="let lead">
+                    <a href="mailto:{{lead.Email}}" class="email-link">{{lead.Email}}</a>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Company">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Company</th>
+                  <td mat-cell *matCellDef="let lead">{{lead.Company}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="Lead_Status">
+                  <th mat-header-cell *matHeaderCellDef>Status</th>
+                  <td mat-cell *matCellDef="let lead">
+                    <mat-chip [color]="getLeadStatusColor(lead.Lead_Status)" selected>
+                      {{lead.Lead_Status || 'New'}}
+                    </mat-chip>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Created_Time">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Created</th>
+                  <td mat-cell *matCellDef="let lead">{{lead.Created_Time | date:'short'}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="actions">
+                  <th mat-header-cell *matHeaderCellDef>Actions</th>
+                  <td mat-cell *matCellDef="let lead">
+                    <button mat-icon-button color="primary" matTooltip="Edit">
+                      <mat-icon>edit</mat-icon>
+                    </button>
+                    <button mat-icon-button color="accent" matTooltip="Convert to Deal">
+                      <mat-icon>trending_up</mat-icon>
+                    </button>
+                  </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="leadColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: leadColumns;"></tr>
+              </table>
+
+              <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]" showFirstLastButtons></mat-paginator>
+            </div>
+          </div>
+        </mat-tab>
+
+        <!-- Deals Tab -->
+        <mat-tab label="Deals" [badge]="stats.totalDeals">
+          <ng-template mat-tab-label>
+            <mat-icon>handshake</mat-icon>
+            Deals
+            <mat-chip-list>
+              <mat-chip color="warn" selected>{{stats.totalDeals}}</mat-chip>
+            </mat-chip-list>
+          </ng-template>
+          
+          <div class="tab-content">
+            <div class="tab-header">
+              <mat-form-field appearance="outline" class="search-field">
+                <mat-label>Search Deals</mat-label>
+                <input matInput (keyup)="applyFilter($event, dealsDataSource)" placeholder="Search by deal name, account...">
+                <mat-icon matSuffix>search</mat-icon>
+              </mat-form-field>
+              
+              <button mat-raised-button color="warn">
+                <mat-icon>add</mat-icon>
+                Add Deal
+              </button>
+            </div>
+
+            <div class="table-container">
+              <table mat-table [dataSource]="dealsDataSource" matSort class="data-table">
+                <ng-container matColumnDef="Deal_Name">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Deal Name</th>
+                  <td mat-cell *matCellDef="let deal">{{deal.Deal_Name}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="Account_Name">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Account</th>
+                  <td mat-cell *matCellDef="let deal">{{deal.Account_Name}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="Stage">
+                  <th mat-header-cell *matHeaderCellDef>Stage</th>
+                  <td mat-cell *matCellDef="let deal">
+                    <mat-chip [color]="getDealStageColor(deal.Stage)" selected>
+                      {{deal.Stage}}
+                    </mat-chip>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Amount">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Amount</th>
+                  <td mat-cell *matCellDef="let deal" class="amount-cell">
+                    ${{deal.Amount | number:'1.2-2'}}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Closing_Date">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Closing Date</th>
+                  <td mat-cell *matCellDef="let deal">{{deal.Closing_Date | date:'mediumDate'}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="actions">
+                  <th mat-header-cell *matHeaderCellDef>Actions</th>
+                  <td mat-cell *matCellDef="let deal">
+                    <button mat-icon-button color="primary" matTooltip="Edit">
+                      <mat-icon>edit</mat-icon>
+                    </button>
+                    <button mat-icon-button color="accent" matTooltip="View Details">
+                      <mat-icon>visibility</mat-icon>
+                    </button>
+                  </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="dealColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: dealColumns;"></tr>
+              </table>
+
+              <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]" showFirstLastButtons></mat-paginator>
+            </div>
+          </div>
+        </mat-tab>
+
+      </mat-tab-group>
+    </mat-card>
+  </div>
+</div>

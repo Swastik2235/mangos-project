@@ -11,6 +11,7 @@ const routes: Routes = [
 			{ path: 'project', loadChildren: () => import('./project/project.module').then(m => m.ProjectModule) },
 			{ path: 'organization', loadChildren: () => import('./organization/organization.module').then(m => m.OrganizationModule) },
 			{ path: 'inventory', loadChildren: () => import('./inventory/inventory.module').then(m => m.InventoryModule) },
+			{ path: 'ais', loadChildren: () => import('./ais/ais.module').then(m => m.AisModule) },
 			{ path: '', loadChildren: () => import('./default/default.module').then(m => m.DefaultModule) },
 		]
 	},
