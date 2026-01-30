@@ -38,7 +38,6 @@ import {
   Link,
   LinkOff,
 } from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
 
 // Types for Zoho CRM data
 interface ZohoContact {
@@ -79,8 +78,6 @@ interface Stats {
 }
 
 const ZohoCRM: React.FC = () => {
-  const navigate = useNavigate();
-  
   // State management
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
