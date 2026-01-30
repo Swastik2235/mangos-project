@@ -182,7 +182,14 @@ const isRegester = location.pathname === "/regester";
                 <ZohoCRM />
               </ProtectedRoute>
             } />
-            <Route path="/zoho-oauth-callback" element={<ZohoCRM />} />
+            <Route path="/zoho-oauth-callback" element={
+              <div style={{ padding: '20px', textAlign: 'center' }}>
+                <h1>OAuth Callback Route Working!</h1>
+                <p>URL: {window.location.href}</p>
+                <p>Search: {window.location.search}</p>
+                <ZohoCRM />
+              </div>
+            } />
 
 
 
