@@ -38,37 +38,7 @@ import {
   Link,
   LinkOff,
 } from '@mui/icons-material';
-
-// Types for Zoho CRM data
-interface ZohoContact {
-  id?: string;
-  First_Name: string;
-  Last_Name: string;
-  Email: string;
-  Phone?: string;
-  Account_Name?: string;
-  Created_Time?: string;
-}
-
-interface ZohoLead {
-  id?: string;
-  First_Name: string;
-  Last_Name: string;
-  Email: string;
-  Company: string;
-  Lead_Status?: string;
-  Created_Time?: string;
-}
-
-interface ZohoDeal {
-  id?: string;
-  Deal_Name: string;
-  Account_Name: string;
-  Stage: string;
-  Amount: number;
-  Closing_Date: string;
-  Created_Time?: string;
-}
+import zohoCrmService, { ZohoContact, ZohoLead, ZohoDeal } from '../../services/zohoCrmService';
 
 interface Stats {
   totalContacts: number;
@@ -99,45 +69,58 @@ const ZohoCRM: React.FC = () => {
   const [contactSearch, setContactSearch] = useState('');
   const [leadSearch, setLeadSearch] = useState('');
   const [dealSearch, setDealSearch] = useState('');
-  
-  // Dialog state
-  const [setupDialog, setSetupDialog] = useState(false);
 
   useEffect(() => {
     checkAuthentication();
+    handleOAuthCallback();
   }, []);
 
   const checkAuthentication = () => {
-    const token = localStorage.getItem('zoho_access_token');
-    if (token) {
-      setIsAuthenticated(true);
+    const isAuth = zohoCrmService.isAuthenticated();
+    setIsAuthenticated(isAuth);
+    if (isAuth) {
       loadAllData();
     }
   };
 
-  const connectToZoho = () => {
-    setSetupDialog(true);
+  const handleOAuthCallback = () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get('code');
+    
+    if (code) {
+      exchangeCodeForToken(code);
+    }
   };
 
-  const handleZohoSetup = () => {
-    // For now, we'll simulate the connection
-    // In a real implementation, this would redirect to Zoho OAuth
+  const connectToZoho = () => {
+    const authUrl = zohoCrmService.getAuthorizationUrl();
+    window.location.href = authUrl;
+  };
+
+  const exchangeCodeForToken = async (code: string) => {
     setIsLoading(true);
-    
-    // Simulate API call delay
-    setTimeout(() => {
-      // Mock successful connection
-      localStorage.setItem('zoho_access_token', 'mock-token-' + Date.now());
-      setIsAuthenticated(true);
-      setSetupDialog(false);
+    try {
+      const response = await zohoCrmService.exchangeCodeForToken(code);
+      if (response.access_token) {
+        zohoCrmService.setAccessToken(response.access_token);
+        if (response.refresh_token) {
+          localStorage.setItem('zoho_refresh_token', response.refresh_token);
+        }
+        setIsAuthenticated(true);
+        loadAllData();
+        // Clean up URL
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }
+    } catch (error) {
+      console.error('OAuth error:', error);
+      setError('Failed to connect to Zoho CRM. Please try again.');
+    } finally {
       setIsLoading(false);
-      loadMockData();
-    }, 2000);
+    }
   };
 
   const disconnect = () => {
-    localStorage.removeItem('zoho_access_token');
-    localStorage.removeItem('zoho_refresh_token');
+    zohoCrmService.logout();
     setIsAuthenticated(false);
     setContacts([]);
     setLeads([]);
@@ -150,92 +133,74 @@ const ZohoCRM: React.FC = () => {
     });
   };
 
-  const loadAllData = () => {
-    loadMockData(); // In real implementation, this would call Zoho APIs
-  };
-
-  const loadMockData = () => {
-    // Mock data for demonstration
-    const mockContacts: ZohoContact[] = [
-      {
-        id: '1',
-        First_Name: 'John',
-        Last_Name: 'Doe',
-        Email: 'john.doe@example.com',
-        Phone: '+1-555-0123',
-        Account_Name: 'Acme Corp',
-        Created_Time: new Date().toISOString()
-      },
-      {
-        id: '2',
-        First_Name: 'Jane',
-        Last_Name: 'Smith',
-        Email: 'jane.smith@example.com',
-        Phone: '+1-555-0124',
-        Account_Name: 'Tech Solutions',
-        Created_Time: new Date().toISOString()
-      }
-    ];
-
-    const mockLeads: ZohoLead[] = [
-      {
-        id: '1',
-        First_Name: 'Mike',
-        Last_Name: 'Johnson',
-        Email: 'mike.johnson@prospect.com',
-        Company: 'Future Industries',
-        Lead_Status: 'Qualified',
-        Created_Time: new Date().toISOString()
-      },
-      {
-        id: '2',
-        First_Name: 'Sarah',
-        Last_Name: 'Wilson',
-        Email: 'sarah.wilson@newco.com',
-        Company: 'New Company',
-        Lead_Status: 'Working',
-        Created_Time: new Date().toISOString()
-      }
-    ];
-
-    const mockDeals: ZohoDeal[] = [
-      {
-        id: '1',
-        Deal_Name: 'Manufacturing Equipment Deal',
-        Account_Name: 'Acme Corp',
-        Stage: 'Proposal',
-        Amount: 50000,
-        Closing_Date: '2026-03-15',
-        Created_Time: new Date().toISOString()
-      },
-      {
-        id: '2',
-        Deal_Name: 'Software Integration Project',
-        Account_Name: 'Tech Solutions',
-        Stage: 'Negotiation',
-        Amount: 25000,
-        Closing_Date: '2026-02-28',
-        Created_Time: new Date().toISOString()
-      }
-    ];
-
-    setContacts(mockContacts);
-    setLeads(mockLeads);
-    setDeals(mockDeals);
-    setStats({
-      totalContacts: mockContacts.length,
-      totalLeads: mockLeads.length,
-      totalDeals: mockDeals.length,
-      totalRevenue: mockDeals.reduce((sum, deal) => sum + deal.Amount, 0)
-    });
-  };
-
-  const refreshData = () => {
+  const loadAllData = async () => {
     setIsLoading(true);
-    setTimeout(() => {
-      loadAllData();
+    try {
+      await Promise.all([
+        loadContacts(),
+        loadLeads(),
+        loadDeals()
+      ]);
+    } catch (error) {
+      console.error('Error loading data:', error);
+      setError('Failed to load CRM data. Please try refreshing.');
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
+  };
+
+  const loadContacts = async () => {
+    try {
+      const response = await zohoCrmService.getContacts();
+      if (response.data) {
+        setContacts(response.data);
+        setStats(prev => ({ ...prev, totalContacts: response.data.length }));
+      }
+    } catch (error) {
+      console.error('Error loading contacts:', error);
+      if (error instanceof Error && error.message === 'Authentication expired') {
+        setIsAuthenticated(false);
+      }
+    }
+  };
+
+  const loadLeads = async () => {
+    try {
+      const response = await zohoCrmService.getLeads();
+      if (response.data) {
+        setLeads(response.data);
+        setStats(prev => ({ ...prev, totalLeads: response.data.length }));
+      }
+    } catch (error) {
+      console.error('Error loading leads:', error);
+      if (error instanceof Error && error.message === 'Authentication expired') {
+        setIsAuthenticated(false);
+      }
+    }
+  };
+
+  const loadDeals = async () => {
+    try {
+      const response = await zohoCrmService.getDeals();
+      if (response.data) {
+        setDeals(response.data);
+        const totalRevenue = response.data.reduce((sum: number, deal: any) => sum + (deal.Amount || 0), 0);
+        setStats(prev => ({ 
+          ...prev, 
+          totalDeals: response.data.length,
+          totalRevenue 
+        }));
+      }
+    } catch (error) {
+      console.error('Error loading deals:', error);
+      if (error instanceof Error && error.message === 'Authentication expired') {
+        setIsAuthenticated(false);
+      }
+    }
+  };
+
+  const refreshData = async () => {
+    await loadAllData();
   };
 
   const getStatusColor = (status: string) => {
@@ -313,46 +278,15 @@ const ZohoCRM: React.FC = () => {
             <Button
               variant="contained"
               size="large"
-              startIcon={<Link />}
+              startIcon={isLoading ? <CircularProgress size={20} color="inherit" /> : <Link />}
               onClick={connectToZoho}
+              disabled={isLoading}
               sx={{ mt: 2 }}
             >
-              Connect to Zoho CRM
+              {isLoading ? 'Connecting...' : 'Connect to Zoho CRM'}
             </Button>
           </CardContent>
         </Card>
-
-        {/* Setup Dialog */}
-        <Dialog open={setupDialog} onClose={() => setSetupDialog(false)} maxWidth="sm" fullWidth>
-          <DialogTitle>Connect to Zoho CRM</DialogTitle>
-          <DialogContent>
-            <Alert severity="info" sx={{ mb: 2 }}>
-              This is a demo implementation. In production, you would need to:
-            </Alert>
-            <Typography variant="body2" component="div">
-              <ol>
-                <li>Create a Zoho Developer account</li>
-                <li>Set up OAuth 2.0 credentials</li>
-                <li>Configure redirect URIs</li>
-                <li>Implement proper authentication flow</li>
-              </ol>
-            </Typography>
-            <Typography variant="body2" sx={{ mt: 2 }}>
-              For now, click "Connect" to see the demo with sample data.
-            </Typography>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setSetupDialog(false)}>Cancel</Button>
-            <Button 
-              variant="contained" 
-              onClick={handleZohoSetup}
-              disabled={isLoading}
-              startIcon={isLoading ? <CircularProgress size={20} /> : <Link />}
-            >
-              {isLoading ? 'Connecting...' : 'Connect'}
-            </Button>
-          </DialogActions>
-        </Dialog>
       </Box>
     );
   }
