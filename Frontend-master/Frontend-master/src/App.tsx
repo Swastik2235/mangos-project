@@ -178,7 +178,6 @@ const isRegester = location.pathname === "/regester";
             <Route path="/new-project-file" element={<NewProjectFile />} />
             <Route path="/new-project-file2" element={<NewProjectFile2 />} />
             <Route path="/zoho-crm" element={<ZohoCRMWrapper />} />
-            <Route path="/zoho-oauth-callback" element={<ZohoCRMWrapper />} />
 
 
 
