@@ -75,19 +75,32 @@ class ZohoCrmService {
       code: code
     });
 
+    console.log('Token exchange request:', {
+      url: `${this.authUrl}/token`,
+      clientId: this.config.clientId,
+      redirectUri: this.config.redirectUri
+    });
+
     const response = await fetch(`${this.authUrl}/token`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Accept': 'application/json'
       },
       body: body.toString()
     });
 
+    console.log('Token exchange response status:', response.status);
+
     if (!response.ok) {
-      throw new Error(`Token exchange failed: ${response.statusText}`);
+      const errorText = await response.text();
+      console.error('Token exchange error:', errorText);
+      throw new Error(`Token exchange failed: ${response.status} ${response.statusText} - ${errorText}`);
     }
 
-    return response.json();
+    const result = await response.json();
+    console.log('Token exchange success:', result);
+    return result;
   }
 
   async refreshAccessToken(refreshToken: string): Promise<any> {

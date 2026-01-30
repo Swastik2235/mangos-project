@@ -83,6 +83,14 @@ const ZohoCRM: React.FC = () => {
   const handleOAuthCallback = () => {
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get('code');
+    const error = urlParams.get('error');
+    
+    console.log('OAuth callback - code:', code, 'error:', error);
+    
+    if (error) {
+      setError(`OAuth error: ${error}`);
+      return;
+    }
     
     if (code) {
       exchangeCodeForToken(code);
@@ -96,21 +104,28 @@ const ZohoCRM: React.FC = () => {
 
   const exchangeCodeForToken = async (code: string) => {
     setIsLoading(true);
+    setError(''); // Clear any previous errors
+    
     try {
+      console.log('Exchanging code for token...');
       const response = await zohoCrmService.exchangeCodeForToken(code);
+      console.log('Token exchange response:', response);
+      
       if (response.access_token) {
         zohoCrmService.setAccessToken(response.access_token);
         if (response.refresh_token) {
           localStorage.setItem('zoho_refresh_token', response.refresh_token);
         }
         setIsAuthenticated(true);
-        loadAllData();
+        await loadAllData();
         // Clean up URL
         window.history.replaceState({}, document.title, window.location.pathname);
+      } else {
+        throw new Error('No access token received');
       }
     } catch (error) {
       console.error('OAuth error:', error);
-      setError('Failed to connect to Zoho CRM. Please try again.');
+      setError(`Failed to connect to Zoho CRM: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setIsLoading(false);
     }
@@ -236,6 +251,26 @@ const ZohoCRM: React.FC = () => {
   );
 
   if (!isAuthenticated) {
+    // Check if we're in the middle of OAuth callback processing
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get('code');
+    
+    if (code && isLoading) {
+      return (
+        <Box sx={{ p: 3, display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
+          <Card sx={{ p: 4, textAlign: 'center' }}>
+            <CircularProgress size={60} sx={{ mb: 2 }} />
+            <Typography variant="h6" gutterBottom>
+              Connecting to Zoho CRM...
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              Please wait while we complete the authentication process.
+            </Typography>
+          </Card>
+        </Box>
+      );
+    }
+
     return (
       <Box sx={{ p: 3 }}>
         {/* Header */}
