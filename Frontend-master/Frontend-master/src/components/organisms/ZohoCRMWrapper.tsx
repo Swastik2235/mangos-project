@@ -8,9 +8,16 @@ const ZohoCRMWrapper: React.FC = () => {
   const urlParams = new URLSearchParams(location.search);
   const hasOAuthCode = urlParams.get('code');
 
+  console.log('ZohoCRMWrapper - path:', location.pathname, 'hasCode:', !!hasOAuthCode);
+
   // If there's an OAuth code, don't require authentication (OAuth callback)
   if (hasOAuthCode) {
-    return <ZohoCRM />;
+    return (
+      <div style={{ padding: '20px' }}>
+        <h3>Processing OAuth callback...</h3>
+        <ZohoCRM />
+      </div>
+    );
   }
 
   // Otherwise, require authentication

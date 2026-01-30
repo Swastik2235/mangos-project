@@ -48,7 +48,6 @@ import JobCart from './pages/Admin/JobCart';
 import InputTable from './components/features/InputTable';
 import Project from './pages/Admin/Project';
 import ZohoCRMWrapper from './components/organisms/ZohoCRMWrapper';
-import ZohoCRM from './pages/Admin/ZohoCRM';
 
 import Login from './components/organisms/login/login';
 // import ProtectedRoute from './components/organisms/ProtectedRoute';
@@ -179,13 +178,6 @@ const isRegester = location.pathname === "/regester";
             <Route path="/new-project-file" element={<NewProjectFile />} />
             <Route path="/new-project-file2" element={<NewProjectFile2 />} />
             <Route path="/zoho-crm" element={<ZohoCRMWrapper />} />
-            <Route path="/zoho-oauth-callback" element={
-              <div style={{ padding: '20px', textAlign: 'center' }}>
-                <h1>OAuth Callback Route Working!</h1>
-                <p>URL: {window.location.href}</p>
-                <ZohoCRM />
-              </div>
-            } />
 
 
 
