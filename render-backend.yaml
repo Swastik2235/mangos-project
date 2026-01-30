@@ -24,3 +24,7 @@ services:
         value: false
       - key: ALLOWED_HOSTS
         value: "*"
+      - key: ZOHO_CLIENT_ID
+        value: "1000.41SOIG7073OKN5GHZHE8EASX1VXQ2S"
+      - key: ZOHO_CLIENT_SECRET
+        value: "054329d1f2ecf830767fdf782dd97b96126bf50228"
