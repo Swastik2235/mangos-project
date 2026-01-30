@@ -78,6 +78,7 @@ interface MenuProps {
 export const menuItems = [
   { text: 'MIS Dashboard', icon: <Home />, path: '/mis-dashboard', title: "MIS Dashboard" },
   { text: 'AIS Dashboard', icon: <Home />, path: '/', title: "Dashboard" },
+  { text: 'Zoho CRM', icon: <Home />, path: '/zoho-crm', title: "Zoho CRM" },
   {
     text: "Masters",
     icon: <Storage />,
