@@ -36,9 +36,34 @@ export class SignupComponent implements OnInit {
   constructor(private zone: NgZone, private spinner:NgxSpinnerService,private dialog:MatDialog,private fb: FormBuilder, private auth: AuthenticationService, private router:Router, private route:ActivatedRoute) {
     console.log("Hello Signup")
     this.currentYear = new Date().getFullYear();
-    this.auth.getAPI('country/').subscribe(result=>{
-      this.countryList = result['results']
-    })
+    
+    // Hardcoded country list as fallback since backend doesn't have country endpoint
+    this.countryList = [
+      { id: 1, code: '91', code3: 'IND', name: 'India' },
+      { id: 2, code: '1', code3: 'USA', name: 'United States' },
+      { id: 3, code: '44', code3: 'GBR', name: 'United Kingdom' },
+      { id: 4, code: '61', code3: 'AUS', name: 'Australia' },
+      { id: 5, code: '49', code3: 'DEU', name: 'Germany' },
+      { id: 6, code: '33', code3: 'FRA', name: 'France' },
+      { id: 7, code: '81', code3: 'JPN', name: 'Japan' },
+      { id: 8, code: '86', code3: 'CHN', name: 'China' },
+      { id: 9, code: '7', code3: 'RUS', name: 'Russia' },
+      { id: 10, code: '55', code3: 'BRA', name: 'Brazil' }
+    ];
+    
+    // Try to fetch from API, but use fallback if it fails
+    this.auth.getAPI('country/').subscribe(
+      result => {
+        if (result && result['results'] && result['results'].length > 0) {
+          this.countryList = result['results'];
+        }
+      },
+      error => {
+        console.log('Country API not available, using fallback list');
+        // countryList is already set above as fallback
+      }
+    );
+    
     var domain = window.location.host
     var protocol = window.location.protocol
     // this.loginUrl = protocol+'//'+domain+'/login'

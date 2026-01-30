@@ -47,10 +47,13 @@
                             <div class="signinform">
                                 <mat-form-field appearance="outline" class="c-code">
                                     <mat-label>Country</mat-label>
-                                    <mat-select formControlName="country">
-                                      <mat-option *ngFor="let country of countryList" [value]="country.id">+{{country.code}} | {{country.code3}}</mat-option>
+                                    <mat-select formControlName="country" placeholder="Select Country">
+                                      <mat-option *ngFor="let country of countryList" [value]="country.id">
+                                        +{{country.code}} | {{country.code3}} - {{country.name || country.code3}}
+                                      </mat-option>
                                     </mat-select>
-                                    <mat-error class="fontSizee" *ngIf="signupForm.controls['country'].hasError('required')"><strong>required</strong>
+                                    <mat-error class="fontSizee" *ngIf="signupForm.controls['country'].hasError('required')">
+                                      Country is <strong>required</strong>
                                     </mat-error>
                                 </mat-form-field>
                                 <mat-form-field class="example-full-width" appearance="outline" class="m-num">
