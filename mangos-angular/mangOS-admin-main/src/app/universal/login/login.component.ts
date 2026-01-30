@@ -34,6 +34,9 @@ export class LoginComponent implements OnInit {
 				designation: 'Plant' // Use the designation from create_employee command
 			};
 			
+			console.log('Attempting login with:', loginData);
+			console.log('API URL will be:', 'user/login-user/');
+			
 			this.auth.postAPI('user/login-user/', loginData).subscribe(data => {
 				console.log('Login response:', data);
 				
@@ -61,15 +64,27 @@ export class LoginComponent implements OnInit {
 				
 				this.router.navigate(['']);
 			}, error => {
-				console.error('Login error:', error);
+				console.error('Login error details:', error);
+				console.error('Error status:', error.status);
+				console.error('Error message:', error.message);
+				console.error('Error response:', error.error);
+				
 				if (error.error && error.error.error) {
 					this.errors = error.error.error;
 				} else if (error.error && error.error.detail) {
 					this.errors = error.error.detail;
+				} else if (error.status === 0) {
+					this.errors = 'Cannot connect to server. Please check if the backend is running.';
+				} else if (error.status === 404) {
+					this.errors = 'Login endpoint not found. Please check API configuration.';
+				} else if (error.status === 500) {
+					this.errors = 'Server error. Please try again later.';
 				} else {
 					this.errors = 'Login failed. Please check your credentials.';
 				}
 			});
+		} else {
+			console.log('Form is invalid:', this.loginForm.errors);
 		}
 	}
 }
