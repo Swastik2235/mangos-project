@@ -34,7 +34,7 @@ import {
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom'; // React Router for navigation
 import logo from '../../assets/logo.png';
-import { Build, ExpandLess, ExpandMore, Inventory, Person ,Construction,Engineering,Store,Storage } from '@mui/icons-material';
+import { Build, ExpandLess, ExpandMore, Inventory, Person ,Construction,Engineering,Store,Storage, Business } from '@mui/icons-material';
 import GroupIcon from '@mui/icons-material/Group';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import LayersIcon from '@mui/icons-material/Layers';
@@ -78,6 +78,15 @@ interface MenuProps {
 export const menuItems = [
   { text: 'MIS Dashboard', icon: <Home />, path: '/mis-dashboard', title: "MIS Dashboard" },
   { text: 'AIS Dashboard', icon: <Home />, path: '/', title: "Dashboard" },
+  {
+    text: "AIS (Integrations)",
+    icon: <Network />,
+    path: "/ais",
+    title: "AIS Integrations",
+    submenu: [
+      { text: "Zoho CRM", path: "/zoho-crm", icon: <Business /> },
+    ],
+  },
   {
     text: "Masters",
     icon: <Storage />,
@@ -179,6 +188,7 @@ const Menu: FC<MenuProps> = ({ mobileOpen = false, onClose  }) => {
   const [openInventory, setOpenInventory] = useState(false);
   const [openMachine, setOpenMachine] = useState(false);
   const [openProjects, setOpenProjects] = useState(false);
+  const [openAIS, setOpenAIS] = useState(false);
 
   const [activePath, setActivePath] = useState(window.location.pathname);
   const [isCreateProjectActive, setCreateProjectActive] = useState(false);
@@ -186,6 +196,11 @@ const Menu: FC<MenuProps> = ({ mobileOpen = false, onClose  }) => {
     setOpenMasters(!openMasters);
     setActivePath('/masters'); // Ensure "Masters" is marked active when clicked
     
+  };
+  
+  const handleAISClick = () => {
+    setOpenAIS(!openAIS);
+    setActivePath('/ais');
   };
   const handleMachineClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     event.stopPropagation(); // Prevents the click from triggering parent handlers
@@ -270,8 +285,32 @@ const Menu: FC<MenuProps> = ({ mobileOpen = false, onClose  }) => {
       )}
 
       {/* Masters Menu with Multiple Submenus */}
+     {/* AIS (Integrations) */}
+            {item.text === "AIS (Integrations)" && item.submenu ? (
+              <>
+                <ListItem disablePadding sx={{ borderRadius: 2 }} onClick={handleAISClick}>
+                  <ListItemButton sx={{ display: "flex", justifyContent: "space-between" }}>
+                    <Box sx={{ display: "flex" }}>
+                      <ListItemIcon sx={{ minWidth: 0, mr: 1 }}>{item.icon}</ListItemIcon>
+                      <Typography sx={{ fontSize: "14px" }}>{item.text}</Typography>
+                    </Box>
+                    {openAIS ? <ExpandLess /> : <ExpandMore />}
+                  </ListItemButton>
+                </ListItem>
+                <Collapse in={openAIS} timeout="auto" unmountOnExit>
+                  <List component="div" disablePadding>
+                    {item.submenu.map((subItem, subIndex) => (
+                      <ListItemButton key={subIndex} sx={{ pl: 4 }} onClick={() => navigate(subItem.path)}>
+                        <ListItemIcon sx={{ minWidth: 0, mr: 1 }}>{subItem.icon}</ListItemIcon>
+                        <Typography sx={{ fontSize: "14px" }}>{subItem.text}</Typography>
+                      </ListItemButton>
+                    ))}
+                  </List>
+                </Collapse>
+              </>
+            ) : 
      {/* Masters */}
-            {item.text === "Masters" && item.submenu ? (
+            item.text === "Masters" && item.submenu ? (
               <>
                 <ListItem disablePadding sx={{ borderRadius: 2 }} onClick={handleMastersClick}>
                   <ListItemButton sx={{ display: "flex", justifyContent: "space-between" }}>
