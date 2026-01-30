@@ -177,7 +177,11 @@ const isRegester = location.pathname === "/regester";
             <Route path="/input-table" element={<InputTable />} />
             <Route path="/new-project-file" element={<NewProjectFile />} />
             <Route path="/new-project-file2" element={<NewProjectFile2 />} />
-            <Route path="/zoho-crm" element={<ZohoCRM />} />
+            <Route path="/zoho-crm" element={
+              <ProtectedRoute>
+                <ZohoCRM />
+              </ProtectedRoute>
+            } />
 
 
 
