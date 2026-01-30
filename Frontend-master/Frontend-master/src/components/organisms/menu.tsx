@@ -284,33 +284,30 @@ const Menu: FC<MenuProps> = ({ mobileOpen = false, onClose  }) => {
         />
       )}
 
-      {/* Masters Menu with Multiple Submenus */}
-     {/* AIS (Integrations) */}
-            {item.text === "AIS (Integrations)" && item.submenu ? (
-              <>
-                <ListItem disablePadding sx={{ borderRadius: 2 }} onClick={handleAISClick}>
-                  <ListItemButton sx={{ display: "flex", justifyContent: "space-between" }}>
-                    <Box sx={{ display: "flex" }}>
-                      <ListItemIcon sx={{ minWidth: 0, mr: 1 }}>{item.icon}</ListItemIcon>
-                      <Typography sx={{ fontSize: "14px" }}>{item.text}</Typography>
-                    </Box>
-                    {openAIS ? <ExpandLess /> : <ExpandMore />}
-                  </ListItemButton>
-                </ListItem>
-                <Collapse in={openAIS} timeout="auto" unmountOnExit>
-                  <List component="div" disablePadding>
-                    {item.submenu.map((subItem, subIndex) => (
-                      <ListItemButton key={subIndex} sx={{ pl: 4 }} onClick={() => navigate(subItem.path)}>
-                        <ListItemIcon sx={{ minWidth: 0, mr: 1 }}>{subItem.icon}</ListItemIcon>
-                        <Typography sx={{ fontSize: "14px" }}>{subItem.text}</Typography>
-                      </ListItemButton>
-                    ))}
-                  </List>
-                </Collapse>
-              </>
-            ) : 
-     {/* Masters */}
-            item.text === "Masters" && item.submenu ? (
+      {/* Menu Items with Conditional Rendering */}
+      {item.text === "AIS (Integrations)" && item.submenu ? (
+        <>
+          <ListItem disablePadding sx={{ borderRadius: 2 }} onClick={handleAISClick}>
+            <ListItemButton sx={{ display: "flex", justifyContent: "space-between" }}>
+              <Box sx={{ display: "flex" }}>
+                <ListItemIcon sx={{ minWidth: 0, mr: 1 }}>{item.icon}</ListItemIcon>
+                <Typography sx={{ fontSize: "14px" }}>{item.text}</Typography>
+              </Box>
+              {openAIS ? <ExpandLess /> : <ExpandMore />}
+            </ListItemButton>
+          </ListItem>
+          <Collapse in={openAIS} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              {item.submenu.map((subItem, subIndex) => (
+                <ListItemButton key={subIndex} sx={{ pl: 4 }} onClick={() => navigate(subItem.path)}>
+                  <ListItemIcon sx={{ minWidth: 0, mr: 1 }}>{subItem.icon}</ListItemIcon>
+                  <Typography sx={{ fontSize: "14px" }}>{subItem.text}</Typography>
+                </ListItemButton>
+              ))}
+            </List>
+          </Collapse>
+        </>
+      ) : item.text === "Masters" && item.submenu ? (
               <>
                 <ListItem disablePadding sx={{ borderRadius: 2 }} onClick={handleMastersClick}>
                   <ListItemButton sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -434,11 +431,6 @@ const Menu: FC<MenuProps> = ({ mobileOpen = false, onClose  }) => {
     Logout
   </Button>
 </Box>
-;
-
-
-
-
      
     </>
   );
