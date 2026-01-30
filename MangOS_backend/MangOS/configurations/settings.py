@@ -35,18 +35,24 @@ CORS_ALLOW_CREDENTIALS = True
 
 # Specify allowed origins for production
 CORS_ALLOWED_ORIGINS = [
-    "https://mangos-frontend.onrender.com",  # Your actual frontend URL
+    "https://mangos-frontend.onrender.com",  # React frontend
+    "https://mangos-admin.onrender.com",     # Angular admin (ADDED)
     "http://localhost:3000",  # For local development
     "http://127.0.0.1:3000",
     "http://localhost:5173",  # Vite dev server
     "http://127.0.0.1:5173",
+    "http://localhost:4200",  # Angular dev server
+    "http://127.0.0.1:4200",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     "https://mangos-frontend.onrender.com",
+    "https://mangos-admin.onrender.com",     # Angular admin (ADDED)
     "http://127.0.0.1:3000",
     "http://localhost:3000",
-    "http://localhost:5173/"
+    "http://localhost:5173/",
+    "http://localhost:4200",
+    "http://127.0.0.1:4200",
 ]
 
 
