@@ -63,7 +63,6 @@ urlpatterns = [
     path('mis_app/user/',include('mis_app.urls.user_urls')),
     path('mis_app/zinc-metrics/',include('mis_app.urls.zinc_metrics_urls')),
     path('mis_app/highlights/',include('mis_app.urls.highlights_urls')),
-    path('mis_app/zoho/',include('mis_app.urls.zoho_oauth_urls')),
     path('file/',include('setup.urls.file_urls')),
     path('sales/',include('setup.urls.sale_urls')),
     path('user/',include('setup.urls.user_urls')),
