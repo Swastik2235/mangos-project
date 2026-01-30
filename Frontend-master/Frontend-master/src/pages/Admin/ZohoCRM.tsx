@@ -37,7 +37,7 @@ const ZohoCRM: React.FC = () => {
       const code = urlParams.get('code');
       const error = urlParams.get('error');
       
-      console.log('OAuth callback - code:', !!code, 'error:', error);
+      console.log('OAuth callback - code:', !!code, 'error:', error, 'path:', window.location.pathname);
       
       if (error) {
         setError(`OAuth error: ${error}`);
@@ -52,8 +52,14 @@ const ZohoCRM: React.FC = () => {
           zohoCrmService.setAccessToken('demo_token_' + Date.now());
           setIsAuthenticated(true);
           setIsLoading(false);
-          // Clean up URL
-          window.history.replaceState({}, document.title, '/zoho-crm');
+          
+          // If we're on the callback route, redirect to main route
+          if (window.location.pathname === '/zoho-oauth-callback') {
+            window.location.href = '/zoho-crm';
+          } else {
+            // Clean up URL if we're already on main route
+            window.history.replaceState({}, document.title, '/zoho-crm');
+          }
         }, 2000);
       }
     } catch (error) {
