@@ -67,60 +67,43 @@ class ZohoCrmService {
   }
 
   async exchangeCodeForToken(code: string): Promise<any> {
-    const body = new URLSearchParams({
-      grant_type: 'authorization_code',
-      client_id: this.config.clientId,
-      client_secret: this.config.clientSecret,
-      redirect_uri: this.config.redirectUri,
-      code: code
-    });
+    console.log('Exchanging code for token via backend...');
 
-    console.log('Token exchange request:', {
-      url: `${this.authUrl}/token`,
-      clientId: this.config.clientId,
-      redirectUri: this.config.redirectUri
-    });
-
-    const response = await fetch(`${this.authUrl}/token`, {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/mis_app/zoho/exchange-token/`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Type': 'application/json',
         'Accept': 'application/json'
       },
-      body: body.toString()
+      body: JSON.stringify({ code })
     });
 
-    console.log('Token exchange response status:', response.status);
+    console.log('Backend token exchange response status:', response.status);
 
     if (!response.ok) {
-      const errorText = await response.text();
-      console.error('Token exchange error:', errorText);
-      throw new Error(`Token exchange failed: ${response.status} ${response.statusText} - ${errorText}`);
+      const errorData = await response.json();
+      console.error('Backend token exchange error:', errorData);
+      throw new Error(`Token exchange failed: ${response.status} ${response.statusText} - ${errorData.error || 'Unknown error'}`);
     }
 
     const result = await response.json();
-    console.log('Token exchange success:', result);
+    console.log('Backend token exchange success:', result);
     return result;
   }
 
   async refreshAccessToken(refreshToken: string): Promise<any> {
-    const body = new URLSearchParams({
-      grant_type: 'refresh_token',
-      client_id: this.config.clientId,
-      client_secret: this.config.clientSecret,
-      refresh_token: refreshToken
-    });
-
-    const response = await fetch(`${this.authUrl}/token`, {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/mis_app/zoho/refresh-token/`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
       },
-      body: body.toString()
+      body: JSON.stringify({ refresh_token: refreshToken })
     });
 
     if (!response.ok) {
-      throw new Error(`Token refresh failed: ${response.statusText}`);
+      const errorData = await response.json();
+      throw new Error(`Token refresh failed: ${response.status} ${response.statusText} - ${errorData.error || 'Unknown error'}`);
     }
 
     return response.json();
