@@ -19,8 +19,6 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTabsModule } from '@angular/material/tabs';
-import { MatChipsModule } from '@angular/material/chips';
-import { MatBadgeModule } from '@angular/material/badge';
 
 import { AisRoutingModule } from './ais-routing.module';
 import { ZohoCrmComponent } from './zoho-crm/zoho-crm.component';
@@ -50,9 +48,7 @@ import { ZohoCrmService } from './services/zoho-crm.service';
     MatProgressSpinnerModule,
     MatSnackBarModule,
     MatDialogModule,
-    MatTabsModule,
-    MatChipsModule,
-    MatBadgeModule
+    MatTabsModule
   ],
   providers: [
     ZohoCrmService

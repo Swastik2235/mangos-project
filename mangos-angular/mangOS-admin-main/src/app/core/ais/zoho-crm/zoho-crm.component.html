@@ -119,13 +119,10 @@
       <mat-tab-group (selectedTabChange)="onTabChange($event.index)">
         
         <!-- Contacts Tab -->
-        <mat-tab label="Contacts" [badge]="stats.totalContacts">
+        <mat-tab>
           <ng-template mat-tab-label>
             <mat-icon>contacts</mat-icon>
-            Contacts
-            <mat-chip-list>
-              <mat-chip color="primary" selected>{{stats.totalContacts}}</mat-chip>
-            </mat-chip-list>
+            Contacts ({{stats.totalContacts}})
           </ng-template>
           
           <div class="tab-content">
@@ -198,13 +195,10 @@
         </mat-tab>
 
         <!-- Leads Tab -->
-        <mat-tab label="Leads" [badge]="stats.totalLeads">
+        <mat-tab>
           <ng-template mat-tab-label>
             <mat-icon>person_add</mat-icon>
-            Leads
-            <mat-chip-list>
-              <mat-chip color="accent" selected>{{stats.totalLeads}}</mat-chip>
-            </mat-chip-list>
+            Leads ({{stats.totalLeads}})
           </ng-template>
           
           <div class="tab-content">
@@ -248,9 +242,9 @@
                 <ng-container matColumnDef="Lead_Status">
                   <th mat-header-cell *matHeaderCellDef>Status</th>
                   <td mat-cell *matCellDef="let lead">
-                    <mat-chip [color]="getLeadStatusColor(lead.Lead_Status)" selected>
+                    <span class="status-badge" [ngClass]="getLeadStatusColor(lead.Lead_Status)">
                       {{lead.Lead_Status || 'New'}}
-                    </mat-chip>
+                    </span>
                   </td>
                 </ng-container>
 
@@ -281,13 +275,10 @@
         </mat-tab>
 
         <!-- Deals Tab -->
-        <mat-tab label="Deals" [badge]="stats.totalDeals">
+        <mat-tab>
           <ng-template mat-tab-label>
             <mat-icon>handshake</mat-icon>
-            Deals
-            <mat-chip-list>
-              <mat-chip color="warn" selected>{{stats.totalDeals}}</mat-chip>
-            </mat-chip-list>
+            Deals ({{stats.totalDeals}})
           </ng-template>
           
           <div class="tab-content">
@@ -319,9 +310,9 @@
                 <ng-container matColumnDef="Stage">
                   <th mat-header-cell *matHeaderCellDef>Stage</th>
                   <td mat-cell *matCellDef="let deal">
-                    <mat-chip [color]="getDealStageColor(deal.Stage)" selected>
+                    <span class="status-badge" [ngClass]="getDealStageColor(deal.Stage)">
                       {{deal.Stage}}
-                    </mat-chip>
+                    </span>
                   </td>
                 </ng-container>
 
