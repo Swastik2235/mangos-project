@@ -43,8 +43,8 @@ export interface ZohoDeal {
 }
 
 class ZohoCrmService {
-  private baseUrl = 'https://www.zohoapis.com/crm/v2';
-  private authUrl = 'https://accounts.zoho.com/oauth/v2';
+  private baseUrl = 'https://www.zohoapis.in/crm/v2';
+  private authUrl = 'https://accounts.zoho.in/oauth/v2';
   
   private config: ZohoAuthConfig = {
     clientId: import.meta.env.VITE_ZOHO_CLIENT_ID || '',
