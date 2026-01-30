@@ -1,0 +1,128 @@
+<div class="signup-container">
+	<mat-grid-list cols="1" rowHeight="2:1" >
+		<mat-grid-tile   colspan='1' >
+            <mat-card >
+			<form [formGroup]="signupForm" novalidate (ngSubmit)="onSubmit(formDirective)" class='signup-card' #formDirective="ngForm">
+                    <div class="Signinuser">
+                        <div fxLayout="row" fxLayoutGap="10px">
+                            <div class="signupForm">
+                                <mat-form-field appearance="outline" class="half-field">
+                                    <mat-label>First Name</mat-label>
+                                    <input type="text" matInput placeholder="First Name" formControlName="first_name">
+                                    <mat-icon matSuffix>person</mat-icon>
+                                    <mat-error class="fontSizee" *ngIf="signupForm.controls['first_name'].hasError('required')">
+                                    First Name is <strong>required</strong>
+                                    </mat-error>
+                                    <mat-error class="fontSizee" *ngIf="signupForm.controls['first_name'].hasError('minlength')">
+                                        <span>Are you sure you have entered your name <strong>correctly</strong></span>
+                                    </mat-error>
+                                </mat-form-field>
+                                <mat-form-field appearance="outline" class="half-field">
+                                    <mat-label>Last Name</mat-label>
+                                    <input type="text" matInput placeholder="Last Name" formControlName="last_name">
+                                    <mat-icon matSuffix>person</mat-icon>
+                                    <mat-error class="fontSizee" *ngIf="signupForm.controls['last_name'].hasError('required')">
+                                    Last Name is <strong>required</strong>
+                                    </mat-error>
+                                    <mat-error class="fontSizee" *ngIf="signupForm.controls['last_name'].hasError('minlength')">
+                                        <span>Are you sure you have entered your last name<strong>correctly</strong></span>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div>
+                            <mat-form-field appearance="outline">
+                                <mat-label>Email</mat-label>
+                                <input type="email" matInput placeholder="Email" formControlName="email" placeholder="abc@example.com">
+                                <mat-icon matSuffix>email</mat-icon>
+                                <mat-error class="fontSizee" *ngIf="signupForm.controls['email'].hasError('required')">
+                                Email is <strong>required</strong>
+                                </mat-error>
+                                <mat-error class="fontSizee" *ngIf="sf.email.errors">
+                                    <span *ngIf='sf.email.errors.email || sf.email.errors?.pattern'>Valid Email is <strong>required.</strong></span>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div fxLayout="row">
+                            <div class="signinform">
+                                <mat-form-field appearance="outline" class="c-code">
+                                    <mat-label>Country</mat-label>
+                                    <mat-select formControlName="country">
+                                      <mat-option *ngFor="let country of countryList" [value]="country.id">+{{country.code}} | {{country.code3}}</mat-option>
+                                    </mat-select>
+                                    <mat-error class="fontSizee" *ngIf="signupForm.controls['country'].hasError('required')"><strong>required</strong>
+                                    </mat-error>
+                                </mat-form-field>
+                                <mat-form-field class="example-full-width" appearance="outline" class="m-num">
+                                    <mat-label>Mobile</mat-label>
+                                    <input matInput placeholder="Mobile" formControlName="mobile" minlength="8" maxlength="12" #phn>
+                                    <mat-icon matSuffix>phone_iphone</mat-icon>
+                                    <mat-hint align="end">{{phn.value.length}} / 12</mat-hint>
+                                    <mat-error class="fontSizee" *ngIf="signupForm.controls['mobile'].hasError('required')">Mobile is <strong>required</strong>
+                                    </mat-error>
+                                    <mat-error class="fontSizee" *ngIf="signupForm.controls['mobile'].hasError('pattern')">Numeric digit is <strong>required</strong>
+                                    </mat-error>
+                                    <mat-error class="fontSizee" *ngIf="signupForm.controls['mobile'].hasError('maxlength')">
+                                        <span >Maximum 12 digit <strong>required</strong></span>
+                                    </mat-error>
+                                    <mat-error class="fontSizee" *ngIf="signupForm.controls['mobile'].hasError('minlength')">
+                                        <span>Minimum 8 digit <strong>required</strong></span>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                                
+                        </div>
+                        <div fxLayout="row" fxLayoutGap="10px">
+                            <div class="signupForm">
+                                <mat-form-field appearance="outline" class="half-field">
+                                    <mat-label>Password</mat-label>
+                                    <input matInput [type]="hide ? 'password' : 'text'"  placeholder="Password" formControlName="password">
+                                    <button type='button' mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                                          <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                                       </button>
+                                    <mat-error class="fontSizee" *ngIf="signupForm.controls['password'].hasError('required')">
+                                    Password is <strong>required</strong>
+                                    </mat-error>
+                                    <mat-error class="fontSizee" *ngIf="sf.password.errors">
+                                        <span *ngIf='sf.password.errors?.minlength'>Minimum 8 digit <strong>required</strong></span>
+                                        <span *ngIf='sf.password.errors?.maxlength'>Password must be less than <strong>20 digits.</strong></span>
+                                    </mat-error>
+                                    <mat-error class="fontSizee" *ngIf="sf.password.errors?.pattern">
+                                        Password must be <strong>alphanumeric with special Characters</strong>
+                                    </mat-error>
+                                </mat-form-field>
+                                <mat-form-field appearance="outline" class="half-field">
+                                    <mat-label>Confirm Password</mat-label>
+                                    <input matInput [type]="chide ? 'password' : 'text'"  placeholder="Confirm Password" formControlName="cpassword" (keyup)="passwordMatchFunction()">
+                                    <button type='button' mat-icon-button matSuffix (click)="chide = !chide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="chide">
+                                          <mat-icon>{{chide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                                       </button>
+                                    <mat-error class="fontSizee" *ngIf="signupForm.controls['cpassword'].hasError('required')">
+                                    Confirm Password is <strong>required</strong>
+                                    </mat-error>
+                                    <mat-error class="fontSizee" *ngIf="sf.cpassword.errors">
+                                        <span *ngIf='sf.cpassword.errors.minlength'>Minimum 8 digit <strong>required</strong></span>
+                                        <span *ngIf='sf.cpassword.errors?.maxlength'>Confirm Password must be less than <strong>20 digits.</strong></span>
+                                    </mat-error>
+                                    <mat-error class="fontSizee" *ngIf="sf.cpassword.errors?.pattern">
+                                        Confirm Password must be <strong>alphanumeric with special Characters</strong>
+                                    </mat-error>
+                                </mat-form-field>
+                                <span class="matchError fontSizee passwordMismatch mat-error" *ngIf='!passwordMatch'>Password do not match.</span>
+                            </div>
+                        </div>
+                    </div>
+                    <mat-error *ngIf="errors !=''">
+                      {{errors}}
+                    </mat-error>
+                    <div fxLayout="row">
+                        <div class="loginButton">
+                            <button mat-raised-button color="primary">Sign Up</button>	
+							<span class="registered">already have an Account? </span> <a class="signup" href="/login"><strong>Login</strong></a>
+                        </div>
+                    </div>
+                </form>
+            </mat-card>
+		</mat-grid-tile>
+	</mat-grid-list>
+</div>

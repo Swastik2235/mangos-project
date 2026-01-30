@@ -1,0 +1,32 @@
+<div class="documentContainer">
+	<ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "large" color = "#fff" type = "pacman" [fullScreen] = "true"><p style="color: white" > Loading... </p></ngx-spinner>
+	<div fxLayout="row" fxLayoutAlign="start center" class="documentTopMenu">
+	    <div fxFlex="80" fxFlexAlign="baseline">
+	      	<button mat-raised-button color="primary" class="addBtn" (click)="addNewFolder()">Add New Folder</button>
+	    </div>
+	    <div fxFlex="20" fxFlexAlign="baseline">
+	      <div>
+	        <mat-form-field class="example-form-field" appearance="outline">
+			  	<mat-label>Clearable input</mat-label>
+			  	<input matInput type="text" [(ngModel)]="folderSearch">
+				<button *ngIf="folderSearch" matSuffix mat-icon-button aria-label="Clear" (click)="folderSearch=''">
+				    <mat-icon>close</mat-icon>
+				</button>
+			</mat-form-field>
+	      </div>
+	    </div>
+	</div>
+	<div fxLayout="row wrap" fxLayout.lt-md="column" class="subFolderDiv">
+		<div fxFlex="20" fxLayoutGap="30px" *ngFor="let folder of folderList | folderFilter:folderSearch">
+			<mat-card class="folder-card" [routerLink]="['/document',folder.id]">
+			  <mat-card-header>
+			    <mat-card-title>{{folder.title}}</mat-card-title>
+			    <!-- <mat-card-subtitle>Dog Breed</mat-card-subtitle> -->
+			  </mat-card-header>
+			  <mat-card-content class="documentFolderIcn">
+			  	<mat-icon [ngStyle]="{color:folder.color}">folder_open</mat-icon>
+			  </mat-card-content>
+			</mat-card>
+		</div>
+	</div>
+</div>

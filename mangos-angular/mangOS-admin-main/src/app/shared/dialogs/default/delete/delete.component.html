@@ -1,0 +1,18 @@
+<div *ngIf='!data.error; else errorMessage '>
+	<h1 mat-dialog-title>Delete</h1>
+	<div mat-dialog-content *ngIf='!data.message; else errorMessage '>
+		<p>Do you want to delete this {{ data.title }}?</p>
+		
+	</div>
+	<div mat-dialog-actions>
+		<button mat-raised-button color="primary" (click)="onCancel()" >Cancel</button>
+		<button mat-raised-button color="warn" cdkFocusInitial (click)="onDelete(data.indx)" >Yes</button>
+	</div>
+</div>
+
+<ng-template class="grid-container" #errorMessage>
+	<h1 mat-dialog-title>Error</h1>
+	<div mat-dialog-content *ngIf='!data.message; else errorMessage '>
+		<p *ngFor='let error of data.error'> {{ error }}</p>
+	</div>
+</ng-template>

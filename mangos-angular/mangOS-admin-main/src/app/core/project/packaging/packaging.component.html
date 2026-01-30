@@ -1,0 +1,122 @@
+<div class="packaging-container" >
+	<ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "large" color = "#fff" type = "pacman" [fullScreen] = "true"><p style="color: white" > Loading... </p></ngx-spinner>
+	<div class="bomHeader">
+		<div fxLayout="row" fxFlexFill>
+			<div fxFlex="25" fxFlexAlign="start">
+				<div class="projectFilter">
+					<mat-form-field appearance="outline">
+						<mat-label>Projects</mat-label>
+						<mat-select [formControl]="sproject" (selectionChange)="projectBom($event.value)">
+						  <mat-option *ngFor="let project of projectList" [value]="project.slug">
+							{{project.title}}
+						  </mat-option>
+						</mat-select>
+					</mat-form-field>
+				</div>
+			</div>
+			<div fxFlex="60" fxFlexAlign="start">
+				<div class="bomFilter">
+					<mat-form-field appearance="outline">
+					  <mat-label>Search</mat-label>
+					  <input matInput (keyup)="applyFilter($any($event.target).value)" placeholder="Filter Invites..." #input>
+					</mat-form-field>
+				</div>
+			</div>
+			<div fxFlex="25" fxFlexAlign="first">
+				<button mat-raised-button color="primary" (click)="JobListView()" >Invoice</button>
+			</div>
+			<!-- <div fxFlex="25" fxFlexAlign="start">
+				<button mat-raised-button color="primary" (click)="importBomFile()">Add Job Card</button>
+			</div> -->
+			<!-- <div fxFlex="25" fxFlexAlign="start">
+				<div  style="float: right;display: flex;" class="downloadButton">
+					<button mat-raised-button class="create" (click)='downloadFile("excel")'><mat-icon>description</mat-icon></button>
+					<button mat-raised-button class="create" (click)='downloadFile("pdf")'><img src="../assets/images/pdf-file.png" class ='downlodaBtnImage'></button>
+					<button mat-raised-button class="create" (click)='downloadFile("csv")'><img src="../assets/images/csv-file.png" class ='downlodaBtnImage' ></button>
+				</div>
+			</div> -->
+		</div>
+	</div>
+	<div class="mat-elevation-z8">
+		<table mat-table class="full-width-table" matSort aria-label="Elements" [dataSource]="dataSource">
+			<!-- Checkbox Column -->
+			<ng-container matColumnDef="select">
+				<th mat-header-cell *matHeaderCellDef>
+				  	<mat-checkbox (change)="$event ? masterToggle() : null"
+								[checked]="selection.hasValue() && isAllSelected()"
+								[indeterminate]="selection.hasValue() && !isAllSelected()">
+				  	</mat-checkbox>
+				</th>
+				<td mat-cell *matCellDef="let row">
+				  	<mat-checkbox (click)="$event.stopPropagation()"
+								(change)="$event ? selection.toggle(row) : null "
+								[checked]="selection.isSelected(row) ">
+				  	</mat-checkbox>
+				</td>
+			</ng-container>
+
+			<!-- mark Column -->
+			<ng-container matColumnDef="date">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
+				<td mat-cell *matCellDef="let row">{{row.date}}</td>
+			</ng-container>
+
+			<!-- number Column -->
+			<ng-container matColumnDef="lr">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header>LR No.</th>
+				<td mat-cell *matCellDef="let row">{{row.number}}</td>
+			</ng-container>
+
+			<!-- Name Column -->
+			<ng-container matColumnDef="vehicle">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header>Vehicle</th>
+				<td mat-cell *matCellDef="let row">{{row.vehicle_data.number}}</td>
+			</ng-container>
+
+
+			<!-- length Column -->
+			<ng-container matColumnDef="project">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header>Project</th>
+				<td mat-cell *matCellDef="let row">{{row.project_data.title}}</td>
+			</ng-container>
+
+			<!-- width Column -->
+			<ng-container matColumnDef="transporter">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header>Transporter</th>
+				<td mat-cell *matCellDef="let row">{{row.transporter_data.name}}</td>
+			</ng-container>
+
+			<!-- unit_weight Column -->
+			<ng-container matColumnDef="prepared">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header>Prepared By.</th>
+				<td mat-cell *matCellDef="let row">{{row.prepared_data.first_name}} {{row.prepared_data.last_name}}</td>
+			</ng-container>
+
+			<!-- piece_weight Column -->
+			<ng-container matColumnDef="checked">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header>Checked By</th>
+				<td mat-cell *matCellDef="let row">{{row.checked_data.first_name}} {{row.checked_data.last_name}}</td>
+			</ng-container>
+
+			<ng-container matColumnDef="item">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header>Items</th>
+				<td mat-cell *matCellDef="let row">{{row.item.length}}</td>
+			</ng-container>
+
+			<ng-container matColumnDef="action">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header>Action</th>
+				<td mat-cell *matCellDef="let item; let i = index"><button mat-icon-button size="small" color="primary" (click)="viewJobCard(item)"><mat-icon>visibility</mat-icon></button><button  mat-icon-button size="small" color="primary" [routerLink]="['/project/packaging/edit/',item.id ]"  ><mat-icon>mode</mat-icon></button><button  mat-icon-button color="warn" (click)="deleteDialog(i)" ><mat-icon>delete</mat-icon></button>
+			</ng-container>
+
+			<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+			<tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+		</table>
+
+		<mat-paginator #paginator
+				[length]="dataSource?.data?.length"
+				[pageIndex]="0"
+				[pageSize]="50"
+				[pageSizeOptions]="[50, 100, 200,500,1000]">
+		</mat-paginator>
+	</div>
+</div>

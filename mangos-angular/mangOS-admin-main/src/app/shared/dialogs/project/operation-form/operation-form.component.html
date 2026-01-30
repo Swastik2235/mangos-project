@@ -1,0 +1,46 @@
+<h3 mat-dialog-title>{{ data.title }}</h3>
+<div mat-dialog-content class="operationform">
+	<form [formGroup]="operationForm" novalidate (ngSubmit)="addOperationData()">
+		<mat-card-content>
+
+			<mat-card-title>
+				<mat-form-field appearance="outline">
+				  	<mat-label>Machine</mat-label>
+					<mat-select formControlName = "machine">
+					    <mat-option *ngFor="let machine of machineList" [value]="machine.id">
+					      {{machine.title}}
+					    </mat-option>
+					</mat-select>
+				  	<mat-error *ngIf="operationForm.hasError('machine')">
+				       Machine is <strong>required</strong>
+				    </mat-error>
+				</mat-form-field>
+			</mat-card-title>
+			<mat-card-title>
+				<mat-form-field appearance="outline">
+					<mat-label>Operation Name</mat-label> 
+					<input matInput  formControlName="title">
+				</mat-form-field>
+			</mat-card-title>
+
+			<mat-card-title>
+				<mat-form-field appearance="outline">
+					<mat-label>Operation Short code</mat-label> 
+					<input matInput  formControlName="code">
+				</mat-form-field>
+			</mat-card-title>
+			
+			<mat-card-title>
+				<mat-form-field appearance="outline">
+					 <mat-label>Description</mat-label> 
+					 <input matInput  formControlName="content">
+				 </mat-form-field>
+			 </mat-card-title>
+		</mat-card-content>
+
+		<mat-card-actions>
+			<button mat-raised-button color="primary" type="submit" [disabled]="!operationForm.valid">Save</button>
+			<button mat-raised-button color="secondary" type="button" (click)="closeDialog()" >Cancel</button>
+		</mat-card-actions>
+	</form>
+</div>

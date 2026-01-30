@@ -1,0 +1,76 @@
+
+<div class="product-container" *ngIf="viewProduct; else noPermission ">
+	<ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "large" color = "#fff" type = "pacman" [fullScreen] = "true"><p style="color: white" > Loading... </p></ngx-spinner>
+	<div class="heading"><h2 class="head">Products</h2>
+		<div class='filter-btn'>
+		<mat-form-field fxFlex="40%">
+			<input matInput type="text" (keyup)="doFilter($any($event.target).value)" placeholder="Filter">
+		</mat-form-field>
+	<a routerLink="/inventory/product/add" *ngIf='addProduct'>
+		<button mat-raised-button color="primary">Add</button>
+	</a>
+	<button mat-raised-button color='primary' (click)='downloadFile("excel")'><mat-icon>description</mat-icon></button>
+	<button mat-raised-button color='primary' (click)='downloadFile("pdf")'><img src="../assets/images/pdf-file.png" class ='downlodaBtnImage'></button>
+	<button mat-raised-button color='primary' (click)='downloadFile("csv")'><img src="../assets/images/csv-file.png" class ='downlodaBtnImage' ></button>
+	</div>
+	</div>
+	<div class="mat-elevation-z8">
+		<table mat-table class="full-width-table" matSort aria-label="Elements" [dataSource]="dataSource">
+			<!-- Id Column -->
+			<ng-container matColumnDef="id">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header>Id</th>
+			<td mat-cell *matCellDef="let row">{{row.id}}</td>
+			</ng-container>
+
+			<!-- Name Column -->
+			<ng-container matColumnDef="category">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header>Category</th>
+			<td mat-cell *matCellDef="let row">{{row.category_detail.name}}</td>
+			</ng-container>
+
+			<ng-container matColumnDef="name">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+			<td mat-cell *matCellDef="let row">{{row.name}}</td>
+			</ng-container>
+
+			<ng-container matColumnDef="description">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header>Description</th>
+			<td mat-cell *matCellDef="let row">{{row.description}}</td>
+			</ng-container>
+
+			<ng-container matColumnDef="quantity">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header>Quantity</th>
+			<td mat-cell *matCellDef="let row">{{row.quantity}}</td>
+			</ng-container>
+
+			<ng-container matColumnDef="sale">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header>Sale</th>
+			<td mat-cell *matCellDef="let row">{{row.sale}}</td>
+			</ng-container>
+
+			<ng-container matColumnDef="purchase">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header>Purchase</th>
+			<td mat-cell *matCellDef="let row">{{row.purchase}}</td>
+			</ng-container>
+
+			<ng-container matColumnDef="action">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header>Action</th>
+			<td mat-cell *matCellDef="let item; let i = index"><button mat-icon-button  size="small" color="primary"  [routerLink]="['/inventory/product/edit',item.id ]" *ngIf='editProduct'><mat-icon>mode</mat-icon></button><button mat-icon-button color="warn" (click)="deleteDialog(i)" *ngIf='deleteProduct'><mat-icon>delete</mat-icon></button></td>
+			</ng-container>
+
+			<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+			<tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+		</table>
+	<mat-paginator [pageSize]="10" [pageSizeOptions]="[2, 4, 6, 10, 20]"></mat-paginator>
+
+	</div>
+</div>
+
+<!---When User Have No Permission Of Product Table -->
+<ng-template class="product-container" #noPermission>
+	<mat-grid-list cols="1" rowHeight="2:1" >
+		<mat-grid-tile   colspan='1' class='warning'>
+			<h2 >You do not have permission to perform this action</h2>
+		</mat-grid-tile>
+	</mat-grid-list>
+</ng-template>

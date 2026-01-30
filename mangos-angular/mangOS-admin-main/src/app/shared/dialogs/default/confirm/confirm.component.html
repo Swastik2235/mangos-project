@@ -1,0 +1,13 @@
+<div>
+	<!-- <h1 mat-dialog-title>Confirm</h1> -->
+	<div mat-dialog-content >
+		<h2 *ngIf="!data.title">Are you sure?</h2>
+		<h2 *ngIf="data.title">{{data.title}}?</h2>
+		
+	</div>
+	<div mat-dialog-actions>
+		<button mat-raised-button color="primary" (click)="onCancel()" >Cancel</button>
+		<button mat-raised-button color="warn" cdkFocusInitial (click)="onConfirm('yes')" *ngIf="!data.title">Yes</button>
+		<button mat-raised-button color="warn" cdkFocusInitial (click)="onConfirm(data.data)" *ngIf="data.data">Yes</button>
+	</div>
+</div>

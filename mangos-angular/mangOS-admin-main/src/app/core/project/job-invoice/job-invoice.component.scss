@@ -1,0 +1,39 @@
+.job-invoice{
+    margin: 20px;
+	button{height: 100%;}
+    ul.breadcrumbs {
+		padding: 10px 16px;
+		list-style: none;
+		//background-color: #eee;
+		li {
+			display: inline;
+			font-size: 15px;
+			a{
+				color:#979797;
+  				text-decoration: none;
+			}
+		}
+		li+li:before {
+			padding: 8px;
+			margin-bottom: 2%;
+			color: #cec9c9;
+			content: ' \003E';;
+		}
+	}
+	.sign{
+		margin-left: 20px;
+		width: 150px;
+		height: 70px;
+	}
+    .my-card{
+        margin-top: 2%;
+        box-shadow: 1px 4px 30px rgb(0 0 0 / 0.2) !important;
+    }
+    .jobCardDHeader{
+		h3,h5{margin-bottom: 0;}
+	}
+    .JobCardContent{
+        font-size:10px;
+		overflow: auto;
+    }
+}

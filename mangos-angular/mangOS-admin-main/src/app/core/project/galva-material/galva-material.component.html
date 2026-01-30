@@ -1,0 +1,132 @@
+<div class="galva-container">
+    <ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="large" color="#fff" type="pacman" [fullScreen]="true">
+        <p style="color: white"> Loading... </p>
+    </ngx-spinner>
+    <div class="galvaHeader">
+        <div fxLayout="row" fxFlexFill>
+            <div fxFlex="25" fxFlexAlign="start">
+                <div class="projectFilter">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Projects</mat-label>
+                        <mat-select [formControl]="sproject" (selectionChange)="projectGalva($event.value)">
+                            <mat-option *ngFor="let project of projectList" [value]="project.slug">
+                                {{project.title}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div fxFlex="40" fxFlexAlign="start">
+				<div class="galvaFilter">
+					<mat-form-field appearance="outline">
+					  <mat-label>Search</mat-label>
+					  <input matInput (keyup)="applyFilter($any($event.target).value)" placeholder="Filter Invites..." #input>
+					</mat-form-field>
+				</div>
+			</div>
+            <div fxFlex="15" fxFlexAlign="start">
+				<button mat-raised-button color="primary" (click)="addGalvaMeterial()">Add Material</button>
+			</div>
+			<div fxFlex="15" fxFlexAlign="start">
+				<button mat-raised-button color="primary" (click)="addNewGalvaJobCard()">Create Job Card</button>
+			</div>
+			<div fxFlex="5" fxFlexAlign="end">
+				<button mat-icon-button class="more-button account" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
+				 <mat-icon>more_vert</mat-icon>
+				</button>
+				<mat-toolbar>
+				<mat-menu #menu="matMenu" xPosition="before">
+					<!-- <div  style="float: right;display: flex;" class="downloadButton"> -->
+						<button mat-menu-item class="create" (click)='downloadFile("excel")'><mat-icon class='mv'>description</mat-icon> excel</button>
+						<button mat-menu-item class="create" (click)='downloadFile("pdf")'><img src="../assets/images/pdf.jpeg" class ='downlodaBtnImage-mv' height="20" width="20"> pdf</button>
+						<button mat-menu-item class="create" (click)='downloadFile("csv")'><img src="../assets/images/csv.jpeg" class ='downlodaBtnImage-mv' height="20" width="20"> csv</button>
+					<!-- </div> -->
+				</mat-menu>
+			</mat-toolbar>
+			</div>
+        </div>
+    </div>
+    <div class="mat-elevation-z8">
+		<table mat-table class="full-width-table" matSort aria-label="Elements">
+			<!-- Id Column -->
+            <ng-container matColumnDef="select">
+                <th mat-header-cell *matHeaderCellDef>
+                      <mat-checkbox (change)="$event ? masterToggle() : null"
+                                [checked]="selection.hasValue() && isAllSelected()"
+                                [indeterminate]="selection.hasValue() && !isAllSelected()">
+                      </mat-checkbox>
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    <!-- {{ element.jobcard}} -->
+                    <mat-checkbox (click)="$event.stopPropagation()"
+                                (change)="$event ? selection.toggle(element) : null"
+                                [checked]="selection.isSelected(element) ">
+                    </mat-checkbox>
+                </td>
+            </ng-container>
+			<ng-container matColumnDef="section">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header>Section</th>
+				<td mat-cell *matCellDef="let row">{{row.section}}</td>
+			</ng-container>
+            <ng-container matColumnDef="name">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+				<td mat-cell *matCellDef="let row">{{row.name}}</td>
+			</ng-container>
+			<!-- Name Column -->
+			<ng-container matColumnDef="material_type">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header>Material Type</th>
+				<td mat-cell *matCellDef="let row">{{row.material_type}}</td>
+			</ng-container>
+            <ng-container matColumnDef="length">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header>Length</th>
+				<td mat-cell *matCellDef="let row">{{row.length}}</td>
+			</ng-container>
+            <ng-container matColumnDef="width">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Width</th>
+                <td mat-cell *matCellDef="let row">{{row.width}}</td>
+            </ng-container>
+            <ng-container matColumnDef="thickness">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header>Thickness</th>
+				<td mat-cell *matCellDef="let row">{{row.thickness}}</td>
+			</ng-container>
+            <ng-container matColumnDef="weight">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header>Weight</th>
+				<td mat-cell *matCellDef="let row">{{row.weight}}</td>
+			</ng-container>
+			<ng-container matColumnDef="min_coating_required">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header>Min Coating required</th>
+				<td mat-cell *matCellDef="let row">{{row.min_coating_required}}</td>
+			</ng-container>
+            <!-- <ng-container matColumnDef="density">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header>Density</th>
+				<td mat-cell *matCellDef="let row">{{row.density}}</td>
+			</ng-container>
+            <ng-container matColumnDef="ph">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header>PH</th>
+				<td mat-cell *matCellDef="let row">{{row.ph}}</td>
+			</ng-container>
+            <ng-container matColumnDef="str_sdc">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header>Strength<br>(sodium dichromate)</th>
+				<td mat-cell *matCellDef="let row">{{row.strengthsdc}}</td>
+			</ng-container>
+			<ng-container matColumnDef="date">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
+				<td mat-cell *matCellDef="let row">{{row.timestamp.substring(0,11)}}</td>
+			</ng-container>
+			<ng-container matColumnDef="action">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header>Action</th>
+				<td mat-cell *matCellDef="let item; let i = index"><button  mat-icon-button size="small" color="primary" (click)="editTankData(i)" ><mat-icon>mode</mat-icon></button><button  mat-icon-button color="warn" (click)="deleteDialog(i)" ><mat-icon>delete</mat-icon></button>
+			</ng-container> -->
+
+			<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+			<tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+		</table>
+
+		<mat-paginator #paginator
+				[length]="dataSource?.data?.length"
+				[pageIndex]="0"
+				[pageSize]="10"
+				[pageSizeOptions]="[5, 10, 20]">
+		</mat-paginator>
+	</div>
+</div>

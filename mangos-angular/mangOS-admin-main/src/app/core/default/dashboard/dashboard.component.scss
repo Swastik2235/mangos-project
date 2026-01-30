@@ -1,0 +1,49 @@
+.main-container {
+	margin: 20px;
+	.invite-list{
+		padding: 13px;
+	}
+	.changePassword{
+		float: right;
+		background-color: darkorange;
+		color: #e8e8e8;
+	}
+	.more-button {
+	position: absolute;
+	top: 5px;
+	right: 10px;
+	}
+	
+
+	.dashboard-card {
+		position: absolute;
+		top: 15px;
+		left: 15px;
+		right: 15px;
+		bottom: 15px;
+		.dashboard-card-content {
+			text-align: center;
+		}
+	}
+}
+.dashboard-card-content{
+	table{width: 100%;}
+}
+nav a {
+	padding: 1rem;
+	text-decoration: none;
+	margin-top: 10px;
+	display: inline-block;
+	background-color: #e8e8e8;
+	color: #3d3d3d;
+	border-radius: 4px;
+	margin-left: 10px;
+	
+}
+
+
+
+
+
+
+

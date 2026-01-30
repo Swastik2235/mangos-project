@@ -1,0 +1,29 @@
+.mat-dialog-content{
+	height: 50%;
+	mat-card-content{
+		//font-size: small;
+		mat-error{
+			font-size: small;
+		}
+		mat-form-field{
+			width: 100%;
+			font-size: small
+		}
+		.date{
+			display: flex;
+			.mat-card-title{
+				width: 50%;
+			}
+			.mat-card-title:not(:first-child){
+				margin-top: unset;	
+				margin-left: 10px;		
+			}
+		}
+	}
+	mat-card-actions{
+		button{
+			margin-bottom: 1%;
+			margin-right: 2%;
+		}
+	}	
+}

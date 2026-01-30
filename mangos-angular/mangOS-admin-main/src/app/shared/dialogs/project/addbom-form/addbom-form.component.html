@@ -1,0 +1,164 @@
+<div class="BomCardFormDiv">
+    <h2>Add BOM</h2>
+    <form [formGroup]="bomForm" novalidate class="profile" (ngSubmit)="addBom()">
+        <div class="bomForm">
+            <div fxLayout="row" fxFlexFill fxLayoutGap="20px">
+                <div fxFlex="25" fxFlexAlign="start" class="drop-dn">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Project</mat-label>
+                        <mat-select name="project" formControlName="project">
+                            <mat-option *ngFor="let project of projectList" [value]="project.id">
+                                {{project.title}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="bomForm.controls['project'].hasError('required')">
+                            Project is <strong>required</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div fxFlex="25" fxFlexAlign="start" class="drop-dn">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Section</mat-label>
+                        <mat-select name="section" formControlName="section">
+                            <mat-option *ngFor="let section of sectionList" [value]="section.id">
+                                {{section.title}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="bomForm.controls['section'].hasError('required')">
+                            Section is <strong>required</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div fxFlex="25" fxFlexAlign="start" class="drop-dn">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Mark</mat-label>
+                        <mat-select name="mark" formControlName="mark">
+                            <mat-option *ngFor="let mark of markList" [value]="mark.id">
+                                {{mark.title}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="bomForm.controls['mark'].hasError('required')">
+                            Mark is <strong>required</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div fxFlex="25" fxFlexAlign="start" class="drop-dn">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Tower</mat-label>
+                        <mat-select name="tower" formControlName="tower">
+                            <mat-option *ngFor="let tower of towerList" [value]="tower.id">
+                                {{tower.title}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="bomForm.controls['tower'].hasError('required')">
+                            Tower is <strong>required</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div fxLayout="row" fxFlexFill fxLayoutGap="20px">
+                <div fxFlex="25" fxFlexAlign="start">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Number</mat-label>
+                        <input matInput formControlName="number">
+                        <mat-error *ngIf="bomForm.controls['number'].hasError('required')">
+                            Number is <strong>required</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div fxFlex="25" fxFlexAlign="start">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Length</mat-label>
+                        <input type='number' matInput placeholder="length" formControlName="length">
+                        <mat-error *ngIf="bomForm.controls['length'].hasError('required')">
+                            Length is <strong>required</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div fxFlex="25" fxFlexAlign="start">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Width</mat-label>
+                        <input type='number' matInput placeholder="width" formControlName="width">
+                        <mat-error *ngIf="bomForm.controls['width'].hasError('required')">
+                            Width is <strong>required</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div fxFlex="25" fxFlexAlign="start">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Unit weight</mat-label>
+                        <input type='number' matInput placeholder="unit weight" formControlName="unit_weight">
+                        <mat-error *ngIf="bomForm.controls['unit_weight'].hasError('required')">
+                            Unit weight is <strong>required</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div fxLayout="row" fxFlexFill fxLayoutGap="20px">
+                <div fxFlex="25" fxFlexAlign="start">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Piece weight</mat-label>
+                        <input type='number' matInput placeholder="piece weight" formControlName="piece_weight">
+                        <mat-error *ngIf="bomForm.controls['piece_weight'].hasError('required')">
+                            Piece weight is <strong>required</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div fxFlex="25" fxFlexAlign="start">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Weight</mat-label>
+                        <input type='number' matInput placeholder="weight" formControlName="weight">
+                        <mat-error *ngIf="bomForm.controls['weight'].hasError('required')">
+                            Weight is <strong>required</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div fxFlex="25" fxFlexAlign="start">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Quantity</mat-label>
+                        <input type='number' matInput placeholder="quantity" formControlName="quantity">
+                        <mat-error *ngIf="bomForm.controls['quantity'].hasError('required')">
+                            Quantity is <strong>required</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div fxFlex="25" fxFlexAlign="start">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Tower Quantity</mat-label>
+                        <input type='number' matInput placeholder="tower_quantity" formControlName="tower_quantity">
+                        <mat-error *ngIf="bomForm.controls['tower_quantity'].hasError('required')">
+                            Tower is <strong>required</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div fxLayout="row" fxFlexFill fxLayoutGap="20px">
+                <mat-form-field appearance="outline">
+                    <mat-label>Note</mat-label>
+                    <input matInput placeholder="note" formControlName="note">
+                    <mat-error *ngIf="bomForm.controls['note'].hasError('required')">
+                        Note is <strong>required</strong>
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Remark</mat-label>
+                    <input matInput placeholder="remark" formControlName="remark">
+                    <mat-error *ngIf="bomForm.controls['remark'].hasError('required')">
+                        Remark is <strong>required</strong>
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Operation</mat-label>
+                    <input matInput placeholder="operation" formControlName="operation">
+                    <mat-error *ngIf="bomForm.controls['operation'].hasError('required')">
+                        Operation is <strong>required</strong>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+        <mat-dialog-actions align="end">
+            <button mat-raised-button color="primary" type="submit">Save</button>
+            <button mat-raised-button mat-dialog-close color="warn">Cancel</button>
+        </mat-dialog-actions>
+    </form>
+</div>

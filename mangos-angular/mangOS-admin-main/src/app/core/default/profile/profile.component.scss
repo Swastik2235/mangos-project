@@ -1,0 +1,40 @@
+.profile{
+    // padding: absolute;
+	// left: 10%;
+	// right: 10%;
+	// top:10%;
+	height: 100%;
+	mat-grid-tile.mat-grid-tile {
+		height: 130vh !important;
+	}
+	mat-grid-list{
+		
+		mat-grid-tile {
+			mat-card {
+				mat-form-field {
+					width: 400px;
+					font-size: small;
+					//height: min-content;
+					mat-error{font-size: small;}
+					height: max-content;
+					.myfilebrowser{
+						height: 100px;
+					}
+				
+				}
+				
+				mat-error{
+					font-size: medium;
+				}
+			}
+		}
+	}
+	.myform-wrapper {
+		margin: 50px;
+		width: 350px;
+	
+		.mat-form-field {
+			width: 100%;
+		}
+	}
+}

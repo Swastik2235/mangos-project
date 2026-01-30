@@ -1,0 +1,41 @@
+.packaging-detail{
+	margin: 20px;
+	
+	.my-card{
+		// margin-top: 2%;
+		// box-shadow: 1px 4px 30px rgb(0 0 0 / 0.2) !important;
+	
+		.jobCardDHeader{
+			h3,h5{margin-bottom: 0;}
+		}
+		.JobCardContent{
+			font-size:10px;
+			.table-bordered,tr,td,th{
+				border: 2px solid black;
+			}
+		}
+		.dispach-list{
+			border-top: 2px solid black;
+			border-bottom: 2px solid black;
+			// font-size: 30px;
+			h2{
+				margin-bottom: unset;
+			}
+		}
+		.dispatch-table{
+			width: 100%;
+			border: 1px solid black;
+			tr{
+				width: 100%;
+				td{
+					width: 50%;
+					border: 1px solid black;
+				}
+			}
+			.end{
+				text-align: right;
+			}
+		}
+	}
+
+}

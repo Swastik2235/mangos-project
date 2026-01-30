@@ -1,0 +1,41 @@
+.account{position: absolute; right: 50px;}
+.sidenav-container{
+	
+	.sidenav{
+		width: 250px;
+		
+		.mat-nav-list {
+			.mat-expansion-panel-header.active{background:#C0C0C0;color: #ffffff;}
+			a{.mat-icon{font-size: 20px;margin-left:2% ;margin-right: 10%;}}
+			a.active{background: #4050b5;color: #ffffff;}
+			.mat-accordion{
+				.mat-icon{ font-size: 20px;margin-right: 10%;}
+				.mat-expansion-panel{
+					border-radius: unset;
+					box-shadow: none !important;
+					.mat-expansion-panel-body {
+						padding: unset !important;
+					}
+					// .mat-expansion-panel-content {
+						
+					// }
+				}
+				.mat-expansion-panel-spacing{margin: 0;}
+			}
+		}
+	}
+	.mat-sidenav-content{
+		height:100vh;
+		overflow-x: hidden;
+		.mat-toolbar{
+			.notification{right:100px;}
+			.checkedIn{right: 150px;width: 150px;padding: 0;
+				.time{
+					font-size: smaller;
+					margin-left: 1%;
+				}
+			}
+		}
+	}
+	
+}

@@ -1,0 +1,63 @@
+<div class="project-container">
+	<ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "large" color = "#fff" type = "pacman" [fullScreen] = "true"><p style="color: white" ></p></ngx-spinner>
+	<mat-card class="headings">
+		<button mat-flat-button [ngClass]="{ 'active' : btnNum == 1}" (click)="filterData('All',1)">All</button>
+		<button mat-flat-button [ngClass]="{ 'active' : btnNum == 2}" (click)="filterData('Ongoing',2)">Ongoing</button>
+		<button mat-flat-button [ngClass]="{ 'active' : btnNum == 3}" (click)="filterData('Completed',3)">Archived</button>
+		<button mat-raised-button class="create" routerLink="/project/add/"><mat-icon>add_circle</mat-icon>Create Project</button>
+
+		<div  style="float: right;display: flex;">
+			<button mat-raised-button class="create" (click)='downloadFile("excel")'><mat-icon>description</mat-icon></button>
+			<button mat-raised-button class="create" (click)='downloadFile("pdf")'><img src="../assets/images/pdf-file.png" class ='downlodaBtnImage'></button>
+			<button mat-raised-button class="create" (click)='downloadFile("csv")'><img src="../assets/images/csv-file.png" class ='downlodaBtnImage' ></button>
+		</div>
+	</mat-card>
+	<mat-grid-list cols="2" rowHeight="290px">
+		<mat-grid-tile [colspan]=1 [rowspan]=1  *ngFor="let project of projectList">
+			<mat-card>
+				<mat-card-header>
+				  	<mat-card-title>
+						<a routerLink="{{ project.slug}}/">{{ project.title}}</a>
+						<button mat-button *ngIf=" project.status === 'Ongoing' ; else complete ">
+							<span><mat-icon >circle</mat-icon> {{ project.status}}</span>
+						</button>
+						<ng-template #complete>
+							<button mat-button >
+								<span>{{ project.status}}</span>
+							</button>
+						</ng-template>
+					</mat-card-title>
+					<mat-card-subtitle>{{project.content | slice :0:70}}</mat-card-subtitle>
+				</mat-card-header>
+				
+				<mat-card-content>
+					<div *ngFor='let prog of progress | slice : 0:4'>
+						<mat-checkbox color='primary' disabled [checked]='prog.status'></mat-checkbox>
+						<p>{{prog.name}}</p>
+					</div>					
+				</mat-card-content>
+				<mat-card-actions>
+						<ul *ngIf="project.project_people.length > 0">
+							<li *ngFor='let person of project.project_people'>
+								<!-- <span *ngIf="person.user_detail.image"> -->
+									<img src="{{ person.user_detail.image }} " onError="this.src='https://mangos-new-testing.s3.amazonaws.com/media/profile/user1_5xxbUHt.jpg '">
+								<!-- </span> -->
+								
+							</li>
+							<!-- <li><img src="http://15.207.89.112:8001/media/profile/user1_5xxbUHt.jpg"></li>
+							<li><img src="http://15.207.89.112:8001/media/profile/user1_5xxbUHt.jpg"></li>  -->
+						</ul>
+						<p>{{project.project_people.length}} people associated with this project</p>
+						<button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+							<mat-icon>more_vert</mat-icon>
+						</button>
+						<mat-menu #menu="matMenu">
+							<button mat-menu-item>
+								<span>Actions</span>
+							</button>
+						</mat-menu>					
+				</mat-card-actions>
+			</mat-card>
+		</mat-grid-tile>		
+	</mat-grid-list>
+</div>

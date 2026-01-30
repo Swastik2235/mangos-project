@@ -1,0 +1,23 @@
+.documentContainer{
+	margin: 20px;
+	.documentTopMenu{
+		margin-bottom: 10px;
+	}
+	.folder-card{
+		margin: 0 15px 15px 0;
+	}
+	.documentFolderIcn{
+		.mat-icon{
+			font-size: 10rem;
+		}
+	}
+	.subFolderDiv{
+		.mat-card{
+			cursor: pointer;
+		}	
+	}
+	.example-form-field{
+		width: 100%;
+	}
+	.addBtn{height: 50px;}
+}

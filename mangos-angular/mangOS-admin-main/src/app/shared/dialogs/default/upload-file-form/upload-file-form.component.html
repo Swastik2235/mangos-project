@@ -1,0 +1,18 @@
+<h3 mat-dialog-title>{{ data.title }}</h3>
+<!-- <div mat-dialog-content class="documentsform">
+	<input type="file" (change)="onFileDropped($event)">
+	<label class="file">
+	  	<input type="file" id="file" aria-label="File browser example" (change)="onFileDropped($event)">
+	  	<span class="file-custom"></span>
+	</label>
+	<p *ngIf="file">{{file.name}}</p>
+</div> -->
+<form [formGroup]="uploadFileForm" novalidate>
+	<mat-card-content>
+				<input type="file" formControlName='file' (change)="onFileDropped($event)">
+	</mat-card-content>
+	<p *ngIf="file">{{file.name}}</p>
+<mat-dialog-actions align="end">
+			  	<button mat-raised-button type="submit" color="primary" *ngIf="uploadFileForm.valid">Uploading...</button>
+				  <button mat-button mat-dialog-close (click)="closeDialog()">Cancel</button>
+</mat-dialog-actions>

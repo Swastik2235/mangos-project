@@ -1,0 +1,144 @@
+<div class="jobCardFormDiv">
+    <form [formGroup]="jobForm" novalidate class="profile" (ngSubmit)="addJob()">
+        <div mat-dialog-title>
+            <div class="jobCardForm">
+                <div fxLayout="row" fxFlexFill fxLayoutGap="20px">
+                    <div fxFlex="20" class="hide" fxFlexAlign="start">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Project</mat-label>
+                            <mat-select name="project" formControlName="project">
+                                <mat-option *ngFor="let project of projectList" [value]="project.id">
+                                    {{project.title}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="jobForm.controls['project'].hasError('required')">
+                                Project is <strong>required</strong>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="25" fxFlexAlign="start">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Prepared</mat-label>
+                            <mat-select formControlName="prepared">
+                                <mat-option *ngFor="let user of userList" [value]="user.id">
+                                    {{user.first_name}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="jobForm.controls['prepared'].hasError('required')">
+                                Prepared is <strong>required</strong>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="25" fxFlexAlign="start">
+                        <mat-form-field class="full-width" appearance="outline">
+                            <mat-label>Authorized</mat-label>
+                            <mat-select formControlName="authorized">
+                                <mat-option *ngFor="let user of userList" [value]="user.id">
+                                    {{user.first_name}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="jobForm.controls['authorized'].hasError('required')">
+                                Authorized is <strong>required</strong>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="25" fxFlexAlign="start">
+                        <mat-form-field class="full-width" appearance="outline">
+                            <mat-label>Tanks</mat-label>
+                            <mat-select multiple formControlName="tanks">
+                                <mat-option *ngFor="let tank of tankList" [value]="tank.id">
+                                    {{tank.title}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="25" fxFlexAlign="start">
+                        <mat-form-field class="full-width" appearance="outline">
+                            <mat-label>Lot</mat-label>
+                            <input type='number' matInput formControlName="lot">
+                            <mat-error *ngIf="jobForm.controls['lot'].hasError('required')">
+                                Lot is <strong>required</strong>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div fxLayout="row" fxFlexFill fxLayoutGap="20px">
+                    <div fxFlex="25" fxFlexAlign="start">
+                        <mat-form-field class="full-width" appearance="outline">
+                            <mat-label>Trolley</mat-label>
+                            <input matInput formControlName="trolley">
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="25" fxFlexAlign="start">
+                        <mat-form-field class="full-width" appearance="outline">
+                            <mat-label>Loading Stand</mat-label>
+                            <input matInput formControlName="loading_stand">
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="25" fxFlexAlign="start">
+                        <mat-form-field class="full-width" appearance="outline">
+                            <mat-label>Zincbath Temperature</mat-label>
+                            <input type='number' matInput formControlName="zincbath_temp">
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="25" fxFlexAlign="start">
+                        <mat-form-field class="full-width" appearance="outline">
+                            <mat-label>Relase Date</mat-label>
+                            <input matInput [matDatepicker]="picker" formControlName="release">
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                            <mat-error *ngIf="jobForm.controls['release'].hasError('required')">
+                                Date is <strong>required</strong>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <mat-dialog-content class="mat-typography">
+                    <div formArrayName='galvajobitems' class="item_jobcard">
+                        <div *ngFor='let item of galvajobitems.controls; let i = index'>
+                            <div [formGroupName]="i">
+                                <div class="galvajobitems">
+                                    <hr>
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Material Type</mat-label>
+                                        <input matInput placeholder="material_type" formControlName="material_type">
+                                    </mat-form-field>
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Length</mat-label>
+                                        <input type='number' matInput placeholder="length" formControlName="length">
+                                    </mat-form-field>
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Width</mat-label>
+                                        <input type='number' matInput placeholder="width" formControlName="width">
+                                    </mat-form-field>
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Thickness</mat-label>
+                                        <input type='number' matInput placeholder="thickness"
+                                            formControlName="thickness">
+                                    </mat-form-field>
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Weight</mat-label>
+                                        <input type='number' matInput placeholder="weight" formControlName="weight">
+                                    </mat-form-field>
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Min Coating required</mat-label>
+                                        <input type='number' matInput placeholder="min_coating_required"
+                                            formControlName="min_coating_required">
+                                    </mat-form-field>
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Remark</mat-label>
+                                        <input matInput placeholder="remark" formControlName="remark">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </mat-dialog-content>
+            </div>
+        </div>
+        <mat-dialog-actions align="end">
+            <button mat-raised-button color="primary" type="submit">Save</button>
+            <button mat-button mat-dialog-close>Cancel</button>
+        </mat-dialog-actions>
+    </form>
+</div>

@@ -1,0 +1,87 @@
+<div class="documentDetailContainer">
+	<ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "large" color = "#fff" type = "pacman" [fullScreen] = "true"><p style="color: white" > Loading... </p></ngx-spinner>
+	<div fxLayout="row" class="documentTopMenu" fxLayoutGap="30px">
+	    <div fxFlex="72" fxLayoutAlign="start">
+	      	<button mat-raised-button class="addBtn" *ngIf="folderDetail">{{ folderDetail.title | titlecase}}</button>
+	    </div>
+	    <div fxFlex="10" fxLayoutAlign="end">
+	      	<div>
+	          	<button mat-raised-button color="primary" class="addBtn" (click)="documentFileUpload()">Upload File</button>
+	      	</div>
+	    </div>
+	    <div fxFlex="5" fxLayoutAlign="end" fxLayoutGap="30px">
+	      	<div>
+	          	<button mat-raised-button color="primary" class="addBtn" (click)="editFolder('edit')">Edit</button>
+	      	</div>
+	    </div>
+	    <div fxFlex="13" fxLayoutAlign="end">
+	      	<div>
+	          	<button mat-raised-button color="primary" class="addBtn" (click)="addNewSubFolder()">Add New SubFolder</button>
+	      	</div>
+	    </div>
+	</div>
+	<div fxLayout="row wrap" fxLayout.lt-md="column" *ngIf="subfolderList.length > 0" class="subFolderDiv">
+		<div fxFlex="20" fxLayoutGap="30px" *ngFor="let folder of subfolderList">
+			<mat-card class="folder-card" [routerLink]="['/document',folder.id]">
+			  <mat-card-header>
+			    <mat-card-title>{{folder.title}}</mat-card-title>
+			    <!-- <mat-card-subtitle>Dog Breed</mat-card-subtitle> -->
+			  </mat-card-header>
+			  <mat-card-content class="documentFolderIcn">
+			  	<mat-icon [ngStyle]="{color:folder.color}">folder_open</mat-icon>
+			  </mat-card-content>
+			</mat-card>
+		</div>
+	</div>
+	<mat-card id='container' class="ws" >
+	</mat-card>
+	<h2 class="documentsList">Documents List</h2>
+	<div class="mat-elevation-z8">
+	    <table mat-table class="full-width-table" matSort aria-label="Elements">
+	      <!-- Id Column -->
+	      <ng-container matColumnDef="id">
+	        <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+	        <td mat-cell *matCellDef="let row;let i = index">{{i+1}}</td>
+	      </ng-container>
+
+	      <!-- Machine Column -->
+	      <ng-container matColumnDef="name">
+	        <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+	        <td mat-cell *matCellDef="let row">
+				<div class="documentFile">
+				<img src="{{row.file}}" *ngIf="row.extension=='Image'" class="chat-image" (click)="ImagePreview(row)" height= 24 width= 24 >
+				<div *ngIf="row.extension == 'Video' || row.extension == 'Document' || row.extension == 'Other'"><mat-icon *ngIf="row.extension == 'Document' || row.extension == 'Other'" (click)="ImagePreview(row)">article</mat-icon><mat-icon *ngIf="row.extension == 'Video'">slideshow</mat-icon></div>
+				{{row.name}}</div>
+			</td>
+	      </ng-container>
+
+	      <!-- Title Column -->
+	      <ng-container matColumnDef="size">
+	        <th mat-header-cell *matHeaderCellDef mat-sort-header>Size</th>
+	        <td mat-cell *matCellDef="let row">{{row.size}}</td>
+	      </ng-container>
+
+	      <!-- Action Column -->
+	      <ng-container matColumnDef="action">
+	        <th mat-header-cell *matHeaderCellDef mat-sort-header>Action</th>
+	        <td mat-cell *matCellDef="let item; let i = index"><button  mat-icon-button size="small" color="primary" (click)="editUploadFile(i)" ><mat-icon>mode</mat-icon></button><button  mat-icon-button color="warn" (click)="deleteFileDialog(i)" ><mat-icon>delete</mat-icon></button>
+	      </ng-container>
+
+		  <!-- Check Column -->
+		  <ng-container matColumnDef="check">
+	        <th mat-header-cell *matHeaderCellDef mat-sort-header>Check</th>
+			<td mat-cell *matCellDef="let row; let i = index"><div *ngIf='row.is_checked' ><input type="checkbox" checked disabled ></div><div *ngIf='!row.is_checked' ><input type="checkbox" (change)="checked(row.id,i)"></div></td>
+		</ng-container>
+
+	      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+	      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+	    </table>
+
+	    <mat-paginator #paginator
+	        [length]="dataSource?.data?.length"
+	        [pageIndex]="0"
+	        [pageSize]="10"
+	        [pageSizeOptions]="[5, 10, 20]">
+	    </mat-paginator>
+	</div>
+</div>

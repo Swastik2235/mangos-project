@@ -1,0 +1,458 @@
+<div class="jobForm-container" >
+	<ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "large" color = "#fff" type = "pacman" [fullScreen] = "true"><p style="color: white" > Loading... </p></ngx-spinner>
+	<ul class="breadcrumbs">
+		<li><a routerLink="/project/">Projects</a></li>
+		<li *ngIf="projectList.length>0"><a [routerLink]="['/project/',projectList[0].slug ]"> {{ projectList[0].title | titlecase}}</a></li>
+		<li>Job-Card</li>
+	</ul>
+	<form [formGroup]="jobForm" novalidate class="profile" (ngSubmit)="addJob()">
+		<mat-card>
+			<mat-card-title>
+				<!-- <h4>{{ title }} Product</h4> -->
+				<!-- <mat-error *ngIf='message!=null'>{{ message }}</mat-error> -->
+				<!-- <mat-error *ngFor='let errors of errors | keyvalue'>{{ errors.value }}</mat-error>				 -->
+			</mat-card-title> 
+			<mat-card-content class="jobForm">
+				<mat-card-title>
+					<mat-form-field class="hide" appearance="outline">
+						<mat-label>Project</mat-label>
+						<mat-select name="project"  formControlName="project">
+							<mat-option *ngFor="let project of projectList" [value]="project.id">
+								{{ project.title }}
+							</mat-option>
+						</mat-select>
+					</mat-form-field>
+				
+					<mat-form-field appearance="outline">
+						<mat-label>Prepared</mat-label>
+						<mat-select formControlName="prepared">
+							<mat-option *ngFor="let user of userList" [value]="user.id">
+								{{ user.first_name }}
+							</mat-option>
+						</mat-select>
+					</mat-form-field>
+					<mat-form-field appearance="outline">
+						<mat-label>Authorized</mat-label>
+						<mat-select formControlName="authorized">
+							<mat-option *ngFor="let user of userList" [value]="user.id">
+								{{ user.first_name }}
+							</mat-option>
+						</mat-select>
+					</mat-form-field>
+				</mat-card-title>
+
+				<mat-card-title>
+				
+				
+					<mat-form-field class="full-width" appearance="outline">
+						<mat-label>Lot</mat-label>
+						<input type='text' matInput  formControlName="lot" >
+						<!-- <mat-error *ngIf="jobForm.controls['quantity'].hasError('required')">
+							Note is <strong>required</strong>
+						</mat-error> -->
+					</mat-form-field>
+				
+					<mat-form-field class="full-width" appearance="outline">
+						<mat-label>Relase Date</mat-label>
+						<input matInput [matDatepicker]="picker" formControlName="release">
+						<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+						<mat-datepicker #picker></mat-datepicker>
+						<mat-error *ngIf="jobForm.controls['release'].hasError('required')">
+							Date is <strong>required</strong>
+						</mat-error>
+					</mat-form-field>
+				</mat-card-title>
+			</mat-card-content> 
+			<!-- <mat-card-content>
+				<mat-card-title>
+					<button type="button" mat-raised-button color="primary" (click)="addItems()">Add New Row</button>
+				</mat-card-title>
+			</mat-card-content> -->
+			<h2>Job Items</h2>
+			<div  formArrayName='jobitems' class="item_jobcard">
+				<div *ngFor='let item of jobitems.controls; let i = index'>
+					<div [formGroupName]="i">
+						<mat-card-title class="jobitems">
+							<!-- <mat-form-field appearance="outline" class="myField">
+								<mat-label>Mark</mat-label>
+								<input type='text' matInput placeholder="mark" formControlName="mark"  >
+								
+							</mat-form-field>						 -->
+							<!-- <mat-form-field appearance="outline">
+								<mat-label>Section</mat-label>
+								<input type='number' matInput placeholder="Quantity" formControlName="section" value=0 >
+							</mat-form-field> -->
+							<mat-form-field class="full-width" appearance="outline">
+								<mat-label>Number Of Towers</mat-label>
+								<input type='number' matInput formControlName="tower_quantity" >
+								<!-- <mat-error *ngIf="jobForm.controls['spec'].hasError('required')">
+									Spec is <strong>required</strong>
+								</mat-error> -->
+							</mat-form-field>
+							<mat-form-field appearance="outline">
+								<mat-label>Length</mat-label>
+								<input type='number' matInput placeholder="length" formControlName="length" value=0 >
+							</mat-form-field>
+							<mat-form-field appearance="outline">
+								<mat-label>Width</mat-label>
+								<input type='number' matInput placeholder="width" formControlName="width" value=0 >
+							</mat-form-field>
+							<mat-form-field appearance="outline">
+								<mat-label>Unit</mat-label>
+								<input type='number' matInput placeholder="unit-weight" formControlName="unit_weight" value=0 >
+							</mat-form-field>
+							<mat-form-field appearance="outline">
+								<mat-label>PC</mat-label>
+								<input type='number' matInput placeholder="Pc weight" formControlName="piece_weight" value=0 >
+							</mat-form-field>
+							<mat-form-field appearance="outline">
+								<mat-label>Quantity</mat-label>
+								<input type='number' matInput formControlName="quantity" value=0 >
+							</mat-form-field>
+							<mat-form-field appearance="outline">
+								<mat-label>Weight</mat-label>
+								<input type='number' matInput formControlName="total_weight" value=0 >
+							</mat-form-field>
+							<mat-form-field appearance="outline">
+								<mat-label>Operation</mat-label>
+								<input type='text' matInput  formControlName="operation" value=0 >
+							</mat-form-field>
+							<mat-form-field appearance="outline">
+								<mat-label>Remark</mat-label>
+								<input type='text' matInput placeholder="remark" formControlName="remark" value=0 >
+							</mat-form-field>
+							<!-- <mat-form-field appearance="outline">
+								<mat-label>Machines to be allocated</mat-label>
+								<mat-select  name="Machine" formControlName="machine" multiple>
+									<mat-option *ngFor="let machine of machines" [value]="machine">
+										{{machine.title}}
+									</mat-option>
+								</mat-select>
+							</mat-form-field> -->
+							</mat-card-title>
+							<div class="checkbox">
+								<mat-checkbox [checked]="jobitems.value[i].hab" [disabled]="jobitems.value[i].hab" (change)="op_checked('hab',i)"> HAB </mat-checkbox>
+								<!-- <span> {{jobitems.value[i].hab}} </span> -->
+								<mat-form-field appearance="outline">
+									<mat-label>Machines to be allocated</mat-label>
+									<mat-select  name="Machine"  multiple (selectionChange)="machineSelect('hab',$event,i)">
+										<mat-option *ngFor="let machine of machines" [value]="machine">
+											{{machine.title}}
+										</mat-option>
+									</mat-select>
+								</mat-form-field>
+								<mat-form-field appearance="outline">
+									<mat-label>Operator</mat-label>
+									<input type='text' matInput placeholder="operator 1,operator 2" (input)="addOperator('hab',$event.target,i)" value="{{jobitems.value[i].operation_data.hab.operator}}">
+								</mat-form-field>
+								<mat-form-field appearance="outline">
+									<mat-label>assistant</mat-label>
+									<input type='text' matInput placeholder="assistant 1,assistant 2" (input)="addAssistant('hab',$event.target,i)" value="{{jobitems.value[i].operation_data.hab.assistant}}">
+								</mat-form-field>
+							</div>
+							<div class="checkbox">
+								<mat-checkbox [checked]="jobitems.value[i].cps" [disabled]="jobitems.value[i].cps" (change)="op_checked('cps',i)"> CPS </mat-checkbox>
+								<mat-form-field appearance="outline">
+									<mat-label>Machines to be allocated</mat-label>
+									<mat-select  name="Machine"  multiple (selectionChange)="machineSelect('cps',$event,i)">
+										<mat-option *ngFor="let machine of machines" [value]="machine">
+											{{machine.title}}
+										</mat-option>
+									</mat-select>
+								</mat-form-field>
+								<mat-form-field appearance="outline">
+									<mat-label>Operator</mat-label>
+									<input type='text' matInput placeholder="operator 1,operator 2" (input)="addOperator('cps',$event.target,i)" value="{{jobitems.value[i].operation_data.cps.operator}}">
+								</mat-form-field>
+								<mat-form-field appearance="outline">
+									<mat-label>assistant</mat-label>
+									<input type='text' matInput placeholder="assistant 1,assistant 2" (input)="addAssistant('cps',$event.target,i)" value="{{jobitems.value[i].operation_data.cps.assistant}}">
+								</mat-form-field>
+							</div>
+							<div class="checkbox">
+								<mat-checkbox [checked]="jobitems.value[i].hc" [disabled]="jobitems.value[i].hc" (change)="op_checked('hc',i)"> HC </mat-checkbox>
+								<mat-form-field appearance="outline">
+									<mat-label>Machines to be allocated</mat-label>
+									<mat-select  name="Machine"  multiple (selectionChange)="machineSelect('hc',$event,i)">
+										<mat-option *ngFor="let machine of machines" [value]="machine">
+											{{machine.title}}
+										</mat-option>
+									</mat-select>
+								</mat-form-field>
+								<mat-form-field appearance="outline">
+									<mat-label>Operator</mat-label>
+									<input type='text' matInput placeholder="operator 1,operator 2" (input)="addOperator('hc',$event.target,i)" value="{{jobitems.value[i].operation_data.hc.operator}}">
+								</mat-form-field>
+								<mat-form-field appearance="outline">
+									<mat-label>assistant</mat-label>
+									<input type='text' matInput placeholder="assistant 1,assistant 2" (input)="addAssistant('hc',$event.target,i)" value="{{jobitems.value[i].operation_data.hc.assistant}}">
+								</mat-form-field>
+							</div>
+							<div class="checkbox">
+								<mat-checkbox [checked]="jobitems.value[i].n" [disabled]="jobitems.value[i].n" (change)="op_checked('n',i)"> N </mat-checkbox>
+								<mat-form-field appearance="outline">
+									<mat-label>Machines to be allocated</mat-label>
+									<mat-select  name="Machine"  multiple (selectionChange)="machineSelect('n',$event,i)">
+										<mat-option *ngFor="let machine of machines" [value]="machine">
+											{{machine.title}}
+										</mat-option>
+									</mat-select>
+								</mat-form-field>
+								<mat-form-field appearance="outline">
+									<mat-label>Operator</mat-label>
+									<input type='text' matInput placeholder="operator 1,operator 2" (input)="addOperator('n',$event.target,i)" value="{{jobitems.value[i].operation_data.n.operator}}">
+								</mat-form-field>
+								<mat-form-field appearance="outline">
+									<mat-label>assistant</mat-label>
+									<input type='text' matInput placeholder="assistant 1,assistant 2" (input)="addAssistant('n',$event.target,i)" value="{{jobitems.value[i].operation_data.n.assistant}}">
+								</mat-form-field>
+							</div>
+							<div class="checkbox">
+								<mat-checkbox [checked]="jobitems.value[i].b" [disabled]="jobitems.value[i].b" (change)="op_checked('b',i)"> B </mat-checkbox>
+								<mat-form-field appearance="outline">
+									<mat-label>Machines to be allocated</mat-label>
+									<mat-select  name="Machine"  multiple (selectionChange)="machineSelect('b',$event,i)">
+										<mat-option *ngFor="let machine of machines" [value]="machine">
+											{{machine.title}}
+										</mat-option>
+									</mat-select>
+								</mat-form-field>
+								<mat-form-field appearance="outline">
+									<mat-label>Operator</mat-label>
+									<input type='text' matInput placeholder="operator 1,operator 2" (input)="addOperator('b',$event.target,i)" value="{{jobitems.value[i].operation_data.b.operator}}">
+								</mat-form-field>
+								<mat-form-field appearance="outline">
+									<mat-label>assistant</mat-label>
+									<input type='text' matInput placeholder="assistant 1,assistant 2" (input)="addAssistant('b',$event.target,i)" value="{{jobitems.value[i].operation_data.b.assistant}}">
+								</mat-form-field>
+							</div>
+							<div class="checkbox">
+								<mat-checkbox [checked]="jobitems.value[i].d" [disabled]="jobitems.value[i].d" (change)="op_checked('d',i)"> D </mat-checkbox>
+								<mat-form-field appearance="outline">
+									<mat-label>Machines to be allocated</mat-label>
+									<mat-select  name="Machine"  multiple (selectionChange)="machineSelect('d',$event,i)">
+										<mat-option *ngFor="let machine of machines" [value]="machine">
+											{{machine.title}}
+										</mat-option>
+									</mat-select>
+								</mat-form-field>
+								<mat-form-field appearance="outline">
+									<mat-label>Operator</mat-label>
+									<input type='text' matInput placeholder="operator 1,operator 2" (input)="addOperator('d',$event.target,i)" value="{{jobitems.value[i].operation_data.d.operator}}">
+								</mat-form-field>
+								<mat-form-field appearance="outline">
+									<mat-label>assistant</mat-label>
+									<input type='text' matInput placeholder="assistant 1,assistant 2" (input)="addAssistant('d',$event.target,i)" value="{{jobitems.value[i].operation_data.d.assistant}}">
+								</mat-form-field>
+							</div>
+							<mat-card-title>
+							<!-- <mat-form-field appearance="outline">
+								<mat-label>N</mat-label>
+								<input type='number' matInput placeholder="n" formControlName="n" value=0 >
+							</mat-form-field>
+							<mat-form-field appearance="outline">
+								<mat-label>B</mat-label>
+								<input type='number' matInput placeholder="b" formControlName="b" value=0 >
+							</mat-form-field> -->
+							<!-- <mat-form-field appearance="outline"> -->
+								<!-- </mat-form-field> -->
+								<!-- <mat-form-field appearance="outline">
+								<mat-label>D</mat-label>
+								<input type='number' matInput placeholder="d" formControlName="d" value=0 >
+							</mat-form-field> -->
+							<!-- <mat-form-field appearance="outline">
+								<mat-label>Operator</mat-label>
+								<input type='text' matInput placeholder="operator 1,operator 2" formControlName="operator">
+							</mat-form-field>
+							<mat-form-field appearance="outline">
+								<mat-label>assistant</mat-label>
+								<input type='text' matInput placeholder="assistant 1,assistant 2" formControlName="assistant">
+							</mat-form-field> -->
+							<!-- <mat-form-field appearance="outline">
+								<mat-label>Tax</mat-label>
+								<mat-select name="item"  formControlName="tax">
+									<mat-option *ngFor="let tax of taxList" [value]="tax.id">
+										{{ tax.name }}
+									</mat-option>
+								</mat-select>
+							</mat-form-field> -->
+							<button type="button"  mat-icon-button (click)="removeRow(i)">
+								<mat-icon  color="warn" >delete</mat-icon>
+							</button>
+						</mat-card-title>
+						
+					</div>  
+					<hr>
+				</div>
+				
+			</div>
+
+			<h2>Embossing</h2>
+			<mat-dialog-content class="mat-typography">
+				<div formArrayName='embossings' class="item_embossing">
+					<div *ngFor='let item of embossing.controls; let i = index'>
+						<div [formGroupName]="i">
+							<div class="jobitems">
+								<!-- <mat-form-field appearance="outline" class="myField">
+									<mat-label>Mark</mat-label>
+									<input type='text' matInput placeholder="mark" formControlName="mark">
+								</mat-form-field>	 -->
+								<mat-form-field appearance="outline">
+									<mat-label>Section</mat-label>
+									<mat-select name="section" formControlName="section">
+										<mat-option *ngFor="let section of sectionList" [value]="section.id">
+											{{section.title}}
+										</mat-option>
+									</mat-select>
+									<!-- <mat-error *ngIf="jobForm.controls['project'].hasError('required')">
+										Project is <strong>required</strong>
+									</mat-error> -->
+								</mat-form-field>
+								<mat-form-field appearance="outline">
+									<mat-label>Title</mat-label>
+									<input type='text' matInput placeholder="Title" formControlName="title">
+								</mat-form-field>					
+								<!-- <mat-form-field appearance="outline">
+									<mat-label>Section</mat-label>
+									<input type='number' matInput placeholder="Quantity" formControlName="section">
+								</mat-form-field> -->
+								<mat-form-field appearance="outline">
+									<mat-label>Sin</mat-label>
+									<input type='number' matInput placeholder="Sin" formControlName="sin">
+								</mat-form-field>
+								<mat-form-field appearance="outline">
+									<mat-label>Width</mat-label>
+									<input type='number' matInput placeholder="Width" formControlName="width">
+								</mat-form-field>
+								<mat-form-field appearance="outline">
+									<mat-label>Length</mat-label>
+									<input type='number' matInput placeholder="Length" formControlName="length">
+								</mat-form-field>
+								<mat-form-field appearance="outline">
+									<mat-label>Pcs</mat-label>
+									<input type='number' matInput placeholder="piece" formControlName="pcs">
+								</mat-form-field>
+								<mat-form-field appearance="outline">
+									<mat-label>Unit weight</mat-label>
+									<input type='number' matInput placeholder="unit weight" formControlName="unit_weight" >
+								</mat-form-field>
+								
+								<mat-form-field appearance="outline">
+									<mat-label>Kg</mat-label>
+									<input type='number' matInput formControlName="kg">
+								</mat-form-field>
+								
+								<!-- <mat-form-field appearance="outline">
+									<mat-label>Tower</mat-label>
+									<input type='number' matInput formControlName="tower">
+								</mat-form-field> -->
+								<mat-form-field appearance="outline">
+									<mat-label>CL</mat-label>
+									<input type='number' matInput formControlName="cl">
+								</mat-form-field>
+								<!-- <mat-form-field appearance="outline">
+									<mat-label>Total Weight</mat-label>
+									<input type='text' matInput  formControlName="total_weight">
+								</mat-form-field> -->
+
+								<!-- <mat-form-field appearance="outline">
+									<mat-label>N</mat-label>
+									<input type='number' matInput placeholder="n" formControlName="n">
+								</mat-form-field>
+								<mat-form-field appearance="outline">
+									<mat-label>B</mat-label>
+									<input type='number' matInput placeholder="b" formControlName="b">
+								</mat-form-field>
+								<mat-form-field appearance="outline">
+									<mat-label>HAB</mat-label>
+									<input type='number' matInput placeholder="hab" formControlName="hab">
+								</mat-form-field>
+								<mat-form-field appearance="outline">
+									<mat-label>D</mat-label>
+									<input type='number' matInput placeholder="d" formControlName="d">
+								</mat-form-field> -->
+
+								<!-- <mat-form-field appearance="outline">
+									<mat-label>Remark</mat-label>
+									<input type='text' matInput placeholder="remark" formControlName="remark">
+								</mat-form-field> -->
+								<button type="button"  mat-icon-button (click)="removeEmbRow(i)">
+									<mat-icon  color="warn" >delete</mat-icon>
+								</button>
+							</div>
+						</div>
+						<mat-divider class="breakBomItem"></mat-divider>  
+					</div>
+				</div>	
+			</mat-dialog-content>
+			<div fxLayout="row">
+				<div fxFlex="100" fxLayoutAlign="start">
+					<h1>Allocation</h1>
+				</div>
+			</div>
+			<mat-dialog-content class="mat-typography">
+				<div formArrayName='allocations' class="item_embossing">
+					<div *ngFor='let item of allocation.controls; let i = index'>
+						<div [formGroupName]="i">
+							<div class="jobitems">
+								<mat-form-field appearance="outline">
+									<mat-label>Section</mat-label>
+									<mat-select name="section" formControlName="section">
+										<mat-option *ngFor="let section of sectionList" [value]="section.id">
+											{{section.title}}
+										</mat-option>
+									</mat-select>
+								</mat-form-field>
+								<mat-form-field appearance="outline">
+									<mat-label>1.Length</mat-label>
+									<input type='number' matInput placeholder="1.length" formControlName="length1">
+								</mat-form-field>
+								<mat-form-field appearance="outline">
+									<mat-label>1.quantity</mat-label>
+									<input type='number' matInput placeholder="1.quantity" formControlName="quantity1">
+								</mat-form-field>
+								<mat-form-field appearance="outline">
+									<mat-label>2.length</mat-label>
+									<input type='number' matInput placeholder="2.length" formControlName="length2">
+								</mat-form-field>
+								<mat-form-field appearance="outline">
+									<mat-label>2.quantity</mat-label>
+									<input type='number' matInput placeholder="2.quantity" formControlName="quantity2">
+								</mat-form-field>
+								<mat-form-field appearance="outline">
+									<mat-label>3.length</mat-label>
+									<input type='number' matInput placeholder="3.length" formControlName="length3">
+								</mat-form-field>
+								<mat-form-field appearance="outline">
+									<mat-label>3.quantity</mat-label>
+									<input type='number' matInput placeholder="3.quantity" formControlName="quantity3">
+								</mat-form-field>
+								<mat-form-field appearance="outline">
+									<mat-label>4.length</mat-label>
+									<input type='number' matInput placeholder="4.length" formControlName="length4">
+								</mat-form-field>
+								<mat-form-field appearance="outline">
+									<mat-label>4.quantity</mat-label>
+									<input type='number' matInput placeholder="4.quantity" formControlName="quantity4">
+								</mat-form-field>
+								<mat-form-field appearance="outline">
+									<mat-label>Total length</mat-label>
+									<input type='number' matInput placeholder="total length" formControlName="length">
+								</mat-form-field>
+								<mat-form-field appearance="outline">
+									<mat-label>Total quantity</mat-label>
+									<input type='number' matInput placeholder="total quantity" formControlName="quantity">
+								</mat-form-field>
+							</div>
+						</div>
+					</div>
+				</div>
+			</mat-dialog-content>	
+			
+			<mat-card-actions>
+				<button mat-raised-button color="primary" type="submit" >Save</button>
+				<!-- <button mat-raised-button color="primary" type="button" (click)="onCancel()">Cancel</button> -->
+			</mat-card-actions>
+		</mat-card>
+	</form>
+</div>

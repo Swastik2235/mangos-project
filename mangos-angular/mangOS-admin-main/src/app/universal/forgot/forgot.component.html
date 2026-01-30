@@ -1,0 +1,101 @@
+
+<div class="forgot-container" *ngIf="emailSent ; else elseBlock">
+	<mat-grid-list cols="1" rowHeight="2:1" >
+		<mat-grid-tile   colspan='1' >
+			 
+				
+			<form [formGroup]="verifyForm" novalidate (ngSubmit)="onSubmit()" class='login-card'  *ngIf='userVerify ; else forgotPassword'>
+				<mat-card >
+					<mat-card-title>
+						<h3>Reset Password</h3>
+						
+						<mat-error class="matchError">{{ message }}</mat-error>
+						<span class="matchError" *ngIf='!passwordMatch'>password do not match.</span>
+					</mat-card-title> 
+					<mat-card-content>
+						<mat-card-title>
+							<mat-form-field >
+								<input matInput placeholder="Enter Password" formControlName="password" type='password'>
+								<mat-error *ngIf="v.password.errors">
+									<span *ngIf='v.password.errors?.required'>Password is <strong>required.</strong></span>
+									<span *ngIf='v.password.errors.minlength'>Minimum 8 digit <strong>required</strong></span>
+									<span *ngIf='v.password.errors?.maxlength'>Password must be less than <strong>20 digits.</strong></span>
+								</mat-error>
+							</mat-form-field>
+						</mat-card-title>   
+						
+					</mat-card-content>
+					<mat-card-content>
+						<mat-card-title>
+							<mat-form-field >
+								<input matInput placeholder="Confirm Password" formControlName="cpassword" type='password' (keyup)="passwordMatchFunction()">
+								<mat-error *ngIf="v.cpassword.errors">
+									<span *ngIf='v.cpassword.errors?.required'>Confirm password is <strong>required.</strong></span>
+									<span *ngIf='v.cpassword.errors.minlength'>Minimum 8 digit <strong>required</strong></span>
+									<span *ngIf='v.cpassword.errors?.maxlength'>Password must be less than <strong>20 digits.</strong></span>
+								</mat-error>
+							</mat-form-field>
+						</mat-card-title>   
+					</mat-card-content>
+					<mat-card-content>
+						<mat-card-title>
+							<mat-form-field [hidden]="true">
+								<input matInput placeholder="Confirm Password" formControlName="uid" hidden >
+								
+							</mat-form-field>
+						</mat-card-title>   
+					</mat-card-content>
+					<mat-card-content>
+						<mat-card-title>
+							<mat-form-field [hidden]="true">
+								<input matInput placeholder="Confirm Password" formControlName="token" hidden>
+								
+							</mat-form-field>
+						</mat-card-title>   
+					</mat-card-content>
+					<mat-card-actions>
+						<button mat-raised-button color="primary" type="submit" [disabled]="!verifyForm.valid || !passwordMatch">Submit</button>
+						<a routerLink="/forgot-password" *ngIf='!passwordChanged'>Resend Link</a>
+						<a routerLink="/login" *ngIf='passwordChanged'>Login</a>
+					</mat-card-actions>
+				</mat-card>
+			</form> 
+			
+			<ng-template #forgotPassword>
+				<form [formGroup]="forgotPasswordForm" novalidate (ngSubmit)="onSubmit()" class='login-card' >
+					<mat-card >
+						<mat-card-title>
+							<h3>Forgot Password</h3>
+							<mat-error class="matchError">{{ message }}</mat-error>
+						</mat-card-title> 
+						<mat-card-content>
+							<mat-card-title>
+								<mat-form-field >
+									<input matInput placeholder="Enter Your Email Address" formControlName="email">
+									<mat-error *ngIf="f.email.errors">
+										<span *ngIf='f.email.errors?.required'>Email is <strong>required.</strong></span>
+										<span *ngIf='f.email.errors?.email'>Enter valid <strong>email.</strong></span>
+									</mat-error>
+								</mat-form-field>
+							</mat-card-title>   
+							
+						</mat-card-content>
+						
+						<mat-card-actions>
+							<button mat-raised-button color="primary" type="submit" [disabled]="!forgotPasswordForm.valid">Submit</button>
+							
+						</mat-card-actions>
+					</mat-card>
+				</form>
+			</ng-template>
+		</mat-grid-tile>
+	</mat-grid-list>
+</div>
+
+<ng-template class="grid-container" #elseBlock>
+	<mat-grid-list cols="1" rowHeight="2:1" >
+		<mat-grid-tile   colspan='1' class='warning'>
+			<h2 >{{message}} .Please Check Your Email.</h2>
+		</mat-grid-tile>
+	</mat-grid-list>
+</ng-template>

@@ -1,0 +1,45 @@
+.jobForm-container{
+	margin:20px;
+	ul.breadcrumbs {padding: 10px 16px;list-style: none;
+		li {display: inline;font-size: 15px;
+			a{color:#979797;text-decoration: none;}
+		}
+		li+li:before {padding: 8px;margin-bottom: 2%;color: #979797;content: ' \003E';;}
+		span{float: right;a{color:#979797 ;}margin-right: 2%;}
+	}
+	.checkbox{
+		// display: grid;
+		.mat-checkbox{padding-left: 10px;}
+	}
+	.jobForm{
+		.mat-form-field{
+			font-size: small;
+			width: 48%;
+			margin-left: 2%;
+		}
+		.hide{
+			display: none;
+		}
+	}
+	.mat-form-field-flex{
+		height: 40px !important;
+	}
+	.item_jobcard {
+		.mat-form-field-appearance-outline .mat-form-field-infix {
+			padding: 0.5em 0 !important;
+		}
+		.mat-form-field{
+			font-size: small;
+			height: 60px;
+			width: 10%;
+			margin-left:.5%;
+		}
+	}
+	.item_embossing {
+		.mat-form-field{
+			font-size: small;
+			width: 10%;
+			margin-left:.5%;
+		}
+	}
+}

@@ -1,0 +1,107 @@
+<mat-sidenav-container class="sidenav-container">	
+	<mat-sidenav #drawer class="sidenav" fixedInViewport [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'" [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="(isHandset$ | async) === false">
+		<mat-toolbar>Menu</mat-toolbar>
+		<mat-nav-list>
+			<a mat-list-item routerLink="/" [routerLinkActiveOptions]="{exact: true}" routerLinkActive #rla="routerLinkActive" [ngClass]="[rla.isActive == true ? 'active': '']">
+				<mat-icon>home</mat-icon><span >Home</span>	 
+			</a>
+			<a mat-list-item routerLink="/home" routerLinkActive="active" >
+				<mat-icon>dashboard</mat-icon><span >Dashboard</span>	 
+			</a>
+			<mat-accordion>			
+				<mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false" [expanded]="router.isActive('organization',false)">
+					<mat-expansion-panel-header  [class.active]="router.isActive('organization',false)">
+						<mat-panel-title>
+							<mat-icon>leaderboard_outlined</mat-icon>Organization</mat-panel-title>
+					</mat-expansion-panel-header>
+					<a mat-list-item routerLinkActive="active" routerLink="/organization/company"><mat-icon>location_city</mat-icon>Company</a>
+					<a mat-list-item routerLinkActive="active" routerLink="/organization/invite" *ngIf="loginUser.is_superuser"><mat-icon>person_add</mat-icon>Invite</a>
+					<a mat-list-item routerLinkActive="active" routerLink="/organization/employee"><mat-icon>person_outline</mat-icon>Employee</a>
+					<a mat-list-item routerLinkActive="active" routerLink="/organization/permission"><mat-icon>accessibility_new</mat-icon>Permission</a>
+					<a mat-list-item routerLinkActive="active" routerLink="/organization/client"><mat-icon>people</mat-icon>Client</a>
+				</mat-expansion-panel>
+				<mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false" [expanded]="router.isActive('inventory',false)">
+					<mat-expansion-panel-header [class.active]="router.isActive('inventory',false)">
+						<mat-panel-title><mat-icon >inventory</mat-icon><span>Inventory</span></mat-panel-title>
+					</mat-expansion-panel-header>
+					<a mat-list-item routerLinkActive="active" routerLink="/inventory/category"><mat-icon>view_quilt</mat-icon>Category</a>
+					<a mat-list-item routerLinkActive="active" routerLink="/inventory/tax"><mat-icon>receipt</mat-icon>Tax</a>
+					<a mat-list-item routerLinkActive="active" routerLink="/inventory/product"><mat-icon>all_inbox</mat-icon>Products</a>
+					<a mat-list-item routerLinkActive="active" routerLink="/inventory/purchase"><mat-icon>add_shopping_cart</mat-icon>Purchase</a>
+					<a mat-list-item routerLinkActive="active" routerLink="/inventory/sale"><mat-icon>outbox</mat-icon>Sale</a>
+					<a mat-list-item routerLinkActive="active" routerLink="/inventory/report"><mat-icon>trending_up</mat-icon>Report</a>
+				</mat-expansion-panel>
+				<mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false" [expanded]="router.isActive('project',false)">
+					<mat-expansion-panel-header [class.active]="router.isActive('project',false)">
+						<mat-panel-title><mat-icon>dns</mat-icon><span>Project</span></mat-panel-title>
+					</mat-expansion-panel-header>
+					<a mat-list-item routerLinkActive="active" routerLink="/project/service"><mat-icon>language</mat-icon><span>Services</span></a>
+					<a mat-list-item routerLinkActive="active" routerLink="/project/machine"><mat-icon>settings_suggest</mat-icon><span>Machines</span></a>
+					<a mat-list-item routerLinkActive="active" routerLink="/project/tank"><mat-icon>takeout_dining</mat-icon><span>Tanks</span></a>
+					<a mat-list-item routerLinkActive="active" routerLink="/project/tank-data"><mat-icon>dataset</mat-icon><span>Tank Audit</span></a>
+					<a mat-list-item routerLinkActive="active" routerLink="/project/operation"><mat-icon>developer_board</mat-icon><span>Operations</span></a>
+					<a mat-list-item routerLinkActive="active" routerLink="/project/section"><mat-icon>stacked_bar_chart</mat-icon><span>Sections</span></a>
+					<a mat-list-item routerLinkActive="active" routerLink="/project/mark"><mat-icon>work</mat-icon><span>Mark</span></a>
+					<a mat-list-item routerLinkActive="active" routerLink="/project/tower"><mat-icon>settings_input_antenna</mat-icon><span>Tower</span></a>
+					<a mat-list-item routerLinkActive="active" routerLink="/project" [routerLinkActiveOptions]="{exact: true}"><mat-icon>receipt</mat-icon><span>Project-List</span></a>
+					<a mat-list-item routerLinkActive="active" routerLink="/project/bom"><mat-icon>article</mat-icon><span>BOM</span></a>
+					<a mat-list-item routerLinkActive="active" routerLink="/project/galva-material"><mat-icon>category</mat-icon><span>Galva Material</span></a>
+					<!-- <a mat-list-item routerLinkActive="active" routerLink="/project/cutting-plan"><mat-icon>article</mat-icon><span>Cutting Plan</span></a> -->
+					<a mat-list-item routerLinkActive="active" routerLink="/project/job-card"><mat-icon> credit_card</mat-icon><span>Job Cards</span></a>
+					<a mat-list-item routerLinkActive="active" routerLink="/project/galva-job-card"><mat-icon> view_agenda</mat-icon><span>G Job Cards</span></a>
+					<a mat-list-item routerLinkActive="active" routerLink="/project/production"><mat-icon>assessment</mat-icon><span>Production</span></a>
+					<a mat-list-item routerLinkActive="active" routerLink="/project/packaging"><mat-icon>shopping_basket</mat-icon><span>Packaging</span></a>
+					<a mat-list-item routerLinkActive="active" routerLink="/project/report"><mat-icon>trending_up</mat-icon><span>Report</span></a>
+					
+					<!-- <a mat-list-item routerLinkActive="active" routerLink="/inventory/category"><mat-icon>view_quilt</mat-icon>Category</a> -->
+				</mat-expansion-panel>
+				<mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false" [expanded]="router.isActive('document',false)">
+					<mat-expansion-panel-header  [class.active]="router.isActive('document',false)">
+						<mat-panel-title>
+							<mat-icon>description</mat-icon>Document</mat-panel-title>
+					</mat-expansion-panel-header>
+					<a mat-list-item routerLinkActive="active" routerLink="/document"><mat-icon>folder</mat-icon>Folder</a>
+				</mat-expansion-panel>
+				<mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false" [expanded]="router.isActive('account',false)">
+					<mat-expansion-panel-header  [class.active]="router.isActive('account',false)">
+						<mat-panel-title>
+							<mat-icon>account_balance_wallet</mat-icon>Account</mat-panel-title>
+					</mat-expansion-panel-header>
+					<a mat-list-item routerLinkActive="active"><mat-icon>wallet</mat-icon>Finance</a>
+				</mat-expansion-panel>
+			</mat-accordion>
+			
+		</mat-nav-list>
+		
+	</mat-sidenav>
+	<mat-sidenav-content>
+		<mat-toolbar color="primary">
+			<button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()" *ngIf="isHandset$ | async">
+				<mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+			</button>
+			<span>mangosAdmin</span>
+			<button mat-icon-button matBadge="15" class="notification position-absolute" (click)='openBar()'>
+				<mat-icon  matBadgeColor="warn">circle_notifications</mat-icon>
+			</button>
+			<button mat-raised-button class="checkedIn position-absolute" >
+				<mat-icon >alarm</mat-icon>
+				<span class="time">Check-In {{checkedIn | date:'HH:mm' }}</span>
+			</button>
+			
+			<button mat-icon-button class="more-button account" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
+		        {{loginUser.display}} <mat-icon>more_vert</mat-icon>
+		    </button>
+		    <mat-menu #menu="matMenu" xPosition="before">
+		        <button mat-menu-item routerLink="/profile">Profile</button>
+		        <button mat-menu-item routerLink="/change-password">Change Password</button>
+		        <button mat-menu-item (click)="logout()"><mat-icon>logout</mat-icon>Logout</button>
+		    </mat-menu>
+		</mat-toolbar>
+		<!--Add Content Here -->
+		<router-outlet ></router-outlet>
+	</mat-sidenav-content>
+
+	<mat-sidenav #sidenav  [(opened)]="notificationDivShow" position="end" class="rightSideNav">
+		<app-notification-bar></app-notification-bar>
+	</mat-sidenav>
+</mat-sidenav-container>

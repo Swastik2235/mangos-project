@@ -1,0 +1,84 @@
+<div class="task-container" >
+	<ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "large" color = "#fff" type = "pacman" [fullScreen] = "true"><p style="color: white" > Loading... </p></ngx-spinner>
+	<!-- <a routerLink="/organization/permission/add" *ngIf='addPermission'>
+		<button mat-raised-button color="primary">Add New Permission</button>
+	</a> -->
+	<!-- <div class='filter-btn'>
+		<mat-form-field fxFlex="40%">
+			<input matInput type="text" (keyup)="doFilter($any($event.target).value)" placeholder="Filter">
+		</mat-form-field>
+	</div> -->
+	<ul class="breadcrumbs">
+		<li><a routerLink="/project/">Projects</a></li>
+		<li><a [routerLink]="['/project/',projectDetail.slug ]"> {{ projectDetail.title | titlecase}}</a></li>
+		<li>Task Management</li>
+	</ul>
+	<div class="mat-elevation-z8">
+		<table mat-table class="full-width-table" matSort aria-label="Elements" multiTemplateDataRows>
+			
+
+			<!-- ID Column -->
+			<ng-container matColumnDef="title">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header>Task</th>
+				
+				<td mat-cell *matCellDef="let row" >
+					<mat-icon><span>expand_more</span></mat-icon>
+					<!-- <a mat-button href="javascript:void()" (click)="row.isExpanded = !row.isExpanded"> -->
+							{{row.title}}
+					<!-- </a> -->
+				</td>
+			</ng-container>
+
+			<!-- content_type Column -->
+			<ng-container matColumnDef="start">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header> 
+					<!-- <input matInput [matDatepicker]="picker">
+					<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+					<mat-datepicker #picker></mat-datepicker> -->
+					Start Date
+				</th>
+				<td mat-cell *matCellDef="let row">{{row.start}}</td>
+			</ng-container>
+
+			<!-- name Column -->
+			<ng-container matColumnDef="finish">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header>End Date</th>
+				<td mat-cell *matCellDef="let row">{{row.finish}}</td>
+			</ng-container>
+
+
+			<ng-container matColumnDef="expandedDetail" >
+				<td mat-cell *matCellDef="let row" [attr.colspan]="displayedColumns.length">
+		  
+				  	<div class="row element-detail" [@detailExpand]="row == expandedElement ? 'expanded' : 'collapsed'">
+						<table class="full-width-table">
+							<tr role='row' *ngFor="let subTask of subTaskList">
+								<td  class="elements" mat-cell [attr.colspan]=1>{{subTask.title}}</td>
+								<td class="subtask" mat-cell [attr.colspan]=1>{{subTask.start}}</td>
+								<td class="subtask" mat-cell [attr.colspan]=1>{{subTask.finish}}</td>
+							</tr>
+						</table>
+				 	 </div>		  
+				</td>
+			</ng-container>
+
+
+			<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+			<tr mat-row *matRowDef="let row; columns: displayedColumns;" class="element-row"  [class.example-expanded-row]="expandedElement === row"  (click)="expandedElement = expandedElement === row ? null : row; subtaskFilter(row.id)"></tr>
+			<tr mat-row *matRowDef="let row; columns: ['expandedDetail']"  class="detail-row"></tr>
+		</table>
+
+		<mat-paginator [pageSize]="10" [pageSizeOptions]="[2, 4, 6, 10, 20]"></mat-paginator>
+		<ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "large" color = "#fff" type = "pacman" [fullScreen] = "true"><p style="color: white" > Loading... </p></ngx-spinner>
+	</div>
+</div>
+
+
+<!---When User Have No Permission Of Puchase Table -->
+<!-- <ng-template class="grid-container" #noPermission>
+	<mat-grid-list cols="1" rowHeight="1:1" >
+		<mat-grid-tile   colspan='1' class='warning'>
+			<h2 >You do not have permission to perform this action</h2>
+		</mat-grid-tile>
+	</mat-grid-list>
+</ng-template> -->

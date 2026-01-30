@@ -1,0 +1,134 @@
+.project-container{
+	.headings{
+		width: 100%;
+		border: unset;
+		box-shadow: unset;
+		background-color: transparent;
+		button{
+			margin-right: 1%;
+			background-color: transparent;
+			border-radius: 0;
+			//float: right;
+		}
+		.create{
+			background-color:#282828 ;
+			color: whitesmoke;
+			border-radius: 6px;
+			font-size: small;
+			
+			.mat-icon{
+				font-size: medium;
+				padding: 4%;
+				
+			}
+			a{
+				color: whitesmoke;
+				text-decoration: none;
+			}
+			
+		}
+		.downlodaBtnImage{
+			height: 20px
+		}
+		
+		.active{
+			border-bottom: 2px solid #282828;;
+		}
+		
+	}
+	.mat-grid-list{
+		.mat-card{
+			width: 90%;
+			box-shadow: 1px 4px 30px rgb(0 0 0 / 0.2) !important;
+			min-height: 225px;
+            .mat-tab-nav-bar, .mat-tab-header {
+                border-bottom:unset !important;
+            }
+            .mat-checkbox-background,.mat-checkbox-frame{
+                border-radius: 50% !important;
+                //border: 2px;
+            }
+			.mat-card-header{
+				.mat-card-title{
+					font-size: medium;
+					a{
+						color: unset;
+					}
+					a:hover{
+						text-decoration: none;
+					}
+					.mat-button{
+						float: right;
+						background-color:#282828;
+						color: white;
+						font-size: 10px;
+						padding: auto;
+						line-height: unset;
+					}
+					.mat-icon{
+						font-size: 8px;
+						height: unset;
+						width: unset;
+					}
+				}
+				.mat-card-header-text {
+					margin: 0 !important;
+					width: 100%;
+				}
+				.mat-card-subtitle{
+					margin-top: 20px !important;
+					font-size: small;
+					height: 20px;
+				}
+			}
+			.mat-card-content{
+				display: flex;
+				margin-top: 3%;
+				div{
+					margin-right: 5%;
+					//padding: 5%;
+					text-align: center;
+					width: 20%;
+					font-size: 10px;
+					color: rgba(0,0,0,.54);
+					p{
+						line-height: 10px;
+					}
+				}
+			}
+			.mat-card-actions{
+				display: flex;
+				ul {
+					list-style-type: none;
+					padding: 0;
+					margin: 0;
+					display: flex;
+					max-width: 20%;
+				
+					li {
+						//height: 30px;
+						// border-radius: 50%;
+						/*margin-top: -1px;*/
+						/* Prevent double borders */
+						//padding: 12px;
+						width: 15%;
+						img{
+							height: 30px;
+							width: 30px;
+							border-radius: 50%;
+							background-color: #F6F6F6;
+							border: 1px solid #ddd;
+						}
+					}
+				}
+				button{
+					position: absolute;
+					right: 0px;
+					bottom: 4%;
+				}
+			}
+			
+		}
+	}
+	
+}

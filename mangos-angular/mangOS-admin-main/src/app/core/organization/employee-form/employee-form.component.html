@@ -1,0 +1,107 @@
+<div class="grid-container" >
+	<ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "large" color = "#fff" type = "pacman" [fullScreen] = "true"><p style="color: white"></p></ngx-spinner>
+	<div *ngIf="employeeId"><h2>Edit Employee Details</h2></div>
+	<div *ngIf="employeeId==null"><h2>Add Employee Details</h2></div>
+	<form [formGroup]="employeeForm" novalidate class="profile" (ngSubmit)="updateEmployee()">
+		<mat-card>
+			<mat-card-title>
+				<mat-error *ngIf='message!=null'>{{ message }}</mat-error>
+				<mat-error *ngFor='let error of errors'><span>{{ error }}</span></mat-error>
+			</mat-card-title> 
+			<mat-card-content>
+				<mat-card-title>
+					<mat-form-field appearance="outline">
+						<mat-label>Company</mat-label>
+						<mat-select  name="food" formControlName="company">
+							<mat-option *ngFor="let ct of company" [value]="ct.id">
+								{{ct.name}}
+							</mat-option>
+						</mat-select>
+					</mat-form-field>
+				</mat-card-title>
+				<mat-card-title>
+					<mat-form-field appearance="outline">
+						<mat-label>Employee</mat-label>
+						<mat-select name="food" formControlName="user">
+							<mat-option *ngFor="let usr of user" [value]="usr.id">
+							{{usr.first_name}} {{usr.last_name}}
+							</mat-option>
+						</mat-select>
+					</mat-form-field>
+				</mat-card-title>
+				<mat-card-title>
+					<mat-form-field appearance="outline">
+						<mat-label>Role</mat-label>
+						<mat-select name="food" formControlName="role">
+							<mat-option *ngFor="let rl of role" [value]="rl.id">
+							{{rl.name}}
+							</mat-option>
+						</mat-select>
+					</mat-form-field>
+				</mat-card-title>
+				<mat-card-title>
+					<mat-form-field appearance="outline">
+						<mat-label>Department</mat-label>
+						<mat-select name="food" formControlName="department">
+							<mat-option *ngFor="let dp of department" [value]="dp">
+							{{dp}}
+							</mat-option>
+						</mat-select>
+					</mat-form-field>
+				</mat-card-title>
+				<mat-card-title>
+					<mat-form-field appearance="outline">
+						<mat-label>Shift</mat-label>
+						<mat-select name="food" formControlName="shift">
+							<mat-option *ngFor="let st of shift" [value]="st">
+							{{st}}
+							</mat-option>
+						</mat-select>
+					</mat-form-field>
+				</mat-card-title>
+				<mat-card-title class="shift-time">
+					<mat-form-field class="shift_start" appearance="outline">
+						<mat-label>Start Shift</mat-label>
+						<input type='time' matInput placeholder="Start Shift" formControlName="shift_start">
+						<mat-error *ngIf="employeeForm.controls['shift_start'].hasError('required')">
+						Start Shift is <strong>required</strong>
+						</mat-error>
+					</mat-form-field>
+					<mat-form-field appearance="outline">
+						<mat-label>End Shift</mat-label>
+						<input type='time' matInput placeholder="End Shift" formControlName="shift_end">
+						<mat-error *ngIf="employeeForm.controls['shift_end'].hasError('required')">
+						End shift <strong>required</strong>
+						</mat-error>
+					</mat-form-field>
+				</mat-card-title>
+				<mat-card-title>					
+				</mat-card-title>
+				<mat-card-title>
+					<mat-form-field class="full-width" appearance="outline">
+						<mat-label>Salary</mat-label>
+						<input type='number' matInput placeholder="Salary" formControlName="salary" >
+						<mat-error *ngIf="employeeForm.controls['salary'].hasError('required')">
+							salary is <strong>required</strong>
+						</mat-error>						
+					</mat-form-field>
+				</mat-card-title>
+				<mat-card-title>
+					<mat-form-field class="full-width" appearance="outline">
+						<mat-label>Choose a date</mat-label>
+						<input matInput [matDatepicker]="picker"  formControlName="joining">
+						<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+						<mat-datepicker #picker></mat-datepicker>						
+						<mat-error *ngIf="employeeForm.controls['joining'].hasError('required')">
+							salary is <strong>required</strong>
+						</mat-error>						
+					</mat-form-field>
+				</mat-card-title>
+			</mat-card-content>
+			<mat-card-actions>
+				<button mat-raised-button color="primary" type="submit" [disabled]="!employeeForm.valid">Save</button>
+			</mat-card-actions>
+		</mat-card>
+	</form>
+</div>
+

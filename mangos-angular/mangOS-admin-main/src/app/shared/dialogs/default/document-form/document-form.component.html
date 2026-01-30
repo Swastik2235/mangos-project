@@ -1,0 +1,52 @@
+<h3 mat-dialog-title>{{ data.title }}</h3>
+<div mat-dialog-content class="documentsform">
+	<form [formGroup]="addFolderForm" novalidate (ngSubmit)="addFolderData()">
+		<mat-card-content>
+
+			<mat-card-title>
+				<mat-form-field appearance="outline">
+				  	<mat-label>Company</mat-label>
+					<mat-select formControlName = "company">
+					    <mat-option *ngFor="let company of companyList" [value]="company.id">
+					      {{company.name}}
+					    </mat-option>
+					</mat-select>
+				  	<mat-error *ngIf="addFolderForm.hasError('company')">
+				       Company is <strong>required</strong>
+				    </mat-error>
+				</mat-form-field>
+			</mat-card-title>
+			<mat-card-title>
+				<mat-form-field appearance="outline">
+				  	<mat-label>User</mat-label>
+					<mat-select formControlName = "user">
+					    <mat-option *ngFor="let user of userList" [value]="user.id">
+					      {{user.username}}
+					    </mat-option>
+					</mat-select>
+				  	<mat-error *ngIf="addFolderForm.hasError('company')">
+				       User is <strong>required</strong>
+				    </mat-error>
+				</mat-form-field>
+			</mat-card-title>
+			<mat-card-title>
+				<mat-form-field appearance="outline">
+					<mat-label>Title</mat-label> 
+					<input matInput formControlName="title">
+				</mat-form-field>
+			</mat-card-title>
+
+			<mat-card-title>
+				<mat-form-field appearance="outline">
+					<mat-label>Color</mat-label> 
+					<input type="color" matInput formControlName="color">
+				</mat-form-field>
+			</mat-card-title>
+		</mat-card-content>
+
+		<mat-card-actions>
+			<button mat-raised-button color="primary" type="submit" [disabled]="!addFolderForm.valid">Save</button>
+			<button mat-raised-button color="secondary" type="button" (click)="closeDialog()" >Cancel</button>
+		</mat-card-actions>
+	</form>
+</div>

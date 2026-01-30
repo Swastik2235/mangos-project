@@ -1,0 +1,73 @@
+<div class="project-setting">
+	<ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "large" color = "#fff" type = "pacman" [fullScreen] = "true"><p style="color: white" ></p></ngx-spinner>
+
+	<ul class="breadcrumbs">
+		<li><a routerLink="/project/">Projects</a></li>
+		<li><a [routerLink]="['/project/',projectDetail.slug ]"> {{ projectDetail.title | titlecase}}</a></li>
+		<li >Settings</li>
+	</ul>
+<!-- People Card---- -->
+	<mat-card>
+		<mat-card-header>
+			<mat-card-title>Project Roles</mat-card-title>
+		</mat-card-header>
+		<mat-card-content>
+			<!-- <div *ngFor='let user of projectDetail.project_people'>
+				<div></div>
+				<p>{{user.name}}</p>
+			</div> -->
+			<div *ngFor="let person of people">
+				<div class="people">
+					<div class="user-img">
+						<img src="{{person.user_detail.image}}" onError="this.src='https://mangos-new-testing.s3.amazonaws.com/media/profile/user1_5xxbUHt.jpg '" alt="Image" >
+					</div>
+					<div class="username">
+						<h5>{{ person.user_detail.username}}</h5>
+						<!-- <h5>{{person.user_detail.first_name}} {{person.user_detail.last_name}}</h5> -->
+						<p>{{person.role}}</p>
+					</div>
+				</div>
+			</div>
+		</mat-card-content>
+		<mat-card-actions>
+			<div>
+				<ul *ngIf=" people.length > 0">
+					<li *ngFor="let person of people ">
+						<img src=" " onError="this.src='https://mangos-new-testing.s3.amazonaws.com/media/profile/user1_5xxbUHt.jpg '">					
+					</li>
+				</ul>
+				<p>View list of {{people.length}} employees</p>
+			</div>
+			<!-- <div>
+				<a>View list of {{people.length}} employees</a>
+			</div> -->
+			
+				<button mat-stroked-button color="primary"  (click)="addPoeple()">Add People</button>
+		
+		</mat-card-actions>
+	</mat-card>
+<!-- Notifications card------->
+	<form [formGroup]="notificationForm" (ngSubmit)="notificationSetting()">
+		<mat-card>
+			<mat-card-header>
+				<mat-card-title>Notifications</mat-card-title>
+			</mat-card-header>
+			<mat-card-content>
+				<mat-list role="list">
+					<mat-list-item role="listitem"><span>Follow this project activity</span>
+						<mat-slide-toggle formControlName="follow" color="primary"></mat-slide-toggle>
+					</mat-list-item>
+					<mat-list-item role="listitem">
+						<span>Events notifications</span>
+						<mat-slide-toggle formControlName="event" color="primary"></mat-slide-toggle>
+					</mat-list-item>
+					<mat-list-item role="listitem">
+						<span>Daily log report from employees (Notifies all employees)</span>
+						<mat-slide-toggle formControlName="report" color="primary"></mat-slide-toggle>
+					</mat-list-item>
+				</mat-list>				
+			</mat-card-content>
+			<button mat-stroked-button color="primary">Save</button>
+		</mat-card>
+	</form>
+</div>

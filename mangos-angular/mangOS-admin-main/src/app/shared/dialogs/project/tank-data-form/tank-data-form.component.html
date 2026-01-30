@@ -1,0 +1,81 @@
+<h3 mat-dialog-title>{{ data.title }}</h3>
+<div mat-dialog-content class="myform">
+    <form [formGroup]="tankDataForm" novalidate (ngSubmit)="addData()">
+        <mat-card-content>
+            <mat-card-title>
+                <mat-form-field appearance="outline">
+                    <mat-label>Tank</mat-label>
+                    <mat-select #mycompany name="Tank" formControlName="tank">
+                        <mat-option *ngFor="let sr of tankList" [value]="sr.id">
+                            {{sr.title}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </mat-card-title>
+            <hr>
+
+            <h3 mat-dialog-title>Parameters</h3>
+            <div class="parameters">
+                <mat-card-title>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Slots</mat-label>
+                        <input type='number' step="1" matInput formControlName="slots">
+                    </mat-form-field>
+                </mat-card-title>
+                <mat-card-title>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Strength</mat-label>
+                        <input type='number' step=".01" matInput formControlName="strength">
+                    </mat-form-field>
+                </mat-card-title>
+                <mat-card-title>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Temperature</mat-label>
+                        <input type='number' step=".01" matInput placeholder='°C' formControlName="temperature">
+                    </mat-form-field>
+                </mat-card-title>
+                <mat-card-title>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Acid Content</mat-label>
+                        <input type='number' step=".01" matInput formControlName="acidc">
+                    </mat-form-field>
+                </mat-card-title>
+                <mat-card-title>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Iron content</mat-label>
+                        <input type='number' step=".01" matInput formControlName="ironc">
+                    </mat-form-field>
+                </mat-card-title>
+                <mat-card-title>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Density</mat-label>
+                        <input type='number' step=".01" matInput formControlName="density">
+                    </mat-form-field>
+                </mat-card-title>
+                <mat-card-title>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Ph</mat-label>
+                        <input type='number' step=".01" matInput formControlName="ph">
+                    </mat-form-field>
+                </mat-card-title>
+                <mat-card-title>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Strength (sodium dichromate)</mat-label>
+                        <input type='number' step=".01" matInput formControlName="strengthsdc">
+                    </mat-form-field>
+                </mat-card-title>
+                <mat-card-title>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Zinc Ash</mat-label>
+                        <input type='number' step=".01" matInput formControlName="zinc_ash">
+                    </mat-form-field>
+                </mat-card-title>
+            </div>
+        </mat-card-content>
+
+        <mat-card-actions>
+            <button mat-raised-button color="primary" type="submit" [disabled]="!tankDataForm.valid">Save</button>
+            <button mat-raised-button color="secondary" type="button" (click)="closeDialog()">Cancel</button>
+        </mat-card-actions>
+    </form>
+</div>

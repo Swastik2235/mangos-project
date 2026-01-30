@@ -1,0 +1,261 @@
+<div class="project-detail">
+	<ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "large" color = "#fff" type = "pacman" [fullScreen] = "true"><p style="color: white" ></p></ngx-spinner>
+	<!-- <mat-card > -->
+		
+	<ul class="breadcrumbs">
+		<li><a routerLink="/project/">Projects</a></li>
+		<li>{{ projectDetail.title | titlecase}}</li>
+		<span><a [routerLink]="['/project/setting/',projectDetail.slug ]"><mat-icon>settings</mat-icon></a></span>
+		<span><a  [routerLink]="['/project/edit/',projectDetail.slug ]"><mat-icon>create</mat-icon></a></span>
+	</ul>
+	  
+	<div style="display: flex;">
+		<div class="pdetailss">
+			<mat-card class="example-card">
+				<mat-card-header>
+					<mat-card-title>About</mat-card-title>
+					<mat-card-subtitle>{{ projectDetail.title | titlecase }}</mat-card-subtitle>
+					<!-- <mat-card-title>About</mat-card-title> -->
+				</mat-card-header>
+				<mat-card-content>
+					<p *ngIf='projectDetail.content'>{{ projectDetail.content.slice(0,500) }}...<span><a>view more</a></span></p>
+				</mat-card-content>
+			</mat-card>
+
+			<!-- Project Status -->
+			<mat-card>
+				<mat-card-header>
+					<mat-card-title>Project Status</mat-card-title>
+				</mat-card-header>
+				<mat-card-content>
+					<div *ngFor='let prog of progress'>
+						<mat-checkbox color='primary' disabled [checked]='prog.status'></mat-checkbox>
+						<p>{{prog.name}}</p>
+					</div>
+				</mat-card-content>
+			</mat-card>
+			<!-- Calneder -->
+			<mat-card>
+				<mat-card-header >
+					<mat-card-title>Calender and Events</mat-card-title>
+				</mat-card-header>
+				<div class="calDiv">
+					<div class="calender">
+						<mat-calendar *ngIf="datesToHighlight && taskList.length>0" (selectedChange)="myDateEvent($event)" [dateClass]="dateClass" ></mat-calendar>
+						<mat-calendar *ngIf="datesToHighlight && taskList.length==0" (selectedChange)="myDateEvent($event)" [dateClass]="dateClass" ></mat-calendar>
+					</div>
+					<div class="event">
+						<div>
+							<h4>Upcoming Events</h4>
+							<ul *ngFor="let event of taskList">
+								<!-- <li *ngIf="event.start">{{ event.start | date:"hh:mm a" }} -->
+								<li *ngIf="event.start>=today && week>=event.start"><div class="event-name">{{ event.title }}</div></li>
+								<span *ngIf="event.start>=today && week>=event.start">start-{{ event.start | date:"dd-MM-yy"}}</span>
+								<p *ngIf="event.start>=today && week>=event.start">deadline-{{ event.finish | date:"dd-MM-yy"}}</p>
+							</ul>
+							<ng-template #noEvent>No Upcomin Events</ng-template>
+						</div>
+					</div>
+				</div>
+			</mat-card>
+
+			<!--Task List  -->
+			<mat-card>
+				<mat-card-header>
+					<mat-card-title>
+						Task Management
+						<div class="expand-icon">
+							<span><a [routerLink]="['/project/task/',projectDetail.slug ]"><mat-icon >north_east</mat-icon></a></span>							
+						</div>
+					</mat-card-title>
+				</mat-card-header>
+				<mat-card-content>
+					<div class="task">
+						<h4>Major Tasks</h4>
+						<div class="task-list">
+							<mat-list role="list" *ngFor="let task of taskList.reverse()">
+								<mat-list-item role="listitem" (click)="filterSubTask(task.id)" [ngClass]="{ 'active' : taskId == task.id}"><mat-checkbox ></mat-checkbox>{{ task.title }}</mat-list-item>
+							</mat-list>
+						</div>
+						<button mat-flat-button color="primary" (click)="addTask()">Add Major Task</button>
+					</div>
+					<div class="task">
+						<h4>Sub Tasks</h4>
+						<div class="subtask-list">
+							<mat-list role="list" *ngFor="let subtask of subTaskList.reverse()">
+								<mat-list-item  role="listitem">{{ subtask.title }}</mat-list-item>
+							</mat-list>
+						</div>
+						<button class="subtask-button" mat-flat-button  (click)="addSubTask()"><mat-icon aria-hidden="false" aria-label="Example home icon">add</mat-icon>Add Task</button>
+					</div>
+				</mat-card-content>
+			</mat-card>
+
+			<!-- Workflow -->
+			<!-- <h2>WorkFlow</h2> -->
+			<!-- <mat-card id='container' class='wf' >
+			</mat-card> -->
+			<mat-card id='container1' class='wf' >
+			</mat-card>
+		</div>
+<!-- Side Bar----------- -->
+		<div class="side-card">
+			<mat-card class="activity">
+				<mat-card-header>
+					<mat-card-title>Project Activity</mat-card-title>
+					<mat-card-subtitle>
+						<ul *ngIf="projectDetail.created_detail">
+							<li>Consignment Initiated by <span>{{projectDetail.created_detail.first_name }} {{projectDetail.created_detail.last_name }} {{ projectDetail.timestamp | date:"dd-mm-yy" }} {{ projectDetail.timestamp | date:"hh:mm a" }}</span></li>
+						</ul>
+					</mat-card-subtitle>
+				</mat-card-header>
+			</mat-card>
+			
+			<!-- People -->
+			<mat-card class="people">
+				<mat-card-header>
+					<mat-card-title>People</mat-card-title>
+				</mat-card-header>
+				
+				<mat-card-content *ngIf="projectDetail.project_people">
+					<div *ngFor="let person of projectDetail.project_people.slice(0,5) ">
+						<div class="people">
+							<div class="user-img">
+								<img src="{{person.user_detail.image}}" onError="this.src='https://mangos-new-testing.s3.amazonaws.com/media/profile/user1_5xxbUHt.jpg '" alt="Image">						
+							</div>
+						</div>
+					</div>
+				</mat-card-content>
+				<!-- <mat-icon>add</mat-icon> -->
+			</mat-card>
+
+			<mat-card class="chat">
+				<mat-card-header>
+					<mat-card-title>Chat Threads</mat-card-title>
+				</mat-card-header>
+				<mat-card-content *ngIf="projectDetail.project_people">
+					<div *ngFor="let person of projectDetail.project_people.slice(0,5)">
+						<div class="people">
+							<div class="user-img" >
+								<img src="{{person.user_detail.image}}" onError="this.src='https://mangos-new-testing.s3.amazonaws.com/media/profile/user1_5xxbUHt.jpg '"  alt="Image" >
+							</div>
+						</div>
+					</div>
+				</mat-card-content>
+				<mat-card class="chat-box">
+					<mat-card-content class="chat-content" >
+						<div class="message" *ngFor="let chat of oldChatData">
+							
+							<div class="msg-in" *ngIf="chat.sender != loginUser.id">
+								<span>{{chat.sender_detail.first_name}} {{chat.sender_detail.last_name}}</span>
+								<p>{{ chat.message}}</p>
+							</div>
+							<div class="msg-out" *ngIf="chat.sender == loginUser.id">
+								<span>{{chat.sender_detail.first_name}} {{chat.sender_detail.last_name}}</span>
+								<p>{{ chat.message}}</p>
+							</div>
+						</div>
+					</mat-card-content>
+					<hr>
+					<mat-card-actions>
+						<form [formGroup]="chatForm" novalidate class="profile" (ngSubmit)="sendMessage()">
+							<div>
+								<mat-form-field class="full-width">
+									<input type='text' matInput placeholder="type something here..." formControlName="message">
+									<!-- <mat-error *ngIf="profileForm.controls['mobile'].hasError('maxLength')">
+										Mobile is <strong>maxLength</strong>
+									</mat-error> -->
+								</mat-form-field>
+							</div>
+							<div>
+								<button mat-flat-button type="submit">
+									<mat-icon>send</mat-icon>
+								</button>
+							</div>
+						</form>	
+						
+					</mat-card-actions>
+					<!-- <hr> -->
+
+				</mat-card>
+			</mat-card>
+			<!-- bom list -->
+			<!-- <mat-card class="jobCards">
+				<mat-card-header>
+				    <mat-card-title>
+				    	Bill of Material
+				    	<div class="expand-icon">
+							<span><a [routerLink]="['/project/',projectDetail.slug,'job-card' ]"><mat-icon >north_east</mat-icon></a></span>							
+						</div>
+				    </mat-card-title>
+				</mat-card-header>
+				<mat-card-content>
+					<mat-list role="list" class="jobcardList">
+					  	<mat-list-item role="listitem" class="jobcarditems" *ngFor="let jobcard of jobcards.slice(0,6)">
+					  		<h4>{{jobcard.title}}</h4>
+					  		<mat-divider></mat-divider>
+					  	</mat-list-item>
+					</mat-list>
+				</mat-card-content>
+			</mat-card> -->
+			<!-- jobcard list -->
+			<!-- <mat-card class="jobCards">
+				<mat-card-header>
+				    <mat-card-title>
+				    	Production
+				    	<div class="expand-icon">
+							<span><a [routerLink]="['/project/',projectDetail.slug,'job-card' ]"><mat-icon >north_east</mat-icon></a></span>							
+						</div>
+				    </mat-card-title>
+				</mat-card-header>
+				<mat-card-content>
+					<mat-list role="list" class="jobcardList">
+					  	<mat-list-item role="listitem" class="jobcarditems" *ngFor="let jobcard of jobcards.slice(0,6)">
+					  		<h4>{{jobcard.title}}</h4>
+					  		<mat-divider></mat-divider>
+					  	</mat-list-item>
+					</mat-list>
+				</mat-card-content>
+			</mat-card>
+		    production list -->
+			<mat-card class="jobCards">
+				<mat-card-header>
+				    <mat-card-title>
+				    	Packaging
+				    	<div class="expand-icon">
+							<span><a [routerLink]="['/project/',projectDetail.slug,'job-card' ]"><mat-icon >north_east</mat-icon></a></span>							
+						</div>
+				    </mat-card-title>
+				</mat-card-header>
+				<mat-card-content>
+					<mat-list role="list" class="jobcardList">
+					  	<mat-list-item role="listitem" class="jobcarditems" *ngFor="let jobcard of jobcards.slice(0,6)">
+					  		<h4>{{jobcard.title}}</h4>
+					  		<mat-divider></mat-divider>
+					  	</mat-list-item>
+					</mat-list>
+				</mat-card-content>
+			</mat-card>
+
+			<!-- packing list -->
+			<!-- <mat-card class="jobCards">
+				<mat-card-header>
+				    <mat-card-title>
+				    	Dispatch
+				    	<div class="expand-icon">
+							<span><a [routerLink]="['/project/',projectDetail.slug,'job-card' ]"><mat-icon >north_east</mat-icon></a></span>							
+						</div>
+				    </mat-card-title>
+				</mat-card-header>
+				<mat-card-content>
+					<mat-list role="list" class="jobcardList">
+					  	<mat-list-item role="listitem" class="jobcarditems" *ngFor="let jobcard of jobcards.slice(0,6)">
+					  		<h4>{{jobcard.title}}</h4>
+					  		<mat-divider></mat-divider>
+					  	</mat-list-item>
+					</mat-list>
+				</mat-card-content>
+			</mat-card> -->
+		</div>
+	</div>
+</div>

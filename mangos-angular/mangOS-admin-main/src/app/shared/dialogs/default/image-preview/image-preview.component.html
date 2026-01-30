@@ -1,0 +1,15 @@
+<div class="ImagePreviewDiv">
+	<div class="actionDiv">
+		<h2 mat-dialog-title>{{data.file.title}}</h2>
+        <button (click)="downloadFile(file)" class="download">
+            <mat-icon aria-hidden="false" aria-label="Example home icon" matTooltip="Download File">cloud_download</mat-icon>
+        </button>
+        <mat-button-toggle mat-dialog-close value="italic">
+            <mat-icon aria-hidden="false" aria-label="Example home icon" title="Close Dialog">clear</mat-icon>
+        </mat-button-toggle>
+    </div>
+<mat-divider></mat-divider>
+	<img src="{{data.file.file}}" alt="{{data.file.title}}" *ngIf="image">
+    <embed type="application/pdf" [src]="pdfurl" *ngIf="pdf">
+    <p *ngIf="!image && !pdf">preview not available</p>
+</div>

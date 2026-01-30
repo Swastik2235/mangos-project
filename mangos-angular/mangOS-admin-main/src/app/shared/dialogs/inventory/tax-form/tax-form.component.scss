@@ -1,0 +1,20 @@
+.mat-dialog-content{
+    height: 50%;
+    mat-card-content{
+        //font-size: small;
+        mat-error{
+            font-size: small;
+        }
+        mat-form-field{
+            width: 100%;
+            font-size: small
+        }
+    }
+    mat-card-actions{
+        button{
+            margin-bottom: 1%;
+            margin-right: 2%;
+        }
+    }
+   
+}

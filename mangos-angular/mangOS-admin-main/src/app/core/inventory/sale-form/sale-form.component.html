@@ -1,0 +1,103 @@
+<div class="grid-container" *ngIf='addPurchase ; else noPermission'>
+	<ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "large" color = "#fff" type = "pacman" [fullScreen] = "true"><p style="color: white" > Loading... </p></ngx-spinner>
+	<form [formGroup]="saleForm" novalidate class="profile" (ngSubmit)="addSaleOrder()">
+		<mat-card>
+			<mat-card-title>
+				<h2>{{ title }} </h2>
+				<mat-error *ngIf='message!=null'>{{ message }}</mat-error>
+				<mat-error *ngFor='let errors of errors | keyvalue'>{{ errors.value }}</mat-error>				
+			</mat-card-title> 
+			<mat-card-content>
+				<mat-card-title>
+					<mat-form-field class="full-width" appearance="outline">
+						<mat-label>Description</mat-label>
+						<textarea matInput placeholder="Description" formControlName="description"></textarea>
+						<mat-error *ngIf="saleForm.controls['description'].hasError('required')">
+							Description is <strong>required</strong>
+						</mat-error>
+					</mat-form-field>
+				</mat-card-title>
+			</mat-card-content>
+			<mat-card-content>
+				<mat-card-title>
+					<mat-form-field class="full-width" appearance="outline">
+						<mat-label>Order Status</mat-label>
+						<mat-select name="food"  formControlName="order_status">
+							<mat-option value="Pending">Pending</mat-option>
+							<mat-option value="Confirm">Confirm</mat-option>
+							<mat-option value="Complete">Complete</mat-option>
+						</mat-select>
+					</mat-form-field>
+				</mat-card-title>
+			</mat-card-content>
+			<mat-card-content>
+				<mat-card-title>
+					<mat-form-field class="full-width" appearance="outline">
+						<mat-label>Customer</mat-label>
+						<mat-select name="user"  formControlName="user">
+							<mat-option *ngFor="let user of userList" [value]="user.id">
+								{{user.first_name }} {{user.last_name }}
+							</mat-option>
+						</mat-select>
+					</mat-form-field>
+				</mat-card-title>
+			</mat-card-content>
+			<mat-card-content>
+				<mat-card-title>
+					<h2>Items</h2>
+					<button type="button" mat-raised-button color="primary" (click)="addItems()">Add New Row</button>
+				</mat-card-title>
+			</mat-card-content>
+			<div formArrayName='order'>
+				<div *ngFor='let item of order.controls; let i = index'>
+					<div [formGroupName]="i">
+						<mat-card-title>
+							<mat-form-field appearance="outline">
+								<mat-label>Item</mat-label>
+								<mat-select name="item"  formControlName="item">
+									<mat-option *ngFor="let item of itemList" [value]="item.id">
+										{{item.name}}
+									</mat-option>
+								</mat-select>
+							</mat-form-field>
+
+							<mat-form-field appearance="outline">
+								<mat-label>Quantity</mat-label>
+								<input type='number' matInput placeholder="Quantity" formControlName="quantity" value=0 >
+							</mat-form-field>
+							
+							<mat-form-field appearance="outline">
+								<mat-label>Price</mat-label>
+								<input type='number' matInput placeholder="Price" formControlName="price" value=0 >
+							</mat-form-field>
+							<mat-form-field appearance="outline">
+                                <mat-label>Tax</mat-label>
+                                <mat-select name="item"  formControlName="tax">
+                                    <mat-option *ngFor="let tax of taxList" [value]="tax.id">
+                                        {{ tax.name }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+							<button type="button"  mat-icon-button (click)="removeRow(i)">
+								<mat-icon  color="warn" >delete</mat-icon>
+							</button>					
+						</mat-card-title>
+					</div>  
+				</div>
+			</div>
+			
+			<mat-card-actions>
+				<button mat-raised-button color="primary" type="submit" [disabled]="!saleForm.valid">Save</button>
+				<button mat-raised-button color="primary" type="button" (click)='onCancel()' >Cancel</button>
+			</mat-card-actions>
+		</mat-card>
+	</form>
+</div>
+
+<ng-template class="grid-container" #noPermission>
+	<mat-grid-list cols="1" rowHeight="2:1" >
+		<mat-grid-tile   colspan='1' class='warning'>
+			<h2 >You do not have permission to perform this action </h2>
+		</mat-grid-tile>
+	</mat-grid-list>
+</ng-template>

@@ -1,0 +1,140 @@
+<div class="packaging-detail">
+	<div fxLayout="row" fxFlexFill>
+		<div fxFlex="100" fxFlexAlign="start">
+			<div class="my-card">
+				<div mat-card-header class="jobCardDHeader">
+					<div fxLayout="row" fxLayoutAlign="start center">
+						<div fxFlex="50" fxFlexAlign="baseline">
+							<div>
+								<!-- {{sJobCardData.project_detail.company_detail.name|titlecase}} -->
+								<h3><strong>ERA T & D LIMITED</strong></h3>
+								<h5><strong>Umred.</strong></h5>
+							</div>
+						</div>
+						<div fxFlex="50" fxFlexAlign="baseline" fxLayoutAlign="end">
+							<div>
+								<h3><strong>Logo</strong></h3>
+								
+								<h5><strong>Format No:- ERA/PPC/RD/010</strong></h5>
+							</div>
+						</div>
+						
+					</div>
+					<div fxLayout="row" fxLayoutAlign="start center">
+						<div fxFlex="100" fxLayoutAlign="center" class="dispach-list">
+							<h2><strong>DISPATCH PACKING LIST</strong></h2>
+						</div>
+					</div>
+					<div fxLayout="row" fxLayoutAlign="start center">
+						<div fxFlex="100">
+							<table class="dispatch-table">
+								<tr></tr>
+								<tr>
+									<td>
+										<tr><strong>Consignee : </strong><span>{{data.project_data.company_detail.name}}</span></tr>
+										<tr>{{data.project_data.company_detail.address}}</tr>
+										<tr>{{data.project_data.company_detail.city | uppercase}} , {{data.project_data.company_detail.pincode}}, </tr>
+									</td>
+									<td class="end">
+										<strong>Packing List No.:</strong><span>PL-2020/21 - 009</span>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<tr><strong>Destination:</strong><span>{{data.project_data.company_detail.name}},  </span></tr>
+										<tr>{{data.project_data.company_detail.address}},</tr>
+										<tr>{{data.project_data.company_detail.city | uppercase}} , {{data.project_data.company_detail.pincode}}</tr>
+									</td>
+									<td >
+										<tr><strong>Date: </strong><span>{{ data.date }}</span></tr>
+										<tr><strong>Vehicle No.: {{ data.vehicle_data.number | uppercase}}</strong></tr>
+										<tr><strong>LR No.: </strong><span>{{ data.lr }}</span></tr>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<div class="dispach-list"><strong>Work Order No :- ADN-20112059/AM1, Date.05/01/2021</strong></div>
+										<tr><strong>Contact Person :</strong>Mr. Dharmendra Pandey, Contact No. :6375052317</tr>
+										<tr>Mr. Samiran Adaldar, Contact No. : 9330059857</tr>
+									</td>
+									<td>
+										<tr><strong>Transporter : {{data.transporter_data.name}}</strong></tr>
+									</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+					<div fxLayout="row" fxLayoutAlign="start center">
+						<div fxFlex="100" fxLayoutAlign="center" class="dispach-list">
+							<h2><strong>*** FABRICATION + GALVANIZING ***</strong></h2>
+						</div>
+					</div>
+				</div>	
+				<div mat-dialog-content class="JobCardContent">
+					<div fxLayout="row" fxLayoutAlign="start center">
+						<div fxFlex="100" fxFlexAlign="baseline">
+							<table class="table table-bordered">
+							<thead>
+								<tr>
+									<th scope="col" colspan="2">Mark No</th>
+									<th scope="col">Section </th>
+									<th></th>
+									<th scope="col">LENGTH</th>
+									<th scope="col">WIDTH</th>
+									<th scope="col">Wt/pc</th>
+									<th scope="col">In one </th>
+									<th scope="col">Set </th>
+									<th scope="col">TOTAL</th>
+									<th scope="col">TOTAL</th>
+									<th>Remark</th>
+								</tr>
+							</thead>
+							<thead>
+								<tr>
+									<th scope="col" colspan="2">No</th>
+									<th scope="col">( mm )</th>
+									<th></th>
+									<th scope="col">( mm )</th>
+									<th scope="col">( mm )</th>
+									<th scope="col">(kg)</th>
+									<th  scope="col">(Qty.)</th>
+									<th scope="col">(Nos.) </th>
+									<th scope="col">QTY.(Nos.)</th>
+									<th scope="col">WEIGHT</th>
+									<th>Remark</th>
+								</tr>
+							</thead>
+							<tbody *ngFor="let jitem of data.item_data">
+								<tr>
+									<td>{{ jitem.bom_detail.mark_detail.title }}</td>
+									<td>{{jitem.n}}</td>
+									<td>{{jitem.bom_detail.section_detail.title}}</td>
+									<td></td>
+									<td>{{jitem.length}}</td>
+									<td>{{jitem.width}}</td>
+									<td></td>
+									<td>{{jitem.tower_quantity}}</td>
+									<td>{{jitem.piece_weight}}</td>
+									<td>{{jitem.total_weight}}</td>
+									<td>{{jitem.remark}}</td>
+								</tr>
+							</tbody>
+							<thead>
+								<tr *ngFor="let jitem of data.item_data.slice(0,1)">
+									<td colspan="9"><strong>{{ jitem.bom_detail.tower_detail.title}} :</strong> </td>
+									<td><strong>total</strong></td>
+									<td><strong>weigth</strong></td>
+								</tr>
+								<tr>
+									<td colspan="5"><strong>Prepared By : {{ data.prepared_data.first_name}} {{ data.prepared_data.last_name}}</strong></td>
+									<td colspan="6"><strong>Checked By : {{ data.checked_data.first_name}} {{ data.checked_data.last_name}}</strong></td>
+								</tr>
+							</thead>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

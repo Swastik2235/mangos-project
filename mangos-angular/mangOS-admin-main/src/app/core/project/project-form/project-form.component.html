@@ -1,0 +1,234 @@
+<div class="create-project">
+	<ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "large" color = "#fff" type = "pacman" [fullScreen] = "true"><p style="color: white" > Loading... </p></ngx-spinner>
+	
+	<form [formGroup]="projectCreateForm" novalidate  (ngSubmit)="addProject()">
+		
+		<h2>{{ title | titlecase}}</h2>
+		
+		<mat-card>
+			<mat-card-title>
+				<h2><span class="head-button">1</span>Consignment Intiation</h2>
+			</mat-card-title>
+				<!-- <mat-error *ngIf='message!=null' >{{ message }}</mat-error> 
+				<mat-error *ngFor='let error of errors '><span>{{ error }}</span></mat-error> 
+			</mat-card-title>  -->
+			<mat-card-content>
+				<!-- <img [src]='userImgUrl' height="100px">
+				<mat-card-title>
+					<mat-form-field hidden >
+						<div class="myfilebrowser">
+							<input matInput formControlName="file" [attr.required]='addCompany'/>
+						</div> 
+					</mat-form-field>
+				</mat-card-title>  -->
+				<!-- <label>Logo: </label>
+				<input type="file"  (change)="fileChangeEvent($event)"  multiple="multiple" accept="image/*"  /> -->
+				<div class="company">
+					<div>
+						<mat-card-title>
+							<mat-form-field class="half-width" appearance="outline">
+								<mat-label>Company</mat-label>
+								<mat-select #mycompany name="Company" formControlName="company" (ngModelChange)="onCompanyChange($event)" >
+									<mat-option *ngFor="let cm of company" [value]="cm.id"  >
+										{{cm.name}}
+									</mat-option>
+								</mat-select>
+							</mat-form-field>
+						
+							<mat-form-field  class="half-width" appearance="outline">
+								<mat-label>Project Name</mat-label>
+								<input matInput  formControlName="title">
+								<mat-error *ngIf="projectCreateForm.controls['title'].hasError('required')">
+									Name is <strong>required</strong>
+								</mat-error>
+							</mat-form-field>
+						</mat-card-title>  
+					</div>
+				</div>
+				<div class="company">
+					<div>
+						<mat-form-field class="half-width" appearance="outline">
+							<mat-label>Client</mat-label>
+							<mat-select #mycompany name="Client" formControlName="client" >
+								<mat-option *ngFor="let cl of client" [value]="cl.id"  >
+									{{cl.name}}
+								</mat-option>
+							</mat-select>
+						</mat-form-field>
+						<mat-form-field class="half-width" appearance="outline">
+							<mat-label>Service</mat-label>
+							<mat-select #mycompany name="Service" formControlName="service" >
+								<mat-option *ngFor="let sr of service" [value]="sr.id"  (click)="onSecvicechange(sr.id);selectedService=sr.title">
+									{{sr.title}}
+								</mat-option>
+							</mat-select>
+						</mat-form-field>
+					</div>
+				 </div>
+
+				<mat-card-title>
+					<mat-form-field appearance="outline">
+						<mat-label>Consignment id</mat-label>
+						<input matInput  formControlName="consignment">
+						<mat-error *ngIf="projectCreateForm.controls['consignment'].hasError('required')">
+							Consignment is <strong>required</strong>
+						</mat-error>
+						
+					</mat-form-field>
+				</mat-card-title>
+
+				<mat-card-title>
+					<mat-form-field appearance="outline">
+						<mat-label>Workflow</mat-label>
+						<mat-select  formControlName="workflow"  >
+							<mat-option *ngFor="let prg of workFlow" [value]="prg.id"  >
+								{{prg.rowdata}}
+							</mat-option>
+						</mat-select>
+					</mat-form-field>
+				</mat-card-title>
+
+
+				<mat-card-title>
+					<mat-form-field appearance="outline">
+						<mat-label>Project Description</mat-label>
+						<textarea matInput formControlName="content" rows='5'></textarea>
+						<mat-error *ngIf="projectCreateForm.controls['content'].hasError('required')">
+							Project Description is <strong>required</strong>
+						</mat-error>
+					</mat-form-field>
+				</mat-card-title>
+
+				<mat-card-title>
+					
+					<div class="dropZone">
+						<input type='file' #uplaodFile formControlName="file" multiple  (change)="onFileDropped($event)"  hidden>
+						<h4>Drag and Drop Files Here</h4>
+						<mat-chip-list aria-label="Fish selection"  style="display: flex;">
+							<mat-chip *ngFor='let file of projectFileList;' [removable]="removable" >
+								<span *ngIf='file.name;else newFile'>{{ file.name  }}</span>
+								<ng-template #newFile>
+									<span >{{ fileName  }}</span>
+								</ng-template>
+								<mat-icon matChipRemove *ngIf="removable" (click)=removed(file.name)>cancel</mat-icon>
+							</mat-chip>
+						</mat-chip-list>
+						<button mat-mini-fab color="primary" class="upload-btn"
+						(click)="uplaodFile.click()" type="button">
+						<mat-icon>attach_file</mat-icon>
+						</button>
+						 
+					</div>
+					
+				</mat-card-title> 
+
+				<mat-card-title>
+					
+					<div class="dropZone">
+						<input type='file' #uplaodFiles (change)="importBomFile($event)"  hidden>
+						<h4>Import BOM File</h4>
+						<!-- <mat-label for="uplaodFile">File</mat-label> -->
+						<mat-chip-list aria-label="Fish selection"  style="display: flex;" *ngIf="bomfileName">
+							<mat-chip [removable]="removable" >
+								<!-- <span *ngIf='file.name;else newFile'>{{ file.name  }}</span> -->
+								
+									{{bomfileName}}
+								<!-- <mat-icon matChipRemove *ngIf="removable" (click)=removed(file.name)>cancel</mat-icon> -->
+							</mat-chip>
+						</mat-chip-list>
+						<button mat-mini-fab color="primary" class="upload-btn"
+						(click)="uplaodFiles.click()" type="button">
+						<mat-icon>attach_file</mat-icon>
+						</button>
+						 
+					</div>
+					
+				</mat-card-title> 
+
+				<!-- <mat-card-title>
+					<mat-form-field >
+						<input matInput   placeholder="file" formControlName="file">
+						<input type="file"   placeholder="file" formControlName="file">
+						<mat-error *ngIf="projectCreateForm.controls['file'].hasError('required')">
+						fileChangeEvent is <strong>required</strong>
+						</mat-error>
+					</mat-form-field>
+				</mat-card-title> -->
+
+				<!-- Client Add -->
+				<!-- <mat-card-content class="add-people">
+					<mat-card-title>
+						<h2><span class="head-button">2</span>Onboard client</h2>
+					</mat-card-title>
+				</mat-card-content>
+				<mat-card-content class="add-people">
+					<div *ngFor="let person of clientData">
+						<div class="people">
+							<div class="user-img">
+								<img src="{{ person.image }}" onError="this.src='https://mangos-new-testing.s3.amazonaws.com/media/company/user2.jpg'" alt="Image" >
+							</div>
+							<div class="username">
+								<h5>{{person.first_name}} {{person.last_name}}</h5> -->
+								<!-- <h5>{{person.user_detail.first_name}} {{person.user_detail.last_name}}</h5> -->
+								<!-- <p>Client</p>
+							</div>
+						</div>
+					</div>
+					<button mat-flat-button class="add-btn" type="button" (click)="addClient()"><mat-icon>add</mat-icon></button>
+				</mat-card-content> -->
+				
+				<!-- People Add -->
+				<mat-card-content class="add-people">
+					<mat-card-title>
+						<h2><span class="head-button">3</span>Resource allocation</h2>
+					</mat-card-title>
+				</mat-card-content>
+				<mat-card-content class="add-people">
+					<div *ngFor="let person of peopleList.slice(0,4)">
+						<div class="people">
+							<div class="user-img">
+								<img src="{{ person.user.image }}" onError="this.src='https://mangos-new-testing.s3.amazonaws.com/media/company/user2.jpg'" alt="Image" >
+							</div>
+							<div class="username">
+								<h5>{{person.user.first_name}} {{person.user.last_name}}</h5>
+								<!-- <h5>{{person.user_detail.first_name}} {{person.user_detail.last_name}}</h5> -->
+								<p>{{ person.role}}</p>
+							</div>
+						</div>
+					</div>
+					<button mat-flat-button class="add-btn" type="button" (click)="addPeople()"><mat-icon>add</mat-icon></button>
+				</mat-card-content>
+
+				<!-- Machine Add -->
+				<div class="company">
+					<div>
+						<mat-card-title>
+							<mat-form-field appearance="outline">
+								<mat-label>Operation to be allocated</mat-label>
+								<mat-select  name="Machine" formControlName="operation"  multiple>
+									<mat-option *ngFor="let operation of operations" [value]="operation.id">
+										{{operation.code}}
+									</mat-option>
+								</mat-select>
+							</mat-form-field>
+							<mat-form-field appearance="outline" *ngIf="selectedService!='Galvanisation'">
+								<mat-label>Machines to be allocated</mat-label>
+								<mat-select  name="Machine" formControlName="machine"  multiple>
+									<mat-option *ngFor="let machine of machines" [value]="machine.id">
+										{{machine.title}}
+									</mat-option>
+								</mat-select>
+							</mat-form-field>
+						</mat-card-title>
+					</div>
+				</div>
+			</mat-card-content>
+
+			<mat-card-actions>
+				<button mat-raised-button color="primary" type="submit" [disabled]="!projectCreateForm.valid">{{ projectSaveBtn }}</button>
+			</mat-card-actions>
+		</mat-card>
+	</form>
+</div>
+
+

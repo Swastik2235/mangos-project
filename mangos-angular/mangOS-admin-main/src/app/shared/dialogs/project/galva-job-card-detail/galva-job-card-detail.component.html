@@ -1,0 +1,272 @@
+<div class="jobCardDetail">
+    <div mat-card-header class="jobCardDHeader">
+        <div fxLayout="row" fxLayoutAlign="start center">
+            <div fxFlex="30" fxFlexAlign="baseline">
+                <div>
+                    <h3><strong>{{sJobCardData.project_detail.company_detail.name|titlecase}}</strong></h3>
+                    <h5><strong>Umred.</strong></h5>
+                </div>
+            </div>
+            <div fxFlex="50" fxFlexAlign="baseline" fxLayoutAlign="center">
+                <div>
+                    <h3><strong>Galva Job Card</strong></h3>
+                    <h5><strong>Cum</strong></h5>
+                    <h5><strong>STELL REQUISITION SLIP</strong></h5>
+                </div>
+            </div>
+            <div fxFlex="20" fxFlexAlign="baseline">
+                <div class="jobCardLogo">
+                </div>
+            </div>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="start center">
+            <div fxFlex="10" fxFlexAlign="end">
+                <div>
+                    <h5><strong>Job Order No</strong></h5>
+                    <h5><strong>Client</strong></h5>
+                    <h5><strong>Project</strong></h5>
+                    <h5><strong>Tanks</strong></h5>
+                    <h5><strong>Loading Stand</strong></h5>
+                    <h5><strong>Trolley</strong></h5>
+                </div>
+            </div>
+            <div fxFlex="1" fxFlexAlign="end">
+                <div>
+                    <h5><strong>:</strong></h5>
+                    <h5><strong>:</strong></h5>
+                    <h5><strong>:</strong></h5>
+                    <h5><strong>:</strong></h5>
+                    <h5><strong>:</strong></h5>
+                    <h5><strong>:</strong></h5>
+                </div>
+            </div>
+            <div fxFlex="55" fxFlexAlign="end">
+                <h5><strong>{{sJobCardData.order}}</strong></h5>
+                <h5><strong>{{sJobCardData.project_detail.client_detail.name}}</strong></h5>
+                <h5><strong>{{sJobCardData.project_detail.title}}</strong></h5>
+                <!-- <h5><strong>{{sJobCardData.tower_detail.title}}</strong></h5> -->
+                <h5><strong *ngFor="let tank of sJobCardData.tank_detail">{{tank.title}} </strong></h5>
+                <h5><strong>{{sJobCardData.loading_stand}}</strong></h5>
+                <h5><strong>{{sJobCardData.trolley}}</strong></h5>
+            </div>
+            <div fxFlex="12" fxFlexAlign="end">
+                <div>
+                    <h5><strong>Format No</strong></h5>
+                    <h5><strong>Relesed Date</strong></h5>
+                    <h5><strong>JC No.</strong></h5>
+                    <!-- <h5><strong>Speci.</strong></h5> -->
+                    <h5><strong>LOT</strong></h5>
+                    <h5><strong>Total Jig Weight</strong></h5>
+                </div>
+            </div>
+            <div fxFlex="1" fxFlexAlign="end">
+                <div>
+                    <h5><strong>:</strong></h5>
+                    <h5><strong>:</strong></h5>
+                    <h5><strong>:</strong></h5>
+                    <!-- <h5><strong>:</strong></h5> -->
+                    <h5><strong>:</strong></h5>
+                    <h5><strong>:</strong></h5>
+                </div>
+            </div>
+            <div fxFlex="21" fxFlexAlign="end">
+                <div>
+                    <h5><strong>ERA/PPC/RD/003</strong></h5>
+                    <h5><strong>{{sJobCardData.timestamp|date:'d-MMM-y'}}</strong></h5>
+                    <h5><strong>JC / 149 / 1354</strong></h5>
+                    <!-- <h5><strong>{{sJobCardData.spec}}</strong></h5> -->
+                    <h5><strong>{{sJobCardData.lot}}</strong></h5>
+                    <h5><strong>{{weighttotal}}</strong></h5>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div mat-dialog-content>
+        <div fxLayout="row" fxLayoutAlign="start center">
+            <div fxFlex="100" fxFlexAlign="baseline">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th scope="col">Section</th>
+                            <th></th>
+                            <th scope="col">Material Type</th>
+                            <th scope="col">LENGTH</th>
+                            <th scope="col">WIDTH</th>
+                            <th scope="col">THICKNESS</th>
+                            <th scope="col">Weight</th>
+                            <th scope="col" >Remark</th>
+                            <th scope="col" >Jig <hr> {{tanks.Jig.title}}</th>
+                            <th scope="col" colspan="2">Degreasing <hr> {{tanks.Degreasing.title}}</th>
+                            <th scope="col" colspan="2">Acid <hr> {{tanks.Pickling.title}}</th>
+                            <th scope="col" colspan="2">Rinsing <hr> {{tanks.Rinsing.title}}</th>
+                            <th scope="col" colspan="2">Flux <hr> {{tanks.Flux.title}}</th>
+                            <th scope="col" colspan="2">Preheater <hr> {{tanks.Preheater.title}}</th>
+                            <th scope="col" colspan="2">Zinc ({{sJobCardData.zincbath_temp}}°C)<hr> {{tanks.Zincbath.title}}</th>
+                            <th scope="col" colspan="2">Quenching <hr> {{tanks.Quenching.title}}</th>
+                            <th scope="col" colspan="2">Passivation <hr> {{tanks.Dichromate.title}}</th>
+                            <th scope="col" >Jig <hr> {{tanks.Jig.title}}</th>
+                            <th scope="col" colspan="2">Filing</th>
+                        </tr>
+                    </thead>
+                    <thead>
+                        <tr>
+                            <th scope="col">( mm )</th>
+                            <th></th>
+                            <th scope="col"></th>
+                            <th scope="col">( mm )</th>
+                            <th scope="col">( mm )</th>
+                            <th scope="col">(mm)</th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                            <th scope="col"><mat-checkbox [checked]="sJobCardData.jig_in" [disabled]="sJobCardData.jig_in" (change)="timein('jig_in')">in</mat-checkbox></th>
+                            <th scope="col"><mat-checkbox [checked]="sJobCardData.degreasing_in" [disabled]="sJobCardData.degreasing_in" (change)="timein('degreasing_in')">in</mat-checkbox></th>
+                            <th scope="col"><mat-checkbox [checked]="sJobCardData.degreasing_out" [disabled]="sJobCardData.degreasing_out" (change)="timein('degreasing_out')">out</mat-checkbox></th>
+                            <th scope="col"><mat-checkbox [checked]="sJobCardData.pickling_in" [disabled]="sJobCardData.pickling_in" (change)="timein('pickling_in')">in</mat-checkbox></th>
+                            <th scope="col"><mat-checkbox [checked]="sJobCardData.pickling_out" [disabled]="sJobCardData.pickling_out" (change)="timein('pickling_out')">out</mat-checkbox></th>
+                            <th scope="col"><mat-checkbox [checked]="sJobCardData.rinsing_in" [disabled]="sJobCardData.rinsing_in" (change)="timein('rinsing_in')">in</mat-checkbox></th>
+                            <th scope="col"><mat-checkbox [checked]="sJobCardData.rinsing_out" [disabled]="sJobCardData.rinsing_out" (change)="timein('rinsing_out')">out</mat-checkbox></th>
+                            <th scope="col"><mat-checkbox [checked]="sJobCardData.flux_in" [disabled]="sJobCardData.flux_in" (change)="timein('flux_in')">in</mat-checkbox></th>
+                            <th scope="col"><mat-checkbox [checked]="sJobCardData.flux_out" [disabled]="sJobCardData.flux_out" (change)="timein('flux_out')">out</mat-checkbox></th>
+                            <th scope="col"><mat-checkbox [checked]="sJobCardData.preheater_in" [disabled]="sJobCardData.preheater_in" (change)="timein('preheater_in')">in</mat-checkbox></th>
+                            <th scope="col"><mat-checkbox [checked]="sJobCardData.preheater_out" [disabled]="sJobCardData.preheater_out" (change)="timein('preheater_out')">out</mat-checkbox></th>
+                            <th scope="col"><mat-checkbox [checked]="sJobCardData.zincbath_in" [disabled]="sJobCardData.zincbath_in" (change)="timein('zincbath_in')">in</mat-checkbox></th>
+                            <th scope="col"><mat-checkbox [checked]="sJobCardData.zincbath_out" [disabled]="sJobCardData.zincbath_out" (change)="timein('zincbath_out')">out</mat-checkbox></th>
+                            <th scope="col"><mat-checkbox [checked]="sJobCardData.quenching_in" [disabled]="sJobCardData.quenching_in" (change)="timein('quenching_in')">in</mat-checkbox></th>
+                            <th scope="col"><mat-checkbox [checked]="sJobCardData.quenching_out" [disabled]="sJobCardData.quenching_out" (change)="timein('quenching_out')">out</mat-checkbox></th>
+                            <th scope="col"><mat-checkbox [checked]="sJobCardData.dichromate_in" [disabled]="sJobCardData.dichromate_in" (change)="timein('dichromate_in')">in</mat-checkbox></th>
+                            <th scope="col"><mat-checkbox [checked]="sJobCardData.dichromate_out" [disabled]="sJobCardData.dichromate_out" (change)="timein('dichromate_out')">out</mat-checkbox></th>
+                            <th scope="col"><mat-checkbox [checked]="sJobCardData.jig_out" [disabled]="sJobCardData.jig_out" (change)="timein('jig_out')">out</mat-checkbox></th>
+                            <th scope="col"><mat-checkbox [checked]="sJobCardData.filing_in" [disabled]="sJobCardData.filing_in" (change)="timein('filing_in')">in</mat-checkbox></th>
+                            <th scope="col"><mat-checkbox [checked]="sJobCardData.filing_out" [disabled]="sJobCardData.filing_out" (change)="timein('filing_out')">out</mat-checkbox></th>
+                        </tr>
+                    </thead>
+                        <tbody>
+                            <tr *ngFor="let jitem of sJobCardData.galvajobitems,let i = index ">
+                            <td>{{jitem.material_detail.section_data.title}}</td>
+                            <td></td>
+                            <td>{{jitem.material_detail.material_type}}</td>
+                            <td>{{jitem.material_detail.length}}</td>
+                            <td>{{jitem.material_detail.width}}</td>
+                            <td>{{jitem.material_detail.thickness}}</td>
+                            <td>{{jitem.material_detail.weight}}</td>
+                            <td>{{jitem.remark}}</td>
+                            <td>{{sJobCardData.jig_in}}</td>
+                            <td>{{sJobCardData.degreasing_in}}</td>
+                            <td>{{sJobCardData.degreasing_out}}</td>
+                            <td>{{sJobCardData.pickling_in}}</td>
+                            <td>{{sJobCardData.pickling_out}}</td>
+                            <td>{{sJobCardData.rinsing_in}}</td>
+                            <td>{{sJobCardData.rinsing_out}}</td>
+                            <td>{{sJobCardData.flux_in}}</td>
+                            <td>{{sJobCardData.flux_out}}</td>
+                            <td>{{sJobCardData.preheater_in}}</td>
+                            <td>{{sJobCardData.preheater_out}}</td>
+                            <td>{{sJobCardData.zincbath_in}}</td>
+                            <td>{{sJobCardData.zincbath_out}}</td>
+                            <td>{{sJobCardData.quenching_in}}</td>
+                            <td>{{sJobCardData.quenching_out}}</td>
+                            <td>{{sJobCardData.dichromate_in}}</td>
+                            <td>{{sJobCardData.dichromate_out}}</td>
+                            <td>{{sJobCardData.jig_out}}</td>
+                            <td>{{sJobCardData.filing_in}}</td>
+                            <td>{{sJobCardData.filing_out}}</td>
+                            </tr>
+                        </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div mat-dialog-content>
+        <h4><strong>Zinc:</strong></h4>
+        <div fxLayout="row" fxLayoutAlign="start center">
+            <div fxFlex="100" fxFlexAlign="baseline">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th scope="col">Section</th>
+                            <th></th>
+                            <th scope="col">Material Type</th>
+                            <th scope="col">LENGTH</th>
+                            <th scope="col">WIDTH</th>
+                            <th scope="col">THICKNESS</th>
+                            <th scope="col">Weight</th>
+                            <th scope="col" >Remark</th>
+                            <th scope="col" colspan="11" >Zinc Data</th>
+                        </tr>
+                    </thead>
+                    <thead>
+                        <tr>
+                            <th scope="col">( mm )</th>
+                            <th></th>
+                            <th scope="col"></th>
+                            <th scope="col">( mm )</th>
+                            <th scope="col">( mm )</th>
+                            <th scope="col">(mm)</th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                            <th scope="col" >Min. Coating Required</th>
+                            <th scope="col">Min. Coating</th>
+                            <th scope="col">Max. Coating</th>
+                            <th scope="col">Avg. Coating</th>
+                            <th scope="col">Zinc Consumption (%)</th>
+                            <th scope="col">Zinc Theoretical</th>
+                            <th scope="col">Zinc Excess</th>
+                            <th scope="col">Zinc Excess %</th>
+                            <th scope="col">Zinc Con Actual (WT)</th>
+                            <th scope="col" >Zinc  Cons Theoritical (WT)</th>
+                            <th scope="col">Difference (WT) KG</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                        <tbody>
+                            <tr *ngFor="let jitem of sJobCardData.galvajobitems,let i = index ">
+                            <td>{{jitem.material_detail.section_data.title}}</td>
+                            <td></td>
+                            <td>{{jitem.material_detail.material_type}}</td>
+                            <td>{{jitem.material_detail.length}}</td>
+                            <td>{{jitem.material_detail.width}}</td>
+                            <td>{{jitem.material_detail.thickness}}</td>
+                            <td>{{jitem.material_detail.weight}}</td>
+                            <td>{{jitem.id}}</td>
+                            <td><input type='number' value='{{jitem.min_coating_required}}' disabled></td>
+                            <td><input type='number' value='{{jitem.min_coating}}' (input)="setmin_coating($event,i)"></td>
+                            <td><input type='number' value='{{jitem.max_coating}}' (input)="setmax_coating($event,i)"></td>
+                            <td><input type='number' value='{{jitem.avg_coating}}' (input)="setavg_coating($event,i)" disabled></td>
+                            <td><input type='number' value='{{jitem.zinc_consumption_per}}' (input)="setzinc_consumption_per($event,i)" disabled></td>
+                            <td><input type='number' value='{{jitem.zinc_theoratical}}' (input)="setzinc_theoratical($event,i)" disabled></td>
+                            <td><input type='number' value='{{jitem.zinc_excess | number : "1.2-2"}}' (input)="setzinc_excess($event,i)" disabled></td>
+                            <td><input type='number' value='{{jitem.zinc_excess_p | number : "1.2-2"}}' (input)="setzinc_excess_p($event,i)" disabled></td>
+                            <td><input type='number' value='{{jitem.zinc_consumption_act}}' (input)="setzinc_consumption_act($event,i)" disabled></td>
+                            <td><input type='number' value='{{jitem.zinc_consumption_t}}' (input)="setzinc_consumption_t($event,i)" disabled></td>
+                            <td><input type='number' value='{{jitem.difference_zinc_cons | number : "1.2-4"}}' (input)="setdifference_zinc_cons($event,i)" disabled></td>
+                            <td><button mat-raised (click)="savezinc(jitem,i)">Save</button></td>
+                            </tr>
+                        </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="start center">
+        <div fxFlex="100" fxFlexAlign="baseline">
+            <table class="table table-bordered">
+                <tr>
+                    <td> <strong>( Prepared By )</strong>
+                        <img src={{sJobCardData.prepared_detail.signature}}
+                            alt={{sJobCardData.prepared_detail.first_name}} class="sign">
+                    </td>
+                    <td></td>
+                    <td> <strong>( Authorized By )</strong>
+                        <img src={{sJobCardData.authorized_detail.signature}}
+                            alt={{sJobCardData.authorized_detail.first_name}} class="sign">
+                    </td>
+                </tr>
+                <tr>
+                    <td> <strong>Planning Deptt.</strong></td>
+                    <td><strong>(RM Checked By)</strong></td>
+
+                    <td><strong>Planning Deptt.</strong></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>

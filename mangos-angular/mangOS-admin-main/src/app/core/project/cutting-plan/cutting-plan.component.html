@@ -1,0 +1,92 @@
+<div class="cutting-container">
+	<ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "large" color = "#fff" type = "pacman" [fullScreen] = "true"><p style="color: white" > Loading... </p></ngx-spinner>
+	<div class="bomHeader">
+		<div fxLayout="row" fxFlexFill>
+			<div fxFlex="25" fxFlexAlign="start">
+				<div class="projectFilter">
+					<mat-form-field appearance="outline">
+						<mat-label>Projects</mat-label>
+						<mat-select [formControl]="sproject" (selectionChange)="projectSelect($event.value)">
+						  <mat-option *ngFor="let project of projectList" [value]="project.id">
+							{{project.title}}
+						  </mat-option>
+						</mat-select>
+					</mat-form-field>
+				</div>
+			</div>
+			<div fxFlex="25" fxFlexAlign="start">
+				<div class="bomFilter">
+					<mat-form-field appearance="outline">
+					  <mat-label>Search</mat-label>
+					  <input matInput (keyup)="applyFilter($any($event.target).value)" placeholder="Filter Invites..." #input>
+					</mat-form-field>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="mat-elevation-z8">
+		<table mat-table class="full-width-table" matSort aria-label="Elements">
+			<!-- Id Column -->
+			<ng-container matColumnDef="sn">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header>Sr. No.</th>
+				<td mat-cell *matCellDef="let row; let i=index;">{{i+1}}</td>
+			</ng-container>
+
+			<!-- Name Column -->
+			<ng-container matColumnDef="section">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header>Section</th>
+				<td mat-cell *matCellDef="let row">{{row.title}}</td>
+			</ng-container>
+
+			<ng-container matColumnDef="grade">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header>Grade</th>
+				<td mat-cell *matCellDef="let row">{{row.grade}}</td>
+			</ng-container>
+
+			<ng-container matColumnDef="unit_wt">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header>Unit Wt. (Kg)</th>
+				<td mat-cell *matCellDef="let row">0</td>
+			</ng-container>
+
+			<ng-container matColumnDef="width">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header>Width (Mtr.)</th>
+				<td mat-cell *matCellDef="let row">{{row.width}}</td>
+			</ng-container>
+
+			<ng-container matColumnDef="length">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header>Length (Mtr.)</th>
+				<td mat-cell *matCellDef="let row">0</td>
+			</ng-container>
+
+			<ng-container matColumnDef="total_qty">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header>Total Qty. (Nos.)</th>
+				<td mat-cell *matCellDef="let row">0</td>
+			</ng-container>
+
+			<ng-container matColumnDef="total_wt">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header>Total Wt. (MT)</th>
+				<td mat-cell *matCellDef="let row">0</td>
+			</ng-container>
+
+			<ng-container matColumnDef="remark">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header>Remarks</th>
+				<td mat-cell *matCellDef="let row">{{row.name}}</td>
+			</ng-container>
+
+
+			<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+			<tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+			<tr class="mat-row" *matNoDataRow>
+				<td class="mat-cell" colspan="4">Please Select Project</td>
+			  </tr>
+		</table>
+
+		<mat-paginator #paginator
+				[length]="dataSource?.data?.length"
+				[pageIndex]="0"
+				[pageSize]="50"
+				[pageSizeOptions]="[50,100,200,500,100]">
+		</mat-paginator>
+	</div>
+</div>

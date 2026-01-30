@@ -1,0 +1,51 @@
+.signup-container{
+	mat-card{
+		background-color: #ededed;
+	}
+	strong{font-weight: 500;}
+	.c-code{max-width: 15%;margin-right: 10px;}
+	.m-num{max-width: 82%;}
+	.half-field{max-width: 48%;margin-right: 10px;}
+	.signup-card{
+		width:100%;
+		text-align:left;
+		mat-form-field {
+			width: 99%;
+			font-size: medium;
+			//margin-top: 10px;
+		}
+		.mat-form-field-flex{height: 40px !important;}
+		.mat-form-field-outline {
+			height: 40px !important;
+		}
+		.mat-form-field-outline.mat-form-field-outline-thick {
+			height: 40px !important;
+		}
+		.mat-form-field-infix {
+			padding-top: 0 !important;
+		}
+		mat-card-actions{
+			button{
+				//float: left;
+				margin-left: 2%;
+				margin-bottom: 5%;
+			}
+			a{
+				margin-left: 2%;
+				text-decoration: none;
+				color: rgb(80, 78, 78);
+			}
+			a:hover{
+				color: red;
+			}
+	}
+	}
+	mat-card-title{ 
+		mat-error{
+			font-size: medium
+		}
+	}
+	.registered{margin-left: 10px;}
+	.signup{cursor: pointer;}
+	.signup:hover{color: #3f51b5;}
+}

@@ -1,0 +1,64 @@
+<div class="InviteFormDiv">
+	 <h2 mat-dialog-title *ngIf="data && data.invite">Resend Invitation</h2>
+	<h2 mat-dialog-title *ngIf="data == 'undefined' || data == undefined">New Invitation</h2> 
+	<ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "large" color = "#fff" type = "pacman" [fullScreen] = "true"><p style="color: white" > Loading... </p></ngx-spinner>
+	<div class="inviteForm">
+		
+		<form [formGroup]="inviteAddForm" (ngSubmit)="inviteAddFormSubmit()">
+			<div>
+				<mat-form-field appearance="outline">
+					<mat-label>Company</mat-label>
+					<mat-select name="food" formControlName="company">
+						<mat-option *ngFor="let company of companyList" [value]="company.id">
+							{{company.name}}
+						</mat-option>
+					</mat-select>
+				</mat-form-field>
+			</div>
+			<div>
+				<mat-form-field appearance="outline">
+					<mat-label>Role</mat-label>
+					<mat-select formControlName="role">
+					    <mat-option *ngFor="let role of roleList" [value]="role.id">
+							{{role.name}}
+						</mat-option>
+					</mat-select>
+					<mat-error *ngIf="inviteAddForm.controls['role'].hasError('required')">
+	           	 	Role is <strong>required</strong>
+	            	</mat-error>
+				</mat-form-field>
+			</div>
+			<div>
+				<mat-form-field class="example-full-width" appearance="outline">
+				    <mat-label>Name</mat-label>
+				    <input matInput formControlName="name">
+				</mat-form-field>
+			</div>
+			<div>
+			  	<mat-form-field class="example-full-width" appearance="outline">
+				    <mat-label>Add Email</mat-label>
+				    <input matInput formControlName="email" type="email" [readonly]="data">
+				    <mat-error *ngIf="inviteAddForm.controls['email'].hasError('required')">
+		           	 	Email is <strong>required</strong>
+		            </mat-error>
+		            <mat-error *ngIf="inf.email.errors">
+		            	<span *ngIf='inf.email.errors?.email || inf.email.errors?.pattern'>
+		            		Valid Email is <strong>required.</strong>
+		            	</span>
+					</mat-error>
+
+				</mat-form-field>
+				<mat-error *ngIf="errors !=''">
+		   	 		{{errors}}
+		    	</mat-error>
+			</div>
+			<div>
+				<button type="submit" mat-raised-button class="companySave buttonSubmit mr-2" [disabled]="!inviteAddForm.valid">
+					<span *ngIf="data == 'undefined' || data == undefined">Sent</span>
+					<span *ngIf="data && data.invite">Resent</span>
+				</button>
+	    		<button mat-raised-button color="warn" mat-dialog-close>Cancel</button>
+	    	</div>
+		</form>
+	</div>
+</div>

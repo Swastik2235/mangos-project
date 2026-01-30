@@ -1,0 +1,38 @@
+.grid-container{
+    .mat-card  {
+        align-items: center;
+        text-align: center;
+        .mat-card-title{
+            .mat-error{
+                font-size: small;
+                color: red;
+            }
+        }
+        .mat-card-content{
+            .shift-time{
+                .shift_start{
+                    margin-right: 1%;
+                   } 
+                .mat-form-field{
+                    width: 40%;
+                    //margin-right: 10%;
+                   
+                }
+            }
+            .mat-form-field{
+                font-size: small;
+                width: 80%;
+                
+                .myfilebrowser{
+                    width: 100%;
+                    background-color: gray;
+                    align-items: center;
+                    align-content: center;
+                    .mat-toolbar{background-color: none !important;}
+                }
+
+            }
+            
+        }
+    }
+}

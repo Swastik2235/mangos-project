@@ -1,0 +1,111 @@
+<div class="profile" >
+	<ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "large" color = "#fff" type = "pacman" [fullScreen] = "true"><p style="color: white" > Loading... </p></ngx-spinner>
+	<mat-grid-list cols="1" rowHeight="100vh" >
+		<mat-grid-tile    >
+			<form [formGroup]="profileForm" novalidate class="profile" (ngSubmit)="updateProfile()">
+				<mat-card  >
+					<mat-card-title>
+						
+						<mat-error *ngIf='message!=null'>{{ message }}</mat-error>
+						<mat-error *ngFor='let errors of errors | keyvalue'>{{ errors.value }}</mat-error>
+						
+					</mat-card-title> 
+					<mat-card-content>
+						<mat-card-title>
+							<mat-form-field >
+								<div class="myfilebrowser">
+									<mat-toolbar>
+										<input matInput formControlName="image" readonly  hidden/>
+										<img [src]='userImgUrl' height ="100%">
+									</mat-toolbar> 
+									<input type="file"  (change)="fileChangeEvent($event)"  multiple="multiple" accept="image/*"  />
+								</div> 
+							</mat-form-field>
+						</mat-card-title> 
+						<mat-card-title>
+							<mat-form-field >
+								<input matInput placeholder="Username" formControlName="username">
+								<mat-error *ngIf="profileForm.controls['username'].hasError('required')">
+								Username is <strong>required</strong>
+								</mat-error>
+							</mat-form-field>
+						</mat-card-title>   
+
+						<mat-card-title>
+							<mat-form-field>
+								<input matInput placeholder="First Name" formControlName="first_name">
+								<mat-error *ngIf="profileForm.controls['first_name'].hasError('required')">
+								First Name is <strong>required</strong>
+								</mat-error>
+							</mat-form-field>
+						</mat-card-title>
+						<mat-card-title>
+							<mat-form-field class="full-width">
+								<input matInput placeholder="Last Name" formControlName="last_name">
+								<mat-error *ngIf="profileForm.controls['last_name'].hasError('required')">
+								Last Name is <strong>required</strong>
+								</mat-error>
+							</mat-form-field>
+						</mat-card-title>
+						<mat-card-title>
+							<mat-form-field class="full-width">
+								<input type='email' matInput placeholder="Email" formControlName="email" >
+								<mat-error *ngIf="profileForm.controls['email'].hasError('required')">
+									Email is <strong>required</strong>
+								</mat-error>
+								<mat-error *ngIf="profileForm.controls['email'].hasError('email')">
+									Please Enter valid <strong>email</strong>
+								</mat-error>
+							</mat-form-field>
+						</mat-card-title>
+						<mat-card-title>
+							<mat-form-field class="full-width">
+								<input type='number' matInput placeholder="Mobile" formControlName="mobile">
+								<mat-error *ngIf="profileForm.controls['mobile'].hasError('maxLength')">
+									Mobile is <strong>maxLength</strong>
+								</mat-error>
+							</mat-form-field>
+						</mat-card-title>
+						<mat-card-title>
+							<mat-form-field  >
+								<mat-label>Country</mat-label>
+								<mat-select  name="food" formControlName="country"  >
+									<mat-option *ngFor="let ct of country" [value]="ct.id"  >
+										{{ct.name}}
+									</mat-option>
+								</mat-select>
+							</mat-form-field>
+						</mat-card-title>
+						<mat-card-title>
+							<mat-form-field  >
+								<mat-label>State</mat-label>
+								<mat-select name="food" formControlName="state">
+									<mat-option *ngFor="let st of state" [value]="st.id">
+									{{st.name}}
+									</mat-option>
+								</mat-select>
+							</mat-form-field>
+						</mat-card-title>
+						<mat-card-title>
+							<mat-form-field >
+								<div class="myfilebrowser">
+									<label>signature:-</label>
+									<mat-toolbar>
+										<input matInput formControlName="signature" readonly  hidden/>
+										<img [src]='userSgnUrl' height ="100%">
+									</mat-toolbar> 
+									<input type="file"  (change)="fileChangeEven($event)"  multiple="multiple" accept="image/*"  />
+								</div> 
+							</mat-form-field>
+						</mat-card-title>
+					</mat-card-content>
+
+					<mat-card-actions>
+						<button mat-raised-button color="primary" type="submit" [disabled]="!profileForm.valid">Update</button>
+					</mat-card-actions>
+				</mat-card>
+			</form>
+		</mat-grid-tile>
+	</mat-grid-list>
+</div>
+

@@ -1,0 +1,9 @@
+.ImagePreviewDiv{
+	min-width: 300px;max-height:85vh;
+    .actionDiv{display: flex;}
+    .download{border: none;background: transparent;}
+	h2{margin: 0;margin-right: auto;}
+	img{max-height: 85vh;max-width:85vh;min-width:45vh ;width:100%}
+	embed{min-height: 75vh;min-width:130vh;max-height: 80vh;max-width:150vh,}
+    .mat-divider{margin: 22px 0 25px 0;}
+}

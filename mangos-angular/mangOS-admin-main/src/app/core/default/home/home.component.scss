@@ -1,0 +1,32 @@
+.card-p{padding: 15px;}
+strong{font-weight: 500;}
+.head{margin: 0;}
+.project-data mat-card{padding: 0;overflow: hidden;
+.projectcardimg{width: -webkit-fill-available; height: 100px;}
+.projectlogodiv{text-align:center;padding: 2px;}
+.projectlogo{width: 50px;height: 50px;border-radius: 50%;position: relative;top: -25px;border: solid 3px #fff;}
+.title{font-weight: 500;text-align: center;margin: 0;margin-top: -25px;}
+.header{display: flex;justify-content: space-around;}
+.sm{font-size: 10px;p{margin-bottom: 5px;}}
+.top p{margin-bottom: 0px !important;font-size: 15px;padding: 10px 0;font-weight: 500;}
+span{font-size: 12px;}
+.grn{color: green; margin-left: 10px;}
+.top-projectlogo{width: 40px;height: 40px;border-radius: 50%;margin: 10px;}
+.nav-flex{display: flex;}
+}
+.card-table{
+mat-card{    
+    height: 280px;
+    overflow-y: auto;
+}
+.t-data{
+    padding: 10px;
+    word-break: break-all;
+}
+.gray {
+    background: gainsboro;
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: 500;
+}
+}

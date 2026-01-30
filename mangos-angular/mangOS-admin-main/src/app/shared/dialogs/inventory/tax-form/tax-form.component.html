@@ -1,0 +1,49 @@
+<h3 mat-dialog-title>{{ data.title }}</h3>
+<div mat-dialog-content>
+	<form [formGroup]="taxForm" novalidate (ngSubmit)="addTax()">
+		<mat-card-content>
+			<mat-card-title>
+				<mat-form-field appearance="outline">
+					<mat-label>Type</mat-label>
+					<mat-select formControlName="type"  >
+						<mat-option *ngFor="let tax of taxType" [value]="tax" >
+							{{ tax }}
+						</mat-option>
+					</mat-select>
+				</mat-form-field>			
+			</mat-card-title>
+			<mat-card-title>
+				<mat-form-field appearance="outline">
+					<mat-label>Tax Name</mat-label>
+					<input matInput placeholder="Tax Name" formControlName="name">
+					<mat-error *ngIf="taxForm.controls['name'].hasError('required')">
+					Description is <strong>required</strong>
+					</mat-error>
+				</mat-form-field>
+			</mat-card-title>
+			<mat-card-title>
+				<mat-form-field appearance="outline">
+					<mat-label>Value</mat-label>
+					<input type="number" matInput placeholder="Value" formControlName="value">
+					<mat-error *ngIf="taxForm.controls['value'].hasError('required')">
+					Value is <strong>required</strong>
+					</mat-error>
+				</mat-form-field>
+			</mat-card-title>
+			<mat-card-title>
+				<mat-form-field appearance="outline">
+					<mat-label>Status</mat-label>
+					<mat-select   formControlName="status"  >
+						<mat-option *ngFor="let st of status" [value]="st" >
+							{{ st }}
+						</mat-option>
+					</mat-select>
+				</mat-form-field>
+			</mat-card-title>
+		</mat-card-content>
+		<mat-card-actions>
+			<button mat-raised-button color="primary" type="submit" [disabled]="!taxForm.valid">Save</button>
+			<button mat-raised-button color="secondary" type="button" (click)="closeDialog()" >Cancel</button>
+		</mat-card-actions>
+	</form>
+</div>

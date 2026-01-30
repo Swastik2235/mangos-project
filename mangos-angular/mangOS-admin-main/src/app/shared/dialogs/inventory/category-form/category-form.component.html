@@ -1,0 +1,31 @@
+<h3 mat-dialog-title>{{ data.title }}</h3>
+<div class='box'>
+	<form mat-dialog-content [formGroup]="categoryForm" novalidate (ngSubmit)="addCategory()">
+		<mat-form-field appearance="outline">
+			<mat-label>Category Name</mat-label>
+			<input matInput placeholder="Category Name" formControlName="name">
+			<mat-error *ngIf="categoryForm.controls['name'].hasError('required')">
+			Name is <strong>required</strong>
+			</mat-error>
+		</mat-form-field>
+		<mat-form-field appearance="outline">
+			<mat-label>Description</mat-label>
+			<textarea matInput placeholder="Description" formControlName="description"></textarea>
+			<mat-error *ngIf="categoryForm.controls['description'].hasError('required')">
+			Description is <strong>required</strong>
+			</mat-error>
+		</mat-form-field>
+		<mat-form-field appearance="outline">
+			<mat-label>Status</mat-label>
+			<mat-select  name="food" formControlName="status">
+				<mat-option *ngFor="let st of status" [value]="st">
+					{{ st }}
+				</mat-option>
+			</mat-select>
+		</mat-form-field>		
+		<mat-card-actions>
+			<button mat-raised-button color="primary" type="submit" [disabled]="!categoryForm.valid">Save</button>
+			<button mat-raised-button color="secondary" type="button" (click)="closeDialog()" >Cancel</button>
+		</mat-card-actions>
+	</form>
+</div>

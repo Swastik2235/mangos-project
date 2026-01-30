@@ -1,0 +1,426 @@
+<div class="job-invoice">
+	<ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "large" color = "#fff" type = "pacman" [fullScreen] = "true"><p style="color: white" > Loading... </p></ngx-spinner>
+	<div  fxLayout="row" fxFlexFill>
+		<ul fxFlex='95' class="breadcrumbs">
+			<li><a [routerLink]="['/project/job-card/list/'+projectName]">{{projectName}}</a></li>
+			<li >Job-Invoices</li>
+		</ul>
+		<button mat-raised-button color="primary" (click)="print()">print</button>
+	</div>
+	<div id="print-section">
+	<div *ngFor="let sJobCardData of invoiceList">
+		<div fxLayout="row" fxFlexFill>
+			<div fxFlex="100" fxFlexAlign="start">
+				<mat-card class="my-card">
+					<div mat-card-header class="jobCardDHeader">
+						<div fxLayout="row" fxLayoutAlign="start center">
+							<div fxFlex="30" fxFlexAlign="baseline">
+								<div>
+									<h3><strong>{{sJobCardData.project_detail.company_detail.name|titlecase}}</strong></h3>
+									<h5><strong>Umred.</strong></h5>
+								</div>
+							</div>
+							<div fxFlex="50" fxFlexAlign="baseline" fxLayoutAlign="center">
+								<div>
+									<h3><strong>Job Card</strong></h3>
+									<h5><strong>Cum</strong></h5>
+									<h5><strong>STELL REQUISITION SLIP</strong></h5>
+								</div>
+							</div>
+							<div fxFlex="20" fxFlexAlign="baseline">
+								<div class="jobCardLogo">
+								</div>
+							</div>
+						</div>
+						<div fxLayout="row" fxLayoutAlign="start center">
+							<div fxFlex="10" fxFlexAlign="end">
+								<div>
+									<h5><strong>Job Order No</strong></h5>
+									<h5><strong>Client</strong></h5>
+									<h5><strong>Project</strong></h5>
+									<h5><strong>Type of Tower</strong></h5>
+								</div>
+							</div>
+							<div fxFlex="1" fxFlexAlign="end">
+								<div>
+									<h5><strong>:</strong></h5>
+									<h5><strong>:</strong></h5>
+									<h5><strong>:</strong></h5>
+									<h5><strong>:</strong></h5>
+								</div>
+							</div>
+							<div fxFlex="59" fxFlexAlign="end">
+								<h5><strong>{{sJobCardData.order}}</strong></h5>
+								<h5><strong>{{sJobCardData.project_detail.client_detail.name}}</strong></h5>
+								<h5><strong>{{sJobCardData.project_detail.title}}</strong></h5>
+								<!-- <h5><strong>{{sJobCardData.tower_detail.title}}</strong></h5> -->
+								<h5><strong>tower name</strong></h5>
+							</div>
+							<div fxFlex="8" fxFlexAlign="end">
+								<div>
+									<h5><strong>Format No</strong></h5>
+									<h5><strong>Relesed Date</strong></h5>
+									<h5><strong></strong></h5>
+									<h5><strong>JC No.</strong></h5>
+									
+								</div>
+							</div>
+							<div fxFlex="1" fxFlexAlign="end">
+								<div>
+									<h5><strong>:</strong></h5>
+									<h5><strong></strong></h5>
+									<h5><strong>:</strong></h5>
+									<h5><strong>:</strong></h5>
+									
+								</div>
+							</div>
+							<div fxFlex="21" fxFlexAlign="end">
+								<div>
+									<h5><strong>ERA/PPC/RD/003</strong></h5>
+									<h5><strong>{{sJobCardData.timestamp|date:'d-MMM-y'}}</strong></h5>
+									<h5><strong></strong></h5>
+									<h5><strong>JC / 149 / 1354</strong></h5>
+								</div>
+							</div>
+						</div>
+						<div fxLayout="row" fxLayoutAlign="start center">
+							<div fxFlex="70" fxFlexAlign="baseline">
+								<div>
+									<h5><strong>{{sJobCardData.note}}</strong></h5>
+								</div>
+							</div>
+							<div fxFlex="8" fxFlexAlign="end">
+								<div>
+									<h5><strong>Speci.</strong></h5>
+								</div>
+								<div>
+									<h5><strong>LOT</strong></h5>
+								</div>
+							</div>
+							<div fxFlex="1" fxFlexAlign="end">
+								<div>
+									<h5><strong>:</strong></h5>
+									<h5><strong>:</strong></h5>
+								</div>
+							</div>
+							<div fxFlex="21" fxFlexAlign="end">
+								<div>
+									<h5><strong>{{sJobCardData.spec}}</strong></h5>
+								</div>
+								<div>
+									<h5><strong>{{sJobCardData.lot}}</strong></h5>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div mat-dialog-content class="JobCardContent">
+						<div fxLayout="row" fxLayoutAlign="start center">
+							<div fxFlex="100" fxFlexAlign="baseline">
+								<table class="table table-bordered">
+									<thead>
+										<tr>
+										<th scope="col" colspan="2">Mark</th>
+										<th scope="col">Section</th>
+										<th></th>
+										<th scope="col">LENGTH</th>
+										<th scope="col">WIDTH</th>
+										<th scope="col">UNIT</th>
+										<th scope="col">Wt/pc </th>
+										<th scope="col">TOTAL</th>
+										<th scope="col">TOTAL</th>
+										<th scope="col">Operations</th>
+										<th></th>
+										<th></th>
+										<th></th>
+										<th></th>
+										<th></th>
+										<th></th>
+										</tr>
+									</thead>
+									<thead>
+										<tr>
+											<th scope="col" colspan="2">No</th>
+											<th scope="col">( mm )</th>
+											<th></th>
+											<th scope="col">( mm )</th>
+											<th scope="col">( mm )</th>
+											<th scope="col">WT.</th>
+											<th scope="col"></th>
+											<th scope="col">QTY.</th>
+											<th scope="col">WEIGHT</th>
+											<th scope="col"></th>
+											<th>N</th>
+											<th>B</th>
+											<th>CPS</th>
+											<th>HAB</th>
+											<th>HC</th>
+											<th>D</th>
+											<th>G</th>
+											<th>Remark</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr *ngFor="let jitem of sJobCardData.jobitems">
+											<td>{{ jitem.bom_detail.mark_detail.title }}</td>
+				      						<td><mat-checkbox [checked]="jitem.progress=='Completed'" [disabled]="true"> Done </mat-checkbox></td>
+											<td>{{jitem.bom_detail.section_detail.title}}</td>
+											<td></td>
+					
+											<td>{{jitem.length}}</td>
+											<td>{{jitem.width}}</td>
+					
+											<td>{{jitem.unit_weight}}</td>
+					
+											<td>{{jitem.piece_weight}}</td>
+					
+											<td>{{jitem.quantity}}</td>
+					
+											<td>{{ jitem.piece_weight*jitem.unit_weight}}</td>
+					
+											<td>{{jitem.operation}}</td>
+					
+											<td><mat-checkbox [checked]="jitem.n" [disabled]="true"> N </mat-checkbox>
+												<hr>
+												M:
+												<span *ngFor="let m of jitem.operation_data.n.machine">{{m.title}} </span>
+												<hr>
+												O:
+												<span>{{jitem.operation_data.n.operator}}</span>
+												<hr>
+												A:
+												<span>{{jitem.operation_data.n.assistant}}</span>
+											</td>
+					
+											<td><mat-checkbox [checked]="jitem.b" [disabled]="true"> B </mat-checkbox>
+												<hr>
+												M:
+												<span *ngFor="let m of jitem.operation_data.b.machine">{{m.title}} </span>
+												<hr>
+												O:
+												<span>{{jitem.operation_data.b.operator}}</span>
+												<hr>
+												A:
+												<span>{{jitem.operation_data.b.assistant}}</span>
+											</td>
+					
+											<td><mat-checkbox [checked]="jitem.cps" [disabled]="true"> CPS </mat-checkbox>
+												<hr>
+												M:
+												<span *ngFor="let m of jitem.operation_data.cps.machine">{{m.title}} </span>
+												<hr>
+												O:
+												<span>{{jitem.operation_data.cps.operator}}</span>
+												<hr>
+												A:
+												<span>{{jitem.operation_data.cps.assistant}}</span>
+											</td>
+											
+											<td><mat-checkbox [checked]="jitem.hab" [disabled]="true"> HAB </mat-checkbox>
+												<hr>
+												M:
+												<span *ngFor="let m of jitem.operation_data.hab.machine">{{m.title}} </span>
+												<hr>
+												O:
+												<span>{{jitem.operation_data.hab.operator}}</span>
+												<hr>
+												A:
+												<span>{{jitem.operation_data.hab.assistant}}</span>
+											</td>
+					
+											<td><mat-checkbox [checked]="jitem.hc" [disabled]="true"> HC </mat-checkbox>
+												<hr>
+												M:
+												<span *ngFor="let m of jitem.operation_data.hc.machine">{{m.title}} </span>
+												<hr>
+												O:
+												<span>{{jitem.operation_data.hc.operator}}</span>
+												<hr>
+												A:
+												<span>{{jitem.operation_data.hc.assistant}}</span>
+											</td>
+					
+											<td><mat-checkbox [checked]="jitem.d" [disabled]="true"> D </mat-checkbox>
+												<hr>
+												M:
+												<span *ngFor="let m of jitem.operation_data.d.machine">{{m.title}} </span>
+												<hr>
+												O:
+												<span>{{jitem.operation_data.d.operator}}</span>
+												<hr>
+												A:
+												<span>{{jitem.operation_data.d.assistant}}</span>
+											</td>
+											
+											<td><mat-checkbox [checked]="jitem.g" [disabled]="true"> G </mat-checkbox></td>
+						
+											<td>{{jitem.remark}}</td>
+										</tr>
+									</tbody>
+									<tfoot>
+										<tr>
+											<th scope="col" colspan="2"></th>
+											<th scope="col"></th>
+											<th></th>
+											<th scope="col"></th>
+											<th scope="col"></th>
+											<th scope="col">Total</th>
+											<th scope="col"></th>
+											<th scope="col">{{qtytotal}}</th>
+											<th scope="col">{{weighttotal}}</th>
+											<th scope="col"></th>
+											<th></th>
+											<th></th>
+											<th></th>
+											<th></th>
+											<th></th>
+											<th></th>
+										</tr>
+									</tfoot>
+								</table>
+							</div>
+						</div>
+						<div fxLayout="row" fxLayoutAlign="end center">
+							<!-- <div fxFlex="10"></div> -->
+							<div fxFlex="90" fxFlexAlign="baseline">
+								<table class="table table-bordered">
+									<thead>
+										<tr>
+											<th scope="col" >Section</th>
+											<th scope="col">SR NO</th>
+											<th scope="col" colspan="2">Alloca. - 1</th>
+											<th scope="col" colspan="2">Alloca. - 2</th>
+											<th scope="col" colspan="2">Alloca. - 3</th>
+											<th scope="col" colspan="2">Alloca. - 4</th>
+											<th scope="col">Consu length</th>
+											<th scope="col">Length</th>
+											<th scope="col">Pcs</th>
+											<th scope="col">C.L</th>
+											<th scope="col">QTY</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr *ngFor="let alloc of sJobCardData.allocations">
+											<td>{{alloc.section_detail.title}}</td>
+											<td></td>
+											<td>{{alloc.length1}}</td>
+											<td>{{alloc.quantity1}}</td>
+											<td>{{alloc.length2}}</td>
+											<td>{{alloc.quantity2}}</td>
+											<td>{{alloc.length3}}</td>
+											<td>{{alloc.quantity3}}</td>
+											<td>{{alloc.length4}}</td>
+											<td>{{alloc.quantity4}}</td>
+											<td></td>
+											<td>{{alloc.length}}</td>
+											<td></td>
+											<td></td>
+											<td>{{alloc.quantity}}</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<div fxLayout="row" fxLayoutAlign="start center">
+							<div fxFlex="70" fxFlexAlign="baseline">
+								<table class="table table-bordered">
+									<thead>
+										<tr>
+											<th>Embossing</th>
+											<th>SIN No.</th>
+											<th>Section</th>
+											<th>Width</th>
+											<th>Length</th>
+											<th>Pcs</th>
+											<th>Unit Wt.</th>
+											<th>Wt in Kgs.</th>
+											<th>C.L</th>
+											<th>Pcs</th>
+											<th>Wt in Kgs</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr *ngFor="let embos of sJobCardData.embossings">
+											<td>{{embos.title}}</td>
+											<td>{{embos.sin}}</td>
+											<td>{{embos.section_detail.title}}</td>
+											<td>{{embos.width}}</td>
+											<td>{{embos.length}}</td>
+											<td>{{embos.pcs}}</td>
+											<td>{{embos.unit_weight}}</td>
+											<td>{{embos.kg}}</td>
+											<td>{{embos.cl}}</td>
+											<td>1</td>
+											<td>{{embos.total_weight}}</td>
+										</tr>
+										
+									</tbody>
+									<tfoot>
+										<tr>
+											<td></td>
+											<td></td>
+											<td><strong>Total:</strong></td>
+											<td></td>
+											<td></td>
+											<td><strong>11</strong></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td><strong>11.84</strong></td>
+										</tr>
+									</tfoot>
+								</table>
+							</div>
+							<div fxFlex="5" fxFlexAlign="baseline"></div>
+							<div fxFlex="25" fxFlexAlign="baseline">
+								<table class="table table-bordered">
+									<tr>
+										<td colspan="2"><strong>Planning Wt.:</strong></td>
+										<td></td>
+										<td>Kgs</td>
+									</tr>
+									<tr>
+										<td colspan="2"><strong>Raw Material Wt.: </strong></td>
+										<td></td>
+										<td>Kgs</td>
+									</tr>
+									<tr>
+										<td colspan="2"><strong>SRN Wt:</strong></td>
+										<td></td>
+										<td>Kgs</td>
+									</tr>
+									<tr>
+										<td colspan="4"><strong>JC/149/1358</strong></td>
+										
+									</tr>
+								</table>
+							</div>
+						</div>
+						<div fxLayout="row" fxLayoutAlign="start center">
+							<div fxFlex="100" fxFlexAlign="baseline">
+								<table class="table table-bordered">
+									<tr>
+										<td> <strong>( Prepared  By )</strong>
+											<img src={{sJobCardData.prepared_detail.signature}} alt={{sJobCardData.prepared_detail.first_name}} class="sign">
+										</td>
+										<td></td>
+										<td> <strong>(  Authorized  By )</strong>
+											<img src={{sJobCardData.authorized_detail.signature}} alt={{sJobCardData.authorized_detail.first_name}} class="sign">
+										</td>
+									</tr>
+									<tr>
+										<td> <strong>Planning  Deptt.</strong></td>
+										<td><strong>(RM Checked By)</strong></td>
+										
+										<td><strong>Planning  Deptt.</strong></td>
+									</tr>
+								</table>
+							</div>
+						</div>
+					</div>
+				</mat-card>
+			</div>
+		</div>
+	</div>
+	</div>
+</div>

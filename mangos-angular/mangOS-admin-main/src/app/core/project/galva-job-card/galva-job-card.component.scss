@@ -1,0 +1,21 @@
+.job-container{
+	margin: 20px;
+	table{
+		width: 100%;
+	}
+	.jobCardHeader{
+		.projectFilter{
+			.mat-form-field{width: 80%;}
+		}
+		display: flex;
+		.breadcrumbs {
+			padding: 10px 16px;list-style: none;width: 98%;
+			li {display: inline;font-size: 15px;
+				a{color:#979797;text-decoration: none;}
+			}
+			li+li:before {padding: 8px;margin-bottom: 2%;color: #979797;content: ' \003E';;}
+			span{float: right;a{color:#979797 ;}margin-right: 2%;}
+		}
+	}
+}
+.redBOMSnackbar{background-color: red!important;color:#fff!important;}

@@ -1,0 +1,75 @@
+<h3 mat-dialog-title>{{ data.title }}</h3>
+<div mat-dialog-content>
+	<form [formGroup]="taskForm" novalidate (ngSubmit)="addTask()">
+		<mat-card-content>
+			<mat-card-title>
+				<mat-form-field hidden>					
+					<input matInput placeholder="Id" formControlName="project" value="data.projectId">
+					<!-- <mat-error *ngIf="taskForm.controls['title'].hasError('required')">
+					ProjectId is <strong>required</strong>
+					</mat-error> -->
+				</mat-form-field>
+				<mat-form-field appearance="outline">
+					<!-- <mat-label>Title</mat-label> -->
+					<!-- <mat-select   formControlName="title"  >
+						<mat-option *ngFor="let tax of taxType" [value]="tax" >
+							{{ tax }}
+						</mat-option>
+					</mat-select> -->
+					<mat-label>title</mat-label>
+					<input matInput placeholder="Title" formControlName="title" >
+					<mat-error *ngIf="taskForm.controls['title'].hasError('required')">
+					Title is <strong>required</strong>
+					</mat-error>
+				</mat-form-field>			
+			</mat-card-title>
+			<mat-card-title>
+				<mat-form-field appearance="outline">
+					<mat-label>Department</mat-label>
+					<mat-select name="food" formControlName="department">
+						<mat-option *ngFor="let dp of department" [value]="dp">
+						{{dp}}
+						</mat-option>
+					</mat-select>
+				</mat-form-field>
+			</mat-card-title>
+			<mat-card-title>
+				<mat-form-field appearance="outline">
+					<mat-label>Task Details</mat-label>
+					<textarea matInput placeholder="Task Details" formControlName="content"></textarea>
+					<mat-error *ngIf="taskForm.controls['content'].hasError('required')">
+					Task-Detail is <strong>required</strong>
+					</mat-error>
+				</mat-form-field>
+			</mat-card-title>
+			<div class="date">
+				<mat-card-title>
+					<mat-form-field appearance="outline">
+						<mat-label>Start Date</mat-label>
+						<input matInput [matDatepicker]="pickerstart" placeholder="Start Date" formControlName="start">
+						<mat-datepicker-toggle matSuffix [for]="pickerstart"></mat-datepicker-toggle>
+						<mat-datepicker #pickerstart></mat-datepicker>
+						<mat-error *ngIf="taskForm.controls['start'].hasError('required')">
+						Start Date is <strong>required</strong>
+						</mat-error>
+					</mat-form-field>
+				</mat-card-title>
+				<mat-card-title>
+					<mat-form-field appearance="outline">	
+						<mat-label>End Date</mat-label>					
+						<input matInput [matDatepicker]="picker" placeholder="End Date" formControlName="finish">
+						<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+						<mat-datepicker #picker></mat-datepicker>
+						<mat-error *ngIf="taskForm.controls['start'].hasError('required')">
+						End Date is <strong>required</strong>
+						</mat-error>
+					</mat-form-field>
+				</mat-card-title>
+			</div>
+		</mat-card-content>
+		<mat-card-actions>
+			<button mat-raised-button color="primary" type="submit" [disabled]="!taskForm.valid">Save</button>
+			<button mat-raised-button color="secondary" type="button" (click)="closeDialog()" >Cancel</button>
+		</mat-card-actions>
+	</form>
+</div>

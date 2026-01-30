@@ -1,0 +1,28 @@
+.myform{
+    form{
+		height: 100%;
+		mat-error{
+			font-size: small;
+		}
+		mat-form-field{
+			width: 100%;
+			font-size: small;
+			input label{
+				font-size: small;
+			}
+		}
+		mat-card-actions{
+			button{
+				margin-bottom: 1%;
+				margin-right: 2%;
+			}
+		}
+        .parameters{
+            .mat-form-field{
+                width: 48%;
+                margin: 5px;
+            }
+        }
+		
+	}
+}

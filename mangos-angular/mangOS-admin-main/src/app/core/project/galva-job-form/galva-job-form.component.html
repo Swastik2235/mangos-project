@@ -1,0 +1,269 @@
+<div class="jobCardFormDiv">
+    <form [formGroup]="jobForm" novalidate class="profile" (ngSubmit)="addJob()">
+        <div mat-dialog-title>
+            <div class="jobCardForm">
+                <div fxLayout="row" fxFlexFill fxLayoutGap="20px">
+                    <div fxFlex="33" class="hide" fxFlexAlign="start">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Project</mat-label>
+                            <mat-select name="project" formControlName="project">
+                                <mat-option *ngFor="let project of projectList" [value]="project.id">
+                                    {{project.title}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="jobForm.controls['project'].hasError('required')">
+                                Project is <strong>required</strong>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="50" fxFlexAlign="start">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Prepared</mat-label>
+                            <mat-select formControlName="prepared">
+                                <mat-option *ngFor="let user of userList" [value]="user.id">
+                                    {{user.first_name}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="jobForm.controls['prepared'].hasError('required')">
+                                Prepared is <strong>required</strong>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="50" fxFlexAlign="start">
+                        <mat-form-field class="full-width" appearance="outline">
+                            <mat-label>Authorized</mat-label>
+                            <mat-select formControlName="authorized">
+                                <mat-option *ngFor="let user of userList" [value]="user.id">
+                                    {{user.first_name}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="jobForm.controls['authorized'].hasError('required')">
+                                Authorized is <strong>required</strong>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div fxLayout="row" fxFlexFill fxLayoutGap="20px">
+                    <div fxFlex="50" fxFlexAlign="start">
+                        <mat-form-field class="full-width" appearance="outline">
+                            <mat-label>Tanks</mat-label>
+                            <mat-select multiple formControlName="tanks">
+                                <mat-option *ngFor="let tank of tankList" [value]="tank.id">
+                                    {{tank.title}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="50" fxFlexAlign="start">
+                        <mat-form-field class="full-width" appearance="outline">
+                            <mat-label>Lot</mat-label>
+                            <input type='number' matInput formControlName="lot">
+                            <mat-error *ngIf="jobForm.controls['lot'].hasError('required')">
+                                Lot is <strong>required</strong>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div fxLayout="row" fxFlexFill fxLayoutGap="20px">
+                    <div fxFlex="50" fxFlexAlign="start">
+                        <mat-form-field class="full-width" appearance="outline">
+                            <mat-label>Trolley</mat-label>
+                            <input matInput formControlName="trolley">
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="50" fxFlexAlign="start">
+                        <mat-form-field class="full-width" appearance="outline">
+                            <mat-label>Loading Stand</mat-label>
+                            <input matInput formControlName="loading_stand">
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div fxLayout="row" fxFlexFill fxLayoutGap="20px">
+                    <div fxFlex="50" fxFlexAlign="start">
+                        <mat-form-field class="full-width" appearance="outline">
+                            <mat-label>Relase Date</mat-label>
+                            <input matInput [matDatepicker]="picker" formControlName="release">
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                            <mat-error *ngIf="jobForm.controls['release'].hasError('required')">
+                                Date is <strong>required</strong>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="50" fxFlexAlign="start">
+                            <mat-form-field class="full-width" appearance="outline">
+                                <mat-label>Zincbath Temperature</mat-label>
+                                <input type='number' matInput formControlName="zincbath_temp">
+                            </mat-form-field>
+                    </div>
+                </div>
+                <hr>
+                <h4>Process</h4>
+                <div fxLayout="row" fxFlexFill fxLayoutGap="20px">
+                    <div fxFlex="25" fxFlexAlign="start">
+                        <mat-form-field class="full-width" appearance="outline">
+                            <mat-label>Jig In</mat-label>
+                            <input matInput type="time"  step="1" formControlName="jig_in">
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="25" fxFlexAlign="start">
+                        <mat-form-field class="full-width" appearance="outline">
+                            <mat-label>Jig Out</mat-label>
+                            <input matInput type="time"  step="1" formControlName="jig_out">
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="50" fxFlexAlign="start">
+                    </div>
+                </div>
+                <div fxLayout="row" fxFlexFill fxLayoutGap="20px">
+                    <div fxFlex="25" fxFlexAlign="start">
+                        <mat-form-field class="full-width" appearance="outline">
+                            <mat-label>Degreasing In</mat-label>
+                            <input matInput type="time"  step="1" formControlName="degreasing_in">
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="25" fxFlexAlign="start">
+                        <mat-form-field class="full-width" appearance="outline">
+                            <mat-label>Degreasing Out</mat-label>
+                            <input matInput type="time"  step="1" formControlName="degreasing_out">
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="50" fxFlexAlign="start">
+                    </div>
+                </div>
+                <div fxLayout="row" fxFlexFill fxLayoutGap="20px">
+                    <div fxFlex="25" fxFlexAlign="start">
+                        <mat-form-field class="full-width" appearance="outline">
+                            <mat-label>Pickling In</mat-label>
+                            <input matInput type="time"  step="1" formControlName="pickling_in">
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="25" fxFlexAlign="start">
+                        <mat-form-field class="full-width" appearance="outline">
+                            <mat-label>Pickling Out</mat-label>
+                            <input matInput type="time"  step="1" formControlName="pickling_out">
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="50" fxFlexAlign="start">
+                    </div>
+                </div>
+                <div fxLayout="row" fxFlexFill fxLayoutGap="20px">
+                    <div fxFlex="25" fxFlexAlign="start">
+                        <mat-form-field class="full-width" appearance="outline">
+                            <mat-label>Rinsing In</mat-label>
+                            <input matInput type="time"  step="1" formControlName="rinsing_in">
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="25" fxFlexAlign="start">
+                        <mat-form-field class="full-width" appearance="outline">
+                            <mat-label>Rinsing Out</mat-label>
+                            <input matInput type="time"  step="1" formControlName="rinsing_out">
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="50" fxFlexAlign="start">
+                    </div>
+                </div>
+                <div fxLayout="row" fxFlexFill fxLayoutGap="20px">
+                    <div fxFlex="25" fxFlexAlign="start">
+                        <mat-form-field class="full-width" appearance="outline">
+                            <mat-label>Flux In</mat-label>
+                            <input matInput type="time"  step="1" formControlName="flux_in">
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="25" fxFlexAlign="start">
+                        <mat-form-field class="full-width" appearance="outline">
+                            <mat-label>Flux Out</mat-label>
+                            <input matInput type="time"  step="1" formControlName="flux_out">
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="50" fxFlexAlign="start">
+                    </div>
+                </div>
+                <div fxLayout="row" fxFlexFill fxLayoutGap="20px">
+                    <div fxFlex="25" fxFlexAlign="start">
+                        <mat-form-field class="full-width" appearance="outline">
+                            <mat-label>Preheater In</mat-label>
+                            <input matInput type="time"  step="1" formControlName="preheater_in">
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="25" fxFlexAlign="start">
+                        <mat-form-field class="full-width" appearance="outline">
+                            <mat-label>Preheater Out</mat-label>
+                            <input matInput type="time"  step="1" formControlName="preheater_out">
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="50" fxFlexAlign="start">
+                    </div>
+                </div>
+                <div fxLayout="row" fxFlexFill fxLayoutGap="20px">
+                    <div fxFlex="25" fxFlexAlign="start">
+                        <mat-form-field class="full-width" appearance="outline">
+                            <mat-label>Zincbath In</mat-label>
+                            <input matInput type="time"  step="1" formControlName="zincbath_in">
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="25" fxFlexAlign="start">
+                        <mat-form-field class="full-width" appearance="outline">
+                            <mat-label>Zincbath Out</mat-label>
+                            <input matInput type="time"  step="1" formControlName="zincbath_out">
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="50" fxFlexAlign="start">
+                    </div>
+                </div>
+                <div fxLayout="row" fxFlexFill fxLayoutGap="20px">
+                    <div fxFlex="25" fxFlexAlign="start">
+                        <mat-form-field class="full-width" appearance="outline">
+                            <mat-label>Quenching In</mat-label>
+                            <input matInput type="time"  step="1" formControlName="quenching_in">
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="25" fxFlexAlign="start">
+                        <mat-form-field class="full-width" appearance="outline">
+                            <mat-label>Quenching Out</mat-label>
+                            <input matInput type="time"  step="1" formControlName="quenching_out">
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="50" fxFlexAlign="start">
+                    </div>
+                </div>
+                <div fxLayout="row" fxFlexFill fxLayoutGap="20px">
+                    <div fxFlex="25" fxFlexAlign="start">
+                        <mat-form-field class="full-width" appearance="outline">
+                            <mat-label>Dichromate In</mat-label>
+                            <input matInput type="time"  step="1" formControlName="dichromate_in">
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="25" fxFlexAlign="start">
+                        <mat-form-field class="full-width" appearance="outline">
+                            <mat-label>Dichromate Out</mat-label>
+                            <input matInput type="time"  step="1" formControlName="dichromate_out">
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="50" fxFlexAlign="start">
+                    </div>
+                </div>
+                <div fxLayout="row" fxFlexFill fxLayoutGap="20px">
+                    <div fxFlex="25" fxFlexAlign="start">
+                        <mat-form-field class="full-width" appearance="outline">
+                            <mat-label>Filing In</mat-label>
+                            <input matInput type="time"  step="1" formControlName="filing_in">
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="25" fxFlexAlign="start">
+                        <mat-form-field class="full-width" appearance="outline">
+                            <mat-label>Filing Out</mat-label>
+                            <input matInput type="time"  step="1" formControlName="filing_out">
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="50" fxFlexAlign="start">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <mat-dialog-actions align="end">
+            <button mat-raised-button color="primary" type="submit">Save</button>
+            <button mat-button mat-dialog-close>Cancel</button>
+        </mat-dialog-actions>
+    </form>
+</div>

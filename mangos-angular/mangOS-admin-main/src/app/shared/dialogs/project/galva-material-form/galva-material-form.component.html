@@ -1,0 +1,105 @@
+<div class="GalvaFormDiv">
+    <h2>Add material</h2>
+    <form [formGroup]="galvaMaterialForm" novalidate class="profile" (ngSubmit)="addGalva()">
+        <div class="materialForm">
+            <div fxLayout="row" fxFlexFill fxLayoutGap="20px">
+                <div fxFlex="25" fxFlexAlign="start" class="hide">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Project</mat-label>
+                        <mat-select name="project" formControlName="project">
+                            <mat-option *ngFor="let project of projectList" [value]="project.id">
+                                {{project.title}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="galvaMaterialForm.controls['project'].hasError('required')">
+                            Project is <strong>required</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div fxFlex="25" fxFlexAlign="start" class="drop-dn">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Section</mat-label>
+                        <mat-select name="section" formControlName="section">
+                            <mat-option *ngFor="let section of sectionList" [value]="section.id">
+                                {{section.title}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="galvaMaterialForm.controls['section'].hasError('required')">
+                            Section is <strong>required</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div fxFlex="25" fxFlexAlign="start">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Name</mat-label>
+                        <input matInput formControlName="name">
+                        <mat-error *ngIf="galvaMaterialForm.controls['name'].hasError('required')">
+                            Name is <strong>required</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div fxFlex="25" fxFlexAlign="start">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Material Type</mat-label>
+                        <input matInput formControlName="material_type">
+                        <mat-error *ngIf="galvaMaterialForm.controls['material_type'].hasError('required')">
+                            Material type is <strong>required</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div fxFlex="25" fxFlexAlign="start">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Min Coating required</mat-label>
+                        <input type='number' matInput placeholder="min coating required"
+                            formControlName="min_coating_required">
+                        <mat-error *ngIf="galvaMaterialForm.controls['min_coating_required'].hasError('required')">
+                            Min Coating is <strong>required</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div fxLayout="row" fxFlexFill fxLayoutGap="20px">
+                <div fxFlex="25" fxFlexAlign="start">
+                    <mat-form-field appearance="outline">
+                        <mat-label>length</mat-label>
+                        <input type='number' matInput placeholder="length" formControlName="length">
+                        <mat-error *ngIf="galvaMaterialForm.controls['length'].hasError('required')">
+                            length is <strong>required</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div fxFlex="25" fxFlexAlign="start">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Width</mat-label>
+                        <input type='number' matInput placeholder="width" formControlName="width">
+                        <mat-error *ngIf="galvaMaterialForm.controls['width'].hasError('required')">
+                            Width is <strong>required</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div fxFlex="25" fxFlexAlign="start">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Thickness</mat-label>
+                        <input type='number' matInput placeholder="thickness" formControlName="thickness">
+                        <mat-error *ngIf="galvaMaterialForm.controls['thickness'].hasError('required')">
+                            Thickness is <strong>required</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div fxFlex="25" fxFlexAlign="start">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Weight</mat-label>
+                        <input type='number' matInput placeholder="weight" formControlName="weight">
+                        <mat-error *ngIf="galvaMaterialForm.controls['weight'].hasError('required')">
+                            Weight is <strong>required</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <mat-dialog-actions align="end">
+                <button mat-raised-button color="primary" type="submit">Save</button>
+                <button mat-raised-button mat-dialog-close color="warn">Cancel</button>
+            </mat-dialog-actions>
+        </div>
+    </form>
+</div>

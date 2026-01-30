@@ -1,0 +1,28 @@
+.documentDetailContainer{
+	margin-top: 20px;padding: 0 15px;
+	.documentFolderIcn{
+		.mat-icon{
+			font-size: 10rem;
+		}
+	}
+	.ws{overflow: auto !important;}
+	.documentFile{
+	display: flex;	}
+	.documentTopMenu{
+		margin-bottom: 20px;
+	}
+	.subFolderDiv{
+		.mat-card{
+			cursor: pointer;
+		}	
+	}
+	.full-width-table {
+	    width: 100%;
+	}
+	.documentsList{
+		margin-top: 20px;
+	}
+	.folder-card{
+		margin: 0 15px 15px 0;
+	}
+}

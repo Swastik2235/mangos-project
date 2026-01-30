@@ -1,0 +1,94 @@
+<div class="job-container" >
+	<ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "large" color = "#fff" type = "pacman" [fullScreen] = "true"><p style="color: white" > Loading... </p></ngx-spinner>
+	<!-- <button mat-raised-button color="primary" (click)="addJob()" >Add </button> -->
+	<div class="JobHeader">
+		<div fxLayout="row" fxFlexFill>
+			<!-- <div fxFlex="10" fxFlexAlign="start">
+				<a [routerLink]="['/project/', projectID, 'job-card', 'add' ]" *ngIf='addJobPermission'>
+					<button mat-raised-button color="primary">Add</button>
+				</a>
+			</div> -->
+			<div fxFlex="25" fxFlexAlign="start">
+				<div class="projectFilter">
+					<mat-form-field appearance="outline">
+						<mat-label>Projects</mat-label>
+						<mat-select [formControl]="sproject" (selectionChange)="projectBom($event.value)">
+						  <mat-option *ngFor="let project of projectList" [value]="project.slug">
+							{{project.title}}
+						  </mat-option>
+						</mat-select>
+					</mat-form-field>
+				</div>
+			</div>
+			<div fxFlex="50" fxFlexAlign="start">
+				<div class="bomFilter">
+					<mat-form-field appearance="outline">
+					  <mat-label>Search</mat-label>
+					  <input matInput (keyup)="applyFilter($any($event.target).value)" placeholder="Filter Invites..." #input>
+					</mat-form-field>
+				</div>
+			</div>
+			<div fxFlex="25" fxFlexAlign="center">
+				<div class="bomFilter">
+					<button mat-raised-button color="primary" (click)="JobListView()">Job Invoice</button>
+					
+				</div>
+			</div>
+			<!-- <div fxFlex="13" fxFlexAlign="start">
+				<button mat-raised-button color="primary" (click)="importBomFile()">Import BOM</button>
+			</div> -->
+			
+		</div>
+		<!-- <mat-grid-list cols="3">importBomFile
+			<mat-grid-tile class="bomFilter">
+				<mat-form-field appearance="outline">
+					<mat-label>Favorite food</mat-label>
+					<mat-select >
+					  <mat-option>tata</mat-option>
+					  <mat-option>adani</mat-option>
+					</mat-select>
+				</mat-form-field>
+		  	</mat-grid-tile>
+			<mat-grid-tile class="bomFilter">
+				<mat-form-field appearance="standard">
+				  <mat-label>Filter</mat-label>
+				  <input matInput (keyup)="applyFilter($any($event.target).value)" placeholder="Filter Invites..." #input>
+				</mat-form-field>
+			</mat-grid-tile>
+		  	<mat-grid-tile class="inviteNewAdd">
+		  	</mat-grid-tile>
+		</mat-grid-list> -->
+	</div>
+	<div class='mat-elevation-z8'>
+		<table mat-table [dataSource]="dataSource"  matSort>
+			<ng-container matColumnDef="project">
+				<th mat-header-cell *matHeaderCellDef  mat-sort-header>Project</th>
+				<td mat-cell *matCellDef="let element"> {{element.project_detail.title}} </td>
+			</ng-container>
+			<!-- Name Column -->
+			<ng-container matColumnDef="lot">
+				<th mat-header-cell *matHeaderCellDef  mat-sort-header> Lot </th>
+				<td mat-cell *matCellDef="let element"> {{element.lot}} </td>
+			</ng-container>
+			<!-- description Column -->
+			<ng-container matColumnDef="release_date">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header> Release Date </th>
+				<td mat-cell *matCellDef="let element"> {{element.release}} </td>
+			</ng-container>			
+			<!-- Action Column -->
+			<ng-container matColumnDef="action">
+				<th mat-header-cell *matHeaderCellDef> Action </th>
+				<td mat-cell *matCellDef="let element; let i = index"> 
+					<button color="primary" mat-icon-button (click)="viewJobCard(element)" ><mat-icon>visibility</mat-icon></button>
+					<button color="primary" mat-icon-button [routerLink]="['/project/', element.project_detail.title, 'job-card', 'edit',element.id ]" ><mat-icon>edit</mat-icon></button>
+					<button mat-icon-button color="warn" (click)="deleteDialog(i)"  size="medium"><mat-icon>delete</mat-icon></button>
+				</td>
+			</ng-container>
+			<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+			<tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>			
+		</table>		
+		<mat-paginator [pageSize]="50" [pageSizeOptions]="[50, 100, 200,500,1000]"></mat-paginator>
+	</div>	
+</div>
+
+
