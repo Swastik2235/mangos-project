@@ -47,7 +47,6 @@ import InventoryStockDetails from './pages/Admin/InventoryStockDetails';
 import JobCart from './pages/Admin/JobCart';
 import InputTable from './components/features/InputTable';
 import Project from './pages/Admin/Project';
-import ZohoCRMWrapper from './components/organisms/ZohoCRMWrapper';
 
 import Login from './components/organisms/login/login';
 // import ProtectedRoute from './components/organisms/ProtectedRoute';
@@ -81,7 +80,7 @@ function MainContent() {
   const location = useLocation(); // Now inside Router context
 
   // Define paths where the header should not be displayed
-  const noHeaderRoutes = ["/machine", "/employee","/machineMaintenance","/machineMaterial","/inventoryCategory","/maintenancerecordid","/maintenancematerialid","/inventoryitemid","/login","/regester","/forgetPassword","/newPassword","/services", "/machines","/operation", "/inventoryItemMaster", "/inventoryStockDetails", "/jobCart", "/project", "/createProject", "/input-table", "/new-project-file", "/new-project-file2", "/zoho-oauth-callback"];
+  const noHeaderRoutes = ["/machine", "/employee","/machineMaintenance","/machineMaterial","/inventoryCategory","/maintenancerecordid","/maintenancematerialid","/inventoryitemid","/login","/regester","/forgetPassword","/newPassword","/services", "/machines","/operation", "/inventoryItemMaster", "/inventoryStockDetails", "/jobCart", "/project", "/createProject", "/input-table", "/new-project-file", "/new-project-file2"];
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -177,8 +176,6 @@ const isRegester = location.pathname === "/regester";
             <Route path="/input-table" element={<InputTable />} />
             <Route path="/new-project-file" element={<NewProjectFile />} />
             <Route path="/new-project-file2" element={<NewProjectFile2 />} />
-            <Route path="/zoho-crm" element={<ZohoCRMWrapper />} />
-            <Route path="/zoho-oauth-callback" element={<ZohoCRMWrapper />} />
 
 
 

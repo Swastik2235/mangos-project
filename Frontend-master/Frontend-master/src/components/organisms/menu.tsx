@@ -34,7 +34,7 @@ import {
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom'; // React Router for navigation
 import logo from '../../assets/logo.png';
-import { Build, ExpandLess, ExpandMore, Inventory, Person ,Construction,Engineering,Store,Storage, Business } from '@mui/icons-material';
+import { Build, ExpandLess, ExpandMore, Inventory, Person ,Construction,Engineering,Store,Storage } from '@mui/icons-material';
 import GroupIcon from '@mui/icons-material/Group';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import LayersIcon from '@mui/icons-material/Layers';
@@ -78,7 +78,6 @@ interface MenuProps {
 export const menuItems = [
   { text: 'MIS Dashboard', icon: <Home />, path: '/mis-dashboard', title: "MIS Dashboard" },
   { text: 'AIS Dashboard', icon: <Home />, path: '/', title: "Dashboard" },
-  { text: 'Zoho CRM', icon: <Business />, path: '/zoho-crm', title: "Zoho CRM" },
   {
     text: "Masters",
     icon: <Storage />,
