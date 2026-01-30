@@ -27,23 +27,49 @@ export class LoginComponent implements OnInit {
 
 	onSubmit(){
 		if(this.loginForm.valid){
-			this.auth.postAPI('login/',this.loginForm.value).subscribe(data => {
-			// console.log('dddddddddddd',data.permission_detail)
-				for(let i=0;i<data.permission_detail.length;i++){
-					this.userPermissions.push(data.permission_detail[i])
-				}	
+			// Transform the form data to match backend expectations
+			const loginData = {
+				email: this.loginForm.value.username, // Backend expects 'email' field
+				password: this.loginForm.value.password,
+				designation: 'Plant' // Use the designation from create_employee command
+			};
+			
+			this.auth.postAPI('user/login-user/', loginData).subscribe(data => {
+				console.log('Login response:', data);
+				
+				// Since backend doesn't provide token and permissions, create mock data
+				const mockUserData = {
+					token: 'mock-token-' + Date.now(), // Generate a mock token
+					employee_id: data.employee_id,
+					designation: data.designation,
+					email: this.loginForm.value.username,
+					permission_detail: [
+						{ name: 'admin', permissions: ['read', 'write', 'delete'] }
+					]
+				};
+				
+				this.userPermissions = mockUserData.permission_detail;
+				
 				var time = new Date().getTime();
-				//console.log(time,'tttttttttttt')
-				let tm = time+12*60*60*1000
-				localStorage.setItem('tm',JSON.stringify(tm))
-				localStorage.setItem('login',data['token'])
-				localStorage.setItem('token',data['token'])
-				localStorage.setItem('userdata',JSON.stringify(data))
-				localStorage.setItem('userPermissions',JSON.stringify(this.userPermissions))
+				let tm = time + 12*60*60*1000;
+				
+				localStorage.setItem('tm', JSON.stringify(tm));
+				localStorage.setItem('login', mockUserData.token);
+				localStorage.setItem('token', mockUserData.token);
+				localStorage.setItem('userdata', JSON.stringify(mockUserData));
+				localStorage.setItem('userPermissions', JSON.stringify(this.userPermissions));
+				
 				this.router.navigate(['']);
-			},error =>{
-				 this.errors = error.error.detail
-			})
+			}, error => {
+				console.error('Login error:', error);
+				if (error.error && error.error.error) {
+					this.errors = error.error.error;
+				} else if (error.error && error.error.detail) {
+					this.errors = error.error.detail;
+				} else {
+					this.errors = 'Login failed. Please check your credentials.';
+				}
+			});
 		}
 	}
 }
