@@ -1,6 +1,18 @@
 <div class="login-container">
-	<mat-grid-list cols="1" rowHeight="2:1" >
-		<mat-grid-tile   colspan='1' >
+	<mat-grid-list cols="2" rowHeight="1:1" >
+		<!-- Left side - Image -->
+		<mat-grid-tile colspan='1' class="image-section">
+			<div class="login-image">
+				<img src="assets/images/user.jpg" alt="MangOS Login" />
+				<div class="image-overlay">
+					<h2>Welcome to MangOS</h2>
+					<p>Your Complete Business Management Solution</p>
+				</div>
+			</div>
+		</mat-grid-tile>
+		
+		<!-- Right side - Login Form -->
+		<mat-grid-tile colspan='1' class="form-section">
 			<form [formGroup]="loginForm" novalidate (ngSubmit)="onSubmit()" class='login-card' >
 				<mat-card >
 					<mat-card-title>

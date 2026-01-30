@@ -1,37 +1,145 @@
 .login-container{
-	mat-card{
-		background-color: #ededed;
+	height: 100vh;
+	
+	mat-grid-list {
+		height: 100%;
 	}
+	
+	// Image section styling
+	.image-section {
+		background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+		position: relative;
+		
+		.login-image {
+			width: 100%;
+			height: 100%;
+			position: relative;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			
+			img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+				opacity: 0.8;
+			}
+			
+			.image-overlay {
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				text-align: center;
+				color: white;
+				z-index: 2;
+				
+				h2 {
+					font-size: 2.5rem;
+					margin-bottom: 1rem;
+					font-weight: 300;
+					text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+				}
+				
+				p {
+					font-size: 1.2rem;
+					opacity: 0.9;
+					text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+				}
+			}
+		}
+	}
+	
+	// Form section styling
+	.form-section {
+		background-color: #f5f5f5;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	
+	mat-card{
+		background-color: #ffffff;
+		box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+		border-radius: 12px;
+	}
+	
 	strong{font-weight: 500;}
+	
 	.login-card{
-		width:30%;
-		text-align:left;
+		width: 80%;
+		max-width: 400px;
+		text-align: left;
+		
 		mat-form-field {
 			width: 100%;
 			font-size: medium;
-			//margin-top: 10px;
+			margin-bottom: 1rem;
 		}
+		
 		mat-card-actions{
+			padding: 1.5rem;
+			
 			button{
-				//float: left;
-				margin-left: 2%;
-				margin-bottom: 5%;
+				width: 100%;
+				margin-bottom: 1rem;
+				padding: 0.75rem;
+				font-size: 1rem;
 			}
+			
 			a.f-pwd{
-				margin-left: 2%;
+				display: block;
+				text-align: center;
+				margin-bottom: 1rem;
 				text-decoration: none;
-				color: rgb(80, 78, 78);
+				color: #666;
+				
+				&:hover {
+					color: #3f51b5;
+				}
 			}
-			// a:hover{
-				// color: red;
-			// }
+			
+			div {
+				text-align: center;
+				font-size: 0.9rem;
+				color: #666;
+			}
+		}
 	}
-	}
+	
 	mat-card-title{ 
 		mat-error{
-			font-size: medium
+			font-size: medium;
+			margin-bottom: 1rem;
 		}
 	}
-	.signup{cursor: pointer;}
-	.signup:hover{color: #3f51b5;}
+	
+	.signup{
+		cursor: pointer;
+		color: #3f51b5;
+		text-decoration: none;
+		
+		&:hover{
+			text-decoration: underline;
+		}
+	}
+	
+	// Responsive design
+	@media (max-width: 768px) {
+		mat-grid-list {
+			mat-grid-tile {
+				&.image-section {
+					display: none;
+				}
+				
+				&.form-section {
+					grid-column: span 2;
+				}
+			}
+		}
+		
+		.login-card {
+			width: 90%;
+		}
+	}
 }
