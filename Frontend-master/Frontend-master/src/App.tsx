@@ -81,7 +81,7 @@ function MainContent() {
   const location = useLocation(); // Now inside Router context
 
   // Define paths where the header should not be displayed
-  const noHeaderRoutes = ["/machine", "/employee","/machineMaintenance","/machineMaterial","/inventoryCategory","/maintenancerecordid","/maintenancematerialid","/inventoryitemid","/login","/regester","/forgetPassword","/newPassword","/services", "/machines","/operation", "/inventoryItemMaster", "/inventoryStockDetails", "/jobCart", "/project", "/createProject", "/input-table", "/new-project-file", "/new-project-file2"];
+  const noHeaderRoutes = ["/machine", "/employee","/machineMaintenance","/machineMaterial","/inventoryCategory","/maintenancerecordid","/maintenancematerialid","/inventoryitemid","/login","/regester","/forgetPassword","/newPassword","/services", "/machines","/operation", "/inventoryItemMaster", "/inventoryStockDetails", "/jobCart", "/project", "/createProject", "/input-table", "/new-project-file", "/new-project-file2", "/zoho-oauth-callback"];
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -182,6 +182,7 @@ const isRegester = location.pathname === "/regester";
                 <ZohoCRM />
               </ProtectedRoute>
             } />
+            <Route path="/zoho-oauth-callback" element={<ZohoCRM />} />
 
 
 
