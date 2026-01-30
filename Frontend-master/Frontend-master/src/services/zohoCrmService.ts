@@ -49,7 +49,7 @@ class ZohoCrmService {
   private config: ZohoAuthConfig = {
     clientId: import.meta.env.VITE_ZOHO_CLIENT_ID || '',
     clientSecret: import.meta.env.VITE_ZOHO_CLIENT_SECRET || '',
-    redirectUri: `${window.location.origin}/zoho-oauth-callback`,
+    redirectUri: `${window.location.origin}/zoho-crm`,
     scope: 'ZohoCRM.modules.ALL,ZohoCRM.settings.ALL'
   };
 

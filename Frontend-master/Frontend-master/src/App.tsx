@@ -47,6 +47,7 @@ import InventoryStockDetails from './pages/Admin/InventoryStockDetails';
 import JobCart from './pages/Admin/JobCart';
 import InputTable from './components/features/InputTable';
 import Project from './pages/Admin/Project';
+import ZohoCRMWrapper from './components/organisms/ZohoCRMWrapper';
 import ZohoCRM from './pages/Admin/ZohoCRM';
 
 import Login from './components/organisms/login/login';
@@ -177,11 +178,7 @@ const isRegester = location.pathname === "/regester";
             <Route path="/input-table" element={<InputTable />} />
             <Route path="/new-project-file" element={<NewProjectFile />} />
             <Route path="/new-project-file2" element={<NewProjectFile2 />} />
-            <Route path="/zoho-crm" element={
-              <ProtectedRoute>
-                <ZohoCRM />
-              </ProtectedRoute>
-            } />
+            <Route path="/zoho-crm" element={<ZohoCRMWrapper />} />
             <Route path="/zoho-oauth-callback" element={<ZohoCRM />} />
 
 

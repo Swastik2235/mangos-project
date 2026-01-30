@@ -96,14 +96,6 @@ const ZohoCRM: React.FC = () => {
     if (code) {
       exchangeCodeForToken(code);
     }
-    
-    // If we're on the callback route and have processed the code, redirect to main route
-    if (window.location.pathname === '/zoho-oauth-callback' && (code || error)) {
-      // Clean up URL and redirect to main Zoho CRM page
-      setTimeout(() => {
-        window.location.href = '/zoho-crm';
-      }, 1000);
-    }
   };
 
   const connectToZoho = () => {
@@ -127,8 +119,8 @@ const ZohoCRM: React.FC = () => {
         }
         setIsAuthenticated(true);
         await loadAllData();
-        // Clean up URL
-        window.history.replaceState({}, document.title, window.location.pathname);
+        // Clean up URL after successful authentication
+        window.history.replaceState({}, document.title, '/zoho-crm');
       } else {
         throw new Error('No access token received');
       }
