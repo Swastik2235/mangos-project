@@ -64,17 +64,27 @@ class ZohoCrmService {
   }
 
   // Exchange authorization code for access token via backend
-  async exchangeCodeForToken(_code: string): Promise<any> {
+  async exchangeCodeForToken(code: string): Promise<any> {
     try {
-      // For now, we'll simulate the token exchange since we need a backend endpoint
-      // In production, this should call your backend API
+      const response = await fetch('/api/zoho/token-exchange/', {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ code })
+      });
       
-      // Simulate successful token exchange
-      const simulatedToken = `zoho_token_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      if (!response.ok) {
+        throw new Error(`Token exchange failed: ${response.statusText}`);
+      }
       
-      this.setAccessToken(simulatedToken);
+      const tokenData = await response.json();
+      this.setAccessToken(tokenData.access_token);
+      if (tokenData.refresh_token) {
+        this.setRefreshToken(tokenData.refresh_token);
+      }
       
-      return { access_token: simulatedToken, token_type: 'Bearer' };
+      return tokenData;
       
     } catch (error) {
       console.error('Error in token exchange:', error);
@@ -207,29 +217,22 @@ class ZohoCrmService {
 
   // Contacts API
   async getContacts(_page: number = 1, _perPage: number = 200): Promise<any> {
-    // For now, return simulated data since we need proper backend integration
-    // In production, this would make real API calls to Zoho
+    const token = this.getAccessToken();
+    if (!token) {
+      throw new Error('No access token available');
+    }
     
-    return {
-      data: [
-        {
-          id: '1',
-          First_Name: 'John',
-          Last_Name: 'Doe',
-          Email: 'john@example.com',
-          Phone: '+1234567890',
-          Account_Name: 'Tech Corp'
-        },
-        {
-          id: '2',
-          First_Name: 'Jane',
-          Last_Name: 'Smith',
-          Email: 'jane@example.com',
-          Phone: '+1234567891',
-          Account_Name: 'Design Studio'
-        }
-      ]
-    };
+    const response = await fetch('/api/zoho/contacts/', {
+      headers: { 
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Failed to fetch contacts: ${response.statusText}`);
+    }
+    
+    return response.json();
   }
 
   async createContact(contact: ZohoContact): Promise<any> {
@@ -254,19 +257,22 @@ class ZohoCrmService {
 
   // Leads API
   async getLeads(_page: number = 1, _perPage: number = 200): Promise<any> {
-    return {
-      data: [
-        {
-          id: '1',
-          First_Name: 'Sarah',
-          Last_Name: 'Wilson',
-          Email: 'sarah@prospect.com',
-          Lead_Status: 'Qualified',
-          Lead_Source: 'Website',
-          Annual_Revenue: '50000'
-        }
-      ]
-    };
+    const token = this.getAccessToken();
+    if (!token) {
+      throw new Error('No access token available');
+    }
+    
+    const response = await fetch('/api/zoho/leads/', {
+      headers: { 
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Failed to fetch leads: ${response.statusText}`);
+    }
+    
+    return response.json();
   }
 
   async createLead(lead: ZohoLead): Promise<any> {
@@ -291,18 +297,22 @@ class ZohoCrmService {
 
   // Deals API
   async getDeals(_page: number = 1, _perPage: number = 200): Promise<any> {
-    return {
-      data: [
-        {
-          id: '1',
-          Deal_Name: 'Enterprise Software License',
-          Amount: 25000,
-          Stage: 'Negotiation',
-          Probability: 75,
-          Closing_Date: '2025-02-15'
-        }
-      ]
-    };
+    const token = this.getAccessToken();
+    if (!token) {
+      throw new Error('No access token available');
+    }
+    
+    const response = await fetch('/api/zoho/deals/', {
+      headers: { 
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Failed to fetch deals: ${response.statusText}`);
+    }
+    
+    return response.json();
   }
 
   async createDeal(deal: ZohoDeal): Promise<any> {

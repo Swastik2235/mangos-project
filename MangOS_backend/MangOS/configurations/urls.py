@@ -66,6 +66,7 @@ urlpatterns = [
     path('file/',include('setup.urls.file_urls')),
     path('sales/',include('setup.urls.sale_urls')),
     path('user/',include('setup.urls.user_urls')),
+    path('api/zoho/', include('setup.urls.zoho_crm_urls')),
 
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
