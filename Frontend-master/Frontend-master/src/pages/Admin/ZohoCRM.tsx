@@ -88,14 +88,30 @@ const ZohoCRM: React.FC = () => {
 
   const loadCRMData = async () => {
     setIsDataLoading(true);
+    console.log('🔄 Starting CRM data load...');
     
     try {
       // Load real data from Zoho CRM
+      console.log('📞 Making API calls to Zoho CRM...');
       const [contactsResponse, leadsResponse, dealsResponse] = await Promise.all([
-        zohoCrmService.getContacts().catch(() => ({ data: [] })),
-        zohoCrmService.getLeads().catch(() => ({ data: [] })),
-        zohoCrmService.getDeals().catch(() => ({ data: [] }))
+        zohoCrmService.getContacts().catch((error) => {
+          console.error('❌ Contacts API error:', error);
+          return { data: [] };
+        }),
+        zohoCrmService.getLeads().catch((error) => {
+          console.error('❌ Leads API error:', error);
+          return { data: [] };
+        }),
+        zohoCrmService.getDeals().catch((error) => {
+          console.error('❌ Deals API error:', error);
+          return { data: [] };
+        })
       ]);
+
+      console.log('📊 Raw API responses:');
+      console.log('Contacts response:', contactsResponse);
+      console.log('Leads response:', leadsResponse);
+      console.log('Deals response:', dealsResponse);
 
       // Transform Zoho data to our format
       const transformedContacts = contactsResponse.data?.map((contact: any) => ({
@@ -124,6 +140,11 @@ const ZohoCRM: React.FC = () => {
         closeDate: deal.Closing_Date || ''
       })) || [];
 
+      console.log('✅ Transformed data:');
+      console.log(`Contacts: ${transformedContacts.length} records`);
+      console.log(`Leads: ${transformedLeads.length} records`);
+      console.log(`Deals: ${transformedDeals.length} records`);
+
       setContacts(transformedContacts);
       setLeads(transformedLeads);
       setDeals(transformedDeals);
@@ -136,8 +157,8 @@ const ZohoCRM: React.FC = () => {
       }
 
     } catch (error) {
-      console.error('Error loading CRM data:', error);
-      setError('Unable to connect to Zoho CRM. Please check your connection and try syncing again.');
+      console.error('💥 Error loading CRM data:', error);
+      setError(`Unable to connect to Zoho CRM: ${error.message}. Please check your connection and try syncing again.`);
       // Clear data on error
       setContacts([]);
       setLeads([]);
@@ -700,6 +721,25 @@ const ZohoCRM: React.FC = () => {
             {error}
           </Alert>
         )}
+
+        {/* Debug Panel - Remove in production */}
+        <Card sx={{ mb: 3, bgcolor: 'info.light', color: 'info.contrastText' }}>
+          <CardContent>
+            <Typography variant="h6" gutterBottom>🔧 Debug Information</Typography>
+            <Typography variant="body2" sx={{ mb: 1 }}>
+              <strong>Access Token:</strong> {zohoCrmService.getAccessToken() ? 'Present ✅' : 'Missing ❌'}
+            </Typography>
+            <Typography variant="body2" sx={{ mb: 1 }}>
+              <strong>API URL:</strong> https://www.zohoapis.in/crm/v2
+            </Typography>
+            <Typography variant="body2" sx={{ mb: 1 }}>
+              <strong>Client ID:</strong> {import.meta.env.VITE_ZOHO_CLIENT_ID?.substring(0, 20)}...
+            </Typography>
+            <Typography variant="body2">
+              <strong>Instructions:</strong> Open browser console (F12) and click "Sync Data" to see detailed API logs
+            </Typography>
+          </CardContent>
+        </Card>
 
         {/* Navigation Tabs */}
         <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>

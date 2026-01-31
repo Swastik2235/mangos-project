@@ -152,6 +152,9 @@ class ZohoCrmService {
       throw new Error('No access token available');
     }
 
+    console.log('Making API request to:', `${this.apiUrl}${endpoint}`);
+    console.log('Using token:', token.substring(0, 20) + '...');
+
     const response = await fetch(`${this.apiUrl}${endpoint}`, {
       ...options,
       headers: {
@@ -161,17 +164,26 @@ class ZohoCrmService {
       },
     });
 
+    console.log('API Response status:', response.status);
+    console.log('API Response headers:', Object.fromEntries(response.headers.entries()));
+
     if (!response.ok) {
+      const errorText = await response.text();
+      console.error('API Error Response:', errorText);
+      
       if (response.status === 401) {
+        console.log('Token expired, attempting refresh...');
         // Token might be expired, try to refresh
         await this.refreshAccessToken();
         // Retry the request
         return this.makeApiRequest(endpoint, options);
       }
-      throw new Error(`API request failed: ${response.statusText}`);
+      throw new Error(`API request failed: ${response.status} ${response.statusText} - ${errorText}`);
     }
 
-    return response.json();
+    const responseData = await response.json();
+    console.log('API Response data:', responseData);
+    return responseData;
   }
 
   // Refresh access token
