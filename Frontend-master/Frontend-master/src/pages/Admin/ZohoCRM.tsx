@@ -255,21 +255,82 @@ const ZohoCRM: React.FC = () => {
     setOpenDialog(true);
   };
 
-  const handleSave = () => {
-    // Simulate saving data - replace with actual Zoho API calls
-    console.log('Saving:', dialogType, formData);
-    setOpenDialog(false);
-    setFormData({});
-    // Refresh data
-    loadCRMData();
+  const handleSave = async () => {
+    if (!formData.name && !formData.firstName) {
+      setError('Name is required');
+      return;
+    }
+
+    try {
+      setIsDataLoading(true);
+      
+      if (isDemoMode) {
+        // Demo mode - just simulate saving
+        console.log('Demo mode - saving:', dialogType, formData);
+        setOpenDialog(false);
+        setFormData({});
+        loadCRMData();
+        return;
+      }
+
+      // Real mode - save to Zoho CRM
+      let response;
+      
+      if (dialogType === 'contact') {
+        const nameParts = formData.name?.split(' ') || ['', ''];
+        const contactData = {
+          First_Name: nameParts[0] || formData.firstName || '',
+          Last_Name: nameParts.slice(1).join(' ') || formData.lastName || '',
+          Email: formData.email || '',
+          Phone: formData.phone || '',
+          Account_Name: formData.company || ''
+        };
+        response = await zohoCrmService.createContact(contactData);
+      } 
+      else if (dialogType === 'lead') {
+        const nameParts = formData.name?.split(' ') || ['', ''];
+        const leadData = {
+          First_Name: nameParts[0] || formData.firstName || '',
+          Last_Name: nameParts.slice(1).join(' ') || formData.lastName || '',
+          Email: formData.email || '',
+          Lead_Status: formData.status || 'New',
+          Lead_Source: formData.source || 'Website',
+          Annual_Revenue: formData.value?.replace(/[$,]/g, '') || '0'
+        };
+        response = await zohoCrmService.createLead(leadData);
+      } 
+      else if (dialogType === 'deal') {
+        const dealData = {
+          Deal_Name: formData.name || '',
+          Amount: parseFloat(formData.amount?.replace(/[$,]/g, '') || '0'),
+          Stage: formData.stage || 'Qualification',
+          Probability: parseInt(formData.probability?.replace('%', '') || '0'),
+          Closing_Date: formData.closeDate || ''
+        };
+        response = await zohoCrmService.createDeal(dealData);
+      }
+
+      if (response?.data?.[0]?.status === 'success') {
+        setError('');
+        setOpenDialog(false);
+        setFormData({});
+        // Refresh data to show the new record
+        await loadCRMData();
+      } else {
+        setError(`Failed to create ${dialogType}. Please try again.`);
+      }
+
+    } catch (error) {
+      console.error(`Error creating ${dialogType}:`, error);
+      setError(`Error creating ${dialogType}. Please check your connection and try again.`);
+    } finally {
+      setIsDataLoading(false);
+    }
   };
 
   const handleSync = () => {
-    setIsDataLoading(true);
-    // Simulate sync - replace with actual Zoho API sync
-    setTimeout(() => {
-      loadCRMData();
-    }, 2000);
+    setError('');
+    loadCRMData();
   };
 
   const renderDashboard = () => (
@@ -324,6 +385,30 @@ const ZohoCRM: React.FC = () => {
           </CardContent>
         </Card>
       </Grid>
+      
+      {isDemoMode && (
+        <Grid item xs={12}>
+          <Card sx={{ bgcolor: 'warning.light', color: 'warning.contrastText' }}>
+            <CardContent>
+              <Typography variant="h6" gutterBottom>📋 How to Add Real Data</Typography>
+              <Typography variant="body2" sx={{ mb: 2 }}>
+                You're currently in Demo Mode. To add real data to your Zoho CRM:
+              </Typography>
+              <Box sx={{ ml: 2 }}>
+                <Typography variant="body2" sx={{ mb: 1 }}>
+                  <strong>Method 1:</strong> Use the tabs above (Contacts, Leads, Deals) and click "Add" buttons
+                </Typography>
+                <Typography variant="body2" sx={{ mb: 1 }}>
+                  <strong>Method 2:</strong> Go to <a href="https://crm.zoho.in" target="_blank" rel="noopener" style={{ color: 'inherit', textDecoration: 'underline' }}>crm.zoho.in</a> and add data directly
+                </Typography>
+                <Typography variant="body2">
+                  <strong>Then:</strong> Click "Switch to Live" to see your real Zoho CRM data
+                </Typography>
+              </Box>
+            </CardContent>
+          </Card>
+        </Grid>
+      )}
     </Grid>
   );
 
