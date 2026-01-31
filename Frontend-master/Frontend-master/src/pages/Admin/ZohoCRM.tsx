@@ -58,26 +58,6 @@ const ZohoCRM: React.FC = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [dialogType, setDialogType] = useState<'contact' | 'lead' | 'deal'>('contact');
   const [formData, setFormData] = useState<any>({});
-  const [isDemoMode, setIsDemoMode] = useState(false);
-
-  // Sample data for demonstration
-  const sampleContacts = [
-    { id: 1, name: 'John Doe', email: 'john@example.com', phone: '+1234567890', company: 'Tech Corp' },
-    { id: 2, name: 'Jane Smith', email: 'jane@example.com', phone: '+1234567891', company: 'Design Studio' },
-    { id: 3, name: 'Mike Johnson', email: 'mike@example.com', phone: '+1234567892', company: 'Marketing Inc' },
-  ];
-
-  const sampleLeads = [
-    { id: 1, name: 'Sarah Wilson', email: 'sarah@prospect.com', status: 'Qualified', source: 'Website', value: '$5,000' },
-    { id: 2, name: 'Tom Brown', email: 'tom@potential.com', status: 'New', source: 'Referral', value: '$3,000' },
-    { id: 3, name: 'Lisa Davis', email: 'lisa@company.com', status: 'Contacted', source: 'Social Media', value: '$7,500' },
-  ];
-
-  const sampleDeals = [
-    { id: 1, name: 'Enterprise Software License', amount: '$25,000', stage: 'Negotiation', probability: '75%', closeDate: '2025-02-15' },
-    { id: 2, name: 'Marketing Campaign', amount: '$15,000', stage: 'Proposal', probability: '50%', closeDate: '2025-02-28' },
-    { id: 3, name: 'Consulting Services', amount: '$10,000', stage: 'Closed Won', probability: '100%', closeDate: '2025-01-30' },
-  ];
 
   useEffect(() => {
     checkAuthentication();
@@ -93,18 +73,6 @@ const ZohoCRM: React.FC = () => {
   const loadCRMData = async () => {
     setIsDataLoading(true);
     
-    // If demo mode is enabled, show sample data
-    if (isDemoMode) {
-      setTimeout(() => {
-        setContacts(sampleContacts);
-        setLeads(sampleLeads);
-        setDeals(sampleDeals);
-        setIsDataLoading(false);
-        setError('');
-      }, 500);
-      return;
-    }
-
     try {
       // Load real data from Zoho CRM
       const [contactsResponse, leadsResponse, dealsResponse] = await Promise.all([
@@ -143,26 +111,20 @@ const ZohoCRM: React.FC = () => {
       setContacts(transformedContacts);
       setLeads(transformedLeads);
       setDeals(transformedDeals);
+      setError('');
 
-      // If no real data found, show message and switch to demo mode
+      // Show helpful message if no data found
       if (transformedContacts.length === 0 && transformedLeads.length === 0 && transformedDeals.length === 0) {
-        setIsDemoMode(true);
-        setContacts(sampleContacts);
-        setLeads(sampleLeads);
-        setDeals(sampleDeals);
-        setError('No data found in your Zoho CRM. Switched to demo mode. Add some data in Zoho CRM and try syncing again.');
-      } else {
-        setError('');
+        setError('No data found in your Zoho CRM. Add some contacts, leads, or deals in Zoho CRM or use the "Add" buttons above.');
       }
 
     } catch (error) {
       console.error('Error loading CRM data:', error);
-      // Fallback to demo mode if API fails
-      setIsDemoMode(true);
-      setContacts(sampleContacts);
-      setLeads(sampleLeads);
-      setDeals(sampleDeals);
-      setError('Unable to connect to Zoho CRM. Switched to demo mode. Please check your connection and try again.');
+      setError('Unable to connect to Zoho CRM. Please check your connection and try syncing again.');
+      // Clear data on error
+      setContacts([]);
+      setLeads([]);
+      setDeals([]);
     }
     setIsDataLoading(false);
   };
@@ -205,10 +167,7 @@ const ZohoCRM: React.FC = () => {
           }
         } catch (tokenError) {
           console.error('Error exchanging token:', tokenError);
-          // Fallback to demo mode
-          zohoCrmService.setAccessToken('demo_token_' + Date.now());
-          setIsAuthenticated(true);
-          setError('Unable to complete OAuth flow. Running in demo mode with sample data.');
+          setError('Unable to complete OAuth flow. Please try connecting again.');
         }
         setIsLoading(false);
       }
@@ -264,16 +223,7 @@ const ZohoCRM: React.FC = () => {
     try {
       setIsDataLoading(true);
       
-      if (isDemoMode) {
-        // Demo mode - just simulate saving
-        console.log('Demo mode - saving:', dialogType, formData);
-        setOpenDialog(false);
-        setFormData({});
-        loadCRMData();
-        return;
-      }
-
-      // Real mode - save to Zoho CRM
+      // Save to Zoho CRM
       let response;
       
       if (dialogType === 'contact') {
@@ -385,31 +335,8 @@ const ZohoCRM: React.FC = () => {
           </CardContent>
         </Card>
       </Grid>
-      
-      {isDemoMode && (
-        <Grid item xs={12}>
-          <Card sx={{ bgcolor: 'warning.light', color: 'warning.contrastText' }}>
-            <CardContent>
-              <Typography variant="h6" gutterBottom>📋 How to Add Real Data</Typography>
-              <Typography variant="body2" sx={{ mb: 2 }}>
-                You're currently in Demo Mode. To add real data to your Zoho CRM:
-              </Typography>
-              <Box sx={{ ml: 2 }}>
-                <Typography variant="body2" sx={{ mb: 1 }}>
-                  <strong>Method 1:</strong> Use the tabs above (Contacts, Leads, Deals) and click "Add" buttons
-                </Typography>
-                <Typography variant="body2" sx={{ mb: 1 }}>
-                  <strong>Method 2:</strong> Go to <a href="https://crm.zoho.in" target="_blank" rel="noopener" style={{ color: 'inherit', textDecoration: 'underline' }}>crm.zoho.in</a> and add data directly
-                </Typography>
-                <Typography variant="body2">
-                  <strong>Then:</strong> Click "Switch to Live" to see your real Zoho CRM data
-                </Typography>
-              </Box>
-            </CardContent>
-          </Card>
-        </Grid>
-      )}
     </Grid>
+  );
   );
 
   const renderContacts = () => (
@@ -728,21 +655,6 @@ const ZohoCRM: React.FC = () => {
           </Box>
           
           <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-            <Chip 
-              label={isDemoMode ? "Demo Mode" : "Live Data"} 
-              color={isDemoMode ? "warning" : "success"}
-              size="small"
-            />
-            <Button
-              variant="outlined"
-              size="small"
-              onClick={() => {
-                setIsDemoMode(!isDemoMode);
-                loadCRMData();
-              }}
-            >
-              {isDemoMode ? 'Switch to Live' : 'Switch to Demo'}
-            </Button>
             <Button
               variant="outlined"
               startIcon={<Sync />}
