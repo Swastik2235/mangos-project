@@ -64,7 +64,7 @@ class ZohoCrmService {
   }
 
   // Exchange authorization code for access token via backend
-  async exchangeCodeForToken(code: string): Promise<any> {
+  async exchangeCodeForToken(_code: string): Promise<any> {
     try {
       // For now, we'll simulate the token exchange since we need a backend endpoint
       // In production, this should call your backend API
