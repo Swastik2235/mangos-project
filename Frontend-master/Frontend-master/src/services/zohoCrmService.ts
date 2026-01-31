@@ -211,7 +211,7 @@ class ZohoCrmService {
   }
 
   // Contacts API
-  async getContacts(page: number = 1, perPage: number = 200): Promise<any> {
+  async getContacts(_page: number = 1, _perPage: number = 200): Promise<any> {
     console.log('📞 Getting contacts from Zoho CRM...');
     
     // For now, return simulated data since we need proper backend integration
@@ -261,7 +261,7 @@ class ZohoCrmService {
   }
 
   // Leads API
-  async getLeads(page: number = 1, perPage: number = 200): Promise<any> {
+  async getLeads(_page: number = 1, _perPage: number = 200): Promise<any> {
     console.log('📞 Getting leads from Zoho CRM...');
     console.log('⚠️ Using simulated lead data - real API integration needed');
     
@@ -301,7 +301,7 @@ class ZohoCrmService {
   }
 
   // Deals API
-  async getDeals(page: number = 1, perPage: number = 200): Promise<any> {
+  async getDeals(_page: number = 1, _perPage: number = 200): Promise<any> {
     console.log('📞 Getting deals from Zoho CRM...');
     console.log('⚠️ Using simulated deal data - real API integration needed');
     
