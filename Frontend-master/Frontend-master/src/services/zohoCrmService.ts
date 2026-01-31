@@ -409,20 +409,29 @@ class ZohoCrmService {
     if (this.useBackend) {
       try {
         console.log('Fetching leads from backend...');
+        
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 10000);
+        
         const response = await fetch(`${this.backendUrl}/api/zoho/leads/`, {
           headers: { 
             'Authorization': `Bearer ${token}`
           },
-          timeout: 10000
+          signal: controller.signal
         });
         
+        clearTimeout(timeoutId);
+        
         if (response.ok) {
-          const data = await response.json();
-          console.log('Backend leads fetch successful');
-          return data;
-        } else {
-          throw new Error(`Backend responded with ${response.status}`);
+          const contentType = response.headers.get('content-type');
+          if (contentType && contentType.includes('application/json')) {
+            const data = await response.json();
+            console.log('Backend leads fetch successful');
+            return data;
+          }
         }
+        throw new Error(`Backend responded with ${response.status}`);
+        
       } catch (backendError) {
         console.warn('Backend leads fetch failed, using fallback:', backendError);
         this.useBackend = false;
@@ -486,20 +495,29 @@ class ZohoCrmService {
     if (this.useBackend) {
       try {
         console.log('Fetching deals from backend...');
+        
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 10000);
+        
         const response = await fetch(`${this.backendUrl}/api/zoho/deals/`, {
           headers: { 
             'Authorization': `Bearer ${token}`
           },
-          timeout: 10000
+          signal: controller.signal
         });
         
+        clearTimeout(timeoutId);
+        
         if (response.ok) {
-          const data = await response.json();
-          console.log('Backend deals fetch successful');
-          return data;
-        } else {
-          throw new Error(`Backend responded with ${response.status}`);
+          const contentType = response.headers.get('content-type');
+          if (contentType && contentType.includes('application/json')) {
+            const data = await response.json();
+            console.log('Backend deals fetch successful');
+            return data;
+          }
         }
+        throw new Error(`Backend responded with ${response.status}`);
+        
       } catch (backendError) {
         console.warn('Backend deals fetch failed, using fallback:', backendError);
         this.useBackend = false;
