@@ -355,24 +355,39 @@ class ZohoCrmService {
   // Check backend connectivity
   async checkBackendConnectivity(): Promise<boolean> {
     try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+      console.log('Checking backend connectivity...');
       
-      const response = await fetch(`${this.backendUrl}/api/zoho/contacts/`, {
-        method: 'GET',
-        signal: controller.signal
-      });
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 8000); // 8 second timeout
+      
+      // Try health check endpoint first
+      let response;
+      try {
+        response = await fetch(`${this.backendUrl}/health/`, {
+          method: 'GET',
+          signal: controller.signal
+        });
+      } catch (healthError) {
+        // If health check fails, try Zoho endpoint
+        response = await fetch(`${this.backendUrl}/api/zoho/contacts/`, {
+          method: 'GET',
+          signal: controller.signal
+        });
+      }
       
       clearTimeout(timeoutId);
       
-      // Even 401 means the endpoint exists
-      if (response.status === 401 || response.status === 200) {
+      // Backend is available if we get any response (even 401/404 means server is running)
+      if (response.status === 200 || response.status === 401 || response.status === 404) {
+        console.log(`Backend is available (status: ${response.status})`);
         this.useBackend = true;
         return true;
       }
       
+      console.warn(`Backend returned unexpected status: ${response.status}`);
       this.useBackend = false;
       return false;
+      
     } catch (error) {
       console.warn('Backend connectivity check failed:', error);
       this.useBackend = false;
