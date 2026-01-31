@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backend Connectivity Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .test-result { margin: 10px 0; padding: 10px; border-radius: 5px; }
+        .success { background-color: #d4edda; border: 1px solid #c3e6cb; color: #155724; }
+        .error { background-color: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; }
+        .info { background-color: #d1ecf1; border: 1px solid #bee5eb; color: #0c5460; }
+        button { background-color: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin: 5px; }
+        button:hover { background-color: #0056b3; }
+        pre { background-color: #f8f9fa; padding: 10px; border-radius: 5px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>🔧 Backend Connectivity Test</h1>
+    <p>This tool helps diagnose connectivity issues with your MangOS backend.</p>
+    
+    <div id="results"></div>
+    
+    <button onclick="testBackendHealth()">Test Backend Health</button>
+    <button onclick="testZohoEndpoints()">Test Zoho Endpoints</button>
+    <button onclick="testCORS()">Test CORS</button>
+    <button onclick="clearResults()">Clear Results</button>
+
+    <script>
+        const BACKEND_URL = 'https://mangos-backend.onrender.com';
+        const resultsDiv = document.getElementById('results');
+
+        function addResult(message, type = 'info') {
+            const div = document.createElement('div');
+            div.className = `test-result ${type}`;
+            div.innerHTML = message;
+            resultsDiv.appendChild(div);
+        }
+
+        function clearResults() {
+            resultsDiv.innerHTML = '';
+        }
+
+        async function testBackendHealth() {
+            addResult('🔍 Testing backend health...', 'info');
+            
+            try {
+                // Test basic connectivity
+                const response = await fetch(`${BACKEND_URL}/admin/`, { 
+                    method: 'GET',
+                    mode: 'no-cors' // Bypass CORS for basic connectivity test
+                });
+                
+                addResult('✅ Backend is reachable (basic connectivity test passed)', 'success');
+                
+                // Test if it's actually Django
+                try {
+                    const apiResponse = await fetch(`${BACKEND_URL}/api/zoho/contacts/`, {
+                        method: 'GET'
+                    });
+                    
+                    if (apiResponse.status === 401) {
+                        addResult('✅ Zoho endpoints are deployed (401 Unauthorized is expected without token)', 'success');
+                    } else if (apiResponse.status === 404) {
+                        addResult('❌ Zoho endpoints not found (404) - endpoints may not be deployed', 'error');
+                    } else {
+                        addResult(`ℹ️ Zoho endpoint responded with status: ${apiResponse.status}`, 'info');
+                    }
+                } catch (apiError) {
+                    addResult(`❌ Zoho API test failed: ${apiError.message}`, 'error');
+                }
+                
+            } catch (error) {
+                addResult(`❌ Backend is not reachable: ${error.message}`, 'error');
+                addResult('💡 This could mean the backend is down or the URL is incorrect', 'info');
+            }
+        }
+
+        async function testZohoEndpoints() {
+            addResult('🔍 Testing Zoho endpoints...', 'info');
+            
+            const endpoints = [
+                '/api/zoho/contacts/',
+                '/api/zoho/leads/',
+                '/api/zoho/deals/',
+                '/api/zoho/token-exchange/'
+            ];
+            
+            for (const endpoint of endpoints) {
+                try {
+                    const response = await fetch(`${BACKEND_URL}${endpoint}`, {
+                        method: endpoint.includes('token-exchange') ? 'POST' : 'GET',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: endpoint.includes('token-exchange') ? JSON.stringify({}) : undefined
+                    });
+                    
+                    if (response.status === 401) {
+                        addResult(`✅ ${endpoint} - Working (401 Unauthorized expected)`, 'success');
+                    } else if (response.status === 400 && endpoint.includes('token-exchange')) {
+                        addResult(`✅ ${endpoint} - Working (400 Bad Request expected for empty body)`, 'success');
+                    } else if (response.status === 404) {
+                        addResult(`❌ ${endpoint} - Not Found (404)`, 'error');
+                    } else {
+                        addResult(`ℹ️ ${endpoint} - Status: ${response.status}`, 'info');
+                    }
+                    
+                } catch (error) {
+                    addResult(`❌ ${endpoint} - Error: ${error.message}`, 'error');
+                }
+            }
+        }
+
+        async function testCORS() {
+            addResult('🔍 Testing CORS configuration...', 'info');
+            
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/zoho/contacts/`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Origin': window.location.origin
+                    }
+                });
+                
+                addResult('✅ CORS is properly configured (no CORS error thrown)', 'success');
+                addResult(`ℹ️ Response status: ${response.status}`, 'info');
+                
+                // Check CORS headers
+                const corsHeaders = {
+                    'Access-Control-Allow-Origin': response.headers.get('Access-Control-Allow-Origin'),
+                    'Access-Control-Allow-Methods': response.headers.get('Access-Control-Allow-Methods'),
+                    'Access-Control-Allow-Headers': response.headers.get('Access-Control-Allow-Headers')
+                };
+                
+                addResult(`ℹ️ CORS Headers: <pre>${JSON.stringify(corsHeaders, null, 2)}</pre>`, 'info');
+                
+            } catch (error) {
+                if (error.message.includes('CORS')) {
+                    addResult(`❌ CORS Error: ${error.message}`, 'error');
+                    addResult('💡 The backend CORS configuration may need to be updated', 'info');
+                } else {
+                    addResult(`❌ Network Error: ${error.message}`, 'error');
+                }
+            }
+        }
+
+        // Auto-run basic test on page load
+        window.onload = function() {
+            addResult('🚀 Backend Connectivity Tester Loaded', 'info');
+            addResult(`📍 Testing backend at: ${BACKEND_URL}`, 'info');
+        };
+    </script>
+</body>
+</html>
