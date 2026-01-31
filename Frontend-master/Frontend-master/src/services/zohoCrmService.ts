@@ -66,25 +66,44 @@ class ZohoCrmService {
   // Exchange authorization code for access token
   async exchangeCodeForToken(code: string): Promise<any> {
     try {
+      console.log('🔄 Exchanging authorization code for token...');
+      console.log('Code:', code.substring(0, 20) + '...');
+      console.log('Client ID:', this.config.clientId.substring(0, 20) + '...');
+      console.log('Redirect URI:', this.config.redirectUri);
+      
+      const tokenRequestBody = new URLSearchParams({
+        grant_type: 'authorization_code',
+        client_id: this.config.clientId,
+        client_secret: this.config.clientSecret,
+        redirect_uri: this.config.redirectUri,
+        code: code
+      });
+
+      console.log('Token request body:', tokenRequestBody.toString());
+
       const response = await fetch(`${this.authUrl}/token`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
-        body: new URLSearchParams({
-          grant_type: 'authorization_code',
-          client_id: this.config.clientId,
-          client_secret: this.config.clientSecret,
-          redirect_uri: this.config.redirectUri,
-          code: code
-        })
+        body: tokenRequestBody
       });
 
+      console.log('Token response status:', response.status);
+      console.log('Token response headers:', Object.fromEntries(response.headers.entries()));
+
+      const responseText = await response.text();
+      console.log('Token response body:', responseText);
+
       if (!response.ok) {
-        throw new Error('Failed to exchange code for token');
+        throw new Error(`Failed to exchange code for token: ${response.status} ${response.statusText} - ${responseText}`);
       }
 
-      const tokenData = await response.json();
+      const tokenData = JSON.parse(responseText);
+      console.log('✅ Token exchange successful!');
+      console.log('Access token received:', !!tokenData.access_token);
+      console.log('Refresh token received:', !!tokenData.refresh_token);
+
       this.setAccessToken(tokenData.access_token);
       if (tokenData.refresh_token) {
         this.setRefreshToken(tokenData.refresh_token);
@@ -92,7 +111,7 @@ class ZohoCrmService {
       
       return tokenData;
     } catch (error) {
-      console.error('Error exchanging code for token:', error);
+      console.error('❌ Error exchanging code for token:', error);
       throw error;
     }
   }

@@ -184,7 +184,11 @@ const ZohoCRM: React.FC = () => {
       const code = urlParams.get('code');
       const error = urlParams.get('error');
       
-      console.log('OAuth callback - code:', !!code, 'error:', error, 'path:', window.location.pathname);
+      console.log('🔄 OAuth callback processing...');
+      console.log('Path:', window.location.pathname);
+      console.log('Code present:', !!code);
+      console.log('Error:', error);
+      console.log('Full URL:', window.location.href);
       
       if (error) {
         setError(`OAuth error: ${error}`);
@@ -194,25 +198,31 @@ const ZohoCRM: React.FC = () => {
       if (code) {
         setIsLoading(true);
         try {
+          console.log('🔑 Attempting token exchange...');
           // Exchange code for real access token
-          await zohoCrmService.exchangeCodeForToken(code);
+          const tokenData = await zohoCrmService.exchangeCodeForToken(code);
+          console.log('✅ Token exchange successful, setting authenticated state');
           setIsAuthenticated(true);
           
           // Clean up URL
           if (window.location.pathname === '/zoho-oauth-callback') {
+            console.log('🔄 Redirecting from callback to main route');
             window.location.href = '/zoho-crm';
           } else {
+            console.log('🧹 Cleaning up URL parameters');
             window.history.replaceState({}, document.title, '/zoho-crm');
           }
         } catch (tokenError) {
-          console.error('Error exchanging token:', tokenError);
-          setError('Unable to complete OAuth flow. Please try connecting again.');
+          console.error('❌ Token exchange failed:', tokenError);
+          const errorMessage = tokenError instanceof Error ? tokenError.message : 'Unknown error';
+          setError(`Unable to complete OAuth flow: ${errorMessage}. Please try connecting again.`);
         }
         setIsLoading(false);
       }
     } catch (error) {
-      console.error('Error handling OAuth callback:', error);
-      setError('Error processing OAuth callback');
+      console.error('❌ Error handling OAuth callback:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      setError(`Error processing OAuth callback: ${errorMessage}`);
       setIsLoading(false);
     }
   };
