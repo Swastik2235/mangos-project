@@ -8,6 +8,8 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
+
+# Updated: 2025-01-31 - Zoho CRM Integration Active
 """
 
 from pathlib import Path
