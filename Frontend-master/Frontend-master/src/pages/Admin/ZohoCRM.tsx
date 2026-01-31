@@ -158,7 +158,8 @@ const ZohoCRM: React.FC = () => {
 
     } catch (error) {
       console.error('💥 Error loading CRM data:', error);
-      setError(`Unable to connect to Zoho CRM: ${error.message}. Please check your connection and try syncing again.`);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      setError(`Unable to connect to Zoho CRM: ${errorMessage}. Please check your connection and try syncing again.`);
       // Clear data on error
       setContacts([]);
       setLeads([]);
