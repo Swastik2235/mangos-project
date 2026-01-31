@@ -1,4 +1,4 @@
-// Simple Zoho CRM Service - Step by step implementation
+// Enhanced Zoho CRM Service with full API support
 export interface ZohoAuthConfig {
   clientId: string;
   clientSecret: string;
@@ -6,8 +6,37 @@ export interface ZohoAuthConfig {
   scope: string;
 }
 
+export interface ZohoContact {
+  id?: string;
+  First_Name: string;
+  Last_Name: string;
+  Email: string;
+  Phone?: string;
+  Account_Name?: string;
+}
+
+export interface ZohoLead {
+  id?: string;
+  First_Name: string;
+  Last_Name: string;
+  Email: string;
+  Lead_Status: string;
+  Lead_Source: string;
+  Annual_Revenue?: string;
+}
+
+export interface ZohoDeal {
+  id?: string;
+  Deal_Name: string;
+  Amount: number;
+  Stage: string;
+  Probability?: number;
+  Closing_Date: string;
+}
+
 class ZohoCrmService {
   private authUrl = 'https://accounts.zoho.in/oauth/v2';
+  private apiUrl = 'https://www.zohoapis.in/crm/v2';
   
   private config: ZohoAuthConfig = {
     clientId: import.meta.env.VITE_ZOHO_CLIENT_ID || '',
@@ -16,7 +45,7 @@ class ZohoCrmService {
     scope: 'ZohoCRM.modules.ALL,ZohoCRM.settings.ALL'
   };
 
-  // Simple OAuth URL generation
+  // OAuth URL generation
   getAuthorizationUrl(): string {
     try {
       const params = new URLSearchParams({
@@ -34,7 +63,41 @@ class ZohoCrmService {
     }
   }
 
-  // Simple token management
+  // Exchange authorization code for access token
+  async exchangeCodeForToken(code: string): Promise<any> {
+    try {
+      const response = await fetch(`${this.authUrl}/token`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+          grant_type: 'authorization_code',
+          client_id: this.config.clientId,
+          client_secret: this.config.clientSecret,
+          redirect_uri: this.config.redirectUri,
+          code: code
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to exchange code for token');
+      }
+
+      const tokenData = await response.json();
+      this.setAccessToken(tokenData.access_token);
+      if (tokenData.refresh_token) {
+        this.setRefreshToken(tokenData.refresh_token);
+      }
+      
+      return tokenData;
+    } catch (error) {
+      console.error('Error exchanging code for token:', error);
+      throw error;
+    }
+  }
+
+  // Token management
   setAccessToken(token: string): void {
     try {
       localStorage.setItem('zoho_access_token', token);
@@ -52,6 +115,23 @@ class ZohoCrmService {
     }
   }
 
+  setRefreshToken(token: string): void {
+    try {
+      localStorage.setItem('zoho_refresh_token', token);
+    } catch (error) {
+      console.error('Error storing refresh token:', error);
+    }
+  }
+
+  getRefreshToken(): string | null {
+    try {
+      return localStorage.getItem('zoho_refresh_token');
+    } catch (error) {
+      console.error('Error retrieving refresh token:', error);
+      return null;
+    }
+  }
+
   isAuthenticated(): boolean {
     return !!this.getAccessToken();
   }
@@ -63,6 +143,153 @@ class ZohoCrmService {
     } catch (error) {
       console.error('Error during logout:', error);
     }
+  }
+
+  // API request helper
+  private async makeApiRequest(endpoint: string, options: RequestInit = {}): Promise<any> {
+    const token = this.getAccessToken();
+    if (!token) {
+      throw new Error('No access token available');
+    }
+
+    const response = await fetch(`${this.apiUrl}${endpoint}`, {
+      ...options,
+      headers: {
+        'Authorization': `Zoho-oauthtoken ${token}`,
+        'Content-Type': 'application/json',
+        ...options.headers,
+      },
+    });
+
+    if (!response.ok) {
+      if (response.status === 401) {
+        // Token might be expired, try to refresh
+        await this.refreshAccessToken();
+        // Retry the request
+        return this.makeApiRequest(endpoint, options);
+      }
+      throw new Error(`API request failed: ${response.statusText}`);
+    }
+
+    return response.json();
+  }
+
+  // Refresh access token
+  private async refreshAccessToken(): Promise<void> {
+    const refreshToken = this.getRefreshToken();
+    if (!refreshToken) {
+      throw new Error('No refresh token available');
+    }
+
+    try {
+      const response = await fetch(`${this.authUrl}/token`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+          grant_type: 'refresh_token',
+          client_id: this.config.clientId,
+          client_secret: this.config.clientSecret,
+          refresh_token: refreshToken
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to refresh token');
+      }
+
+      const tokenData = await response.json();
+      this.setAccessToken(tokenData.access_token);
+    } catch (error) {
+      console.error('Error refreshing token:', error);
+      this.logout(); // Clear invalid tokens
+      throw error;
+    }
+  }
+
+  // Contacts API
+  async getContacts(page: number = 1, perPage: number = 200): Promise<any> {
+    return this.makeApiRequest(`/Contacts?page=${page}&per_page=${perPage}`);
+  }
+
+  async createContact(contact: ZohoContact): Promise<any> {
+    return this.makeApiRequest('/Contacts', {
+      method: 'POST',
+      body: JSON.stringify({ data: [contact] })
+    });
+  }
+
+  async updateContact(id: string, contact: Partial<ZohoContact>): Promise<any> {
+    return this.makeApiRequest(`/Contacts/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify({ data: [contact] })
+    });
+  }
+
+  async deleteContact(id: string): Promise<any> {
+    return this.makeApiRequest(`/Contacts/${id}`, {
+      method: 'DELETE'
+    });
+  }
+
+  // Leads API
+  async getLeads(page: number = 1, perPage: number = 200): Promise<any> {
+    return this.makeApiRequest(`/Leads?page=${page}&per_page=${perPage}`);
+  }
+
+  async createLead(lead: ZohoLead): Promise<any> {
+    return this.makeApiRequest('/Leads', {
+      method: 'POST',
+      body: JSON.stringify({ data: [lead] })
+    });
+  }
+
+  async updateLead(id: string, lead: Partial<ZohoLead>): Promise<any> {
+    return this.makeApiRequest(`/Leads/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify({ data: [lead] })
+    });
+  }
+
+  async deleteLead(id: string): Promise<any> {
+    return this.makeApiRequest(`/Leads/${id}`, {
+      method: 'DELETE'
+    });
+  }
+
+  // Deals API
+  async getDeals(page: number = 1, perPage: number = 200): Promise<any> {
+    return this.makeApiRequest(`/Deals?page=${page}&per_page=${perPage}`);
+  }
+
+  async createDeal(deal: ZohoDeal): Promise<any> {
+    return this.makeApiRequest('/Deals', {
+      method: 'POST',
+      body: JSON.stringify({ data: [deal] })
+    });
+  }
+
+  async updateDeal(id: string, deal: Partial<ZohoDeal>): Promise<any> {
+    return this.makeApiRequest(`/Deals/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify({ data: [deal] })
+    });
+  }
+
+  async deleteDeal(id: string): Promise<any> {
+    return this.makeApiRequest(`/Deals/${id}`, {
+      method: 'DELETE'
+    });
+  }
+
+  // Utility methods
+  async searchRecords(module: string, criteria: string): Promise<any> {
+    return this.makeApiRequest(`/${module}/search?criteria=${encodeURIComponent(criteria)}`);
+  }
+
+  async getModuleFields(module: string): Promise<any> {
+    return this.makeApiRequest(`/settings/fields?module=${module}`);
   }
 }
 
