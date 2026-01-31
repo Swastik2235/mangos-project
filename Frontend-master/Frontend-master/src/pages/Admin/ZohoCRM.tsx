@@ -58,6 +58,7 @@ const ZohoCRM: React.FC = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [dialogType, setDialogType] = useState<'contact' | 'lead' | 'deal'>('contact');
   const [formData, setFormData] = useState<any>({});
+  const [isDemoMode, setIsDemoMode] = useState(false);
 
   // Sample data for demonstration
   const sampleContacts = [
@@ -89,15 +90,81 @@ const ZohoCRM: React.FC = () => {
     }
   }, [isAuthenticated]);
 
-  const loadCRMData = () => {
+  const loadCRMData = async () => {
     setIsDataLoading(true);
-    // Simulate API calls - replace with actual Zoho API calls
-    setTimeout(() => {
+    
+    // If demo mode is enabled, show sample data
+    if (isDemoMode) {
+      setTimeout(() => {
+        setContacts(sampleContacts);
+        setLeads(sampleLeads);
+        setDeals(sampleDeals);
+        setIsDataLoading(false);
+        setError('');
+      }, 500);
+      return;
+    }
+
+    try {
+      // Load real data from Zoho CRM
+      const [contactsResponse, leadsResponse, dealsResponse] = await Promise.all([
+        zohoCrmService.getContacts().catch(() => ({ data: [] })),
+        zohoCrmService.getLeads().catch(() => ({ data: [] })),
+        zohoCrmService.getDeals().catch(() => ({ data: [] }))
+      ]);
+
+      // Transform Zoho data to our format
+      const transformedContacts = contactsResponse.data?.map((contact: any) => ({
+        id: contact.id,
+        name: `${contact.First_Name || ''} ${contact.Last_Name || ''}`.trim(),
+        email: contact.Email || '',
+        phone: contact.Phone || '',
+        company: contact.Account_Name?.name || contact.Account_Name || ''
+      })) || [];
+
+      const transformedLeads = leadsResponse.data?.map((lead: any) => ({
+        id: lead.id,
+        name: `${lead.First_Name || ''} ${lead.Last_Name || ''}`.trim(),
+        email: lead.Email || '',
+        status: lead.Lead_Status || 'New',
+        source: lead.Lead_Source || 'Unknown',
+        value: lead.Annual_Revenue ? `$${lead.Annual_Revenue}` : '$0'
+      })) || [];
+
+      const transformedDeals = dealsResponse.data?.map((deal: any) => ({
+        id: deal.id,
+        name: deal.Deal_Name || '',
+        amount: deal.Amount ? `$${deal.Amount.toLocaleString()}` : '$0',
+        stage: deal.Stage || 'Qualification',
+        probability: deal.Probability ? `${deal.Probability}%` : '0%',
+        closeDate: deal.Closing_Date || ''
+      })) || [];
+
+      setContacts(transformedContacts);
+      setLeads(transformedLeads);
+      setDeals(transformedDeals);
+
+      // If no real data found, show message and switch to demo mode
+      if (transformedContacts.length === 0 && transformedLeads.length === 0 && transformedDeals.length === 0) {
+        setIsDemoMode(true);
+        setContacts(sampleContacts);
+        setLeads(sampleLeads);
+        setDeals(sampleDeals);
+        setError('No data found in your Zoho CRM. Switched to demo mode. Add some data in Zoho CRM and try syncing again.');
+      } else {
+        setError('');
+      }
+
+    } catch (error) {
+      console.error('Error loading CRM data:', error);
+      // Fallback to demo mode if API fails
+      setIsDemoMode(true);
       setContacts(sampleContacts);
       setLeads(sampleLeads);
       setDeals(sampleDeals);
-      setIsDataLoading(false);
-    }, 1000);
+      setError('Unable to connect to Zoho CRM. Switched to demo mode. Please check your connection and try again.');
+    }
+    setIsDataLoading(false);
   };
 
   const checkAuthentication = () => {
@@ -110,7 +177,7 @@ const ZohoCRM: React.FC = () => {
     }
   };
 
-  const handleOAuthCallback = () => {
+  const handleOAuthCallback = async () => {
     try {
       const urlParams = new URLSearchParams(window.location.search);
       const code = urlParams.get('code');
@@ -124,26 +191,31 @@ const ZohoCRM: React.FC = () => {
       }
       
       if (code) {
-        // For now, just simulate success
         setIsLoading(true);
-        setTimeout(() => {
-          // Simulate token storage
-          zohoCrmService.setAccessToken('demo_token_' + Date.now());
+        try {
+          // Exchange code for real access token
+          await zohoCrmService.exchangeCodeForToken(code);
           setIsAuthenticated(true);
-          setIsLoading(false);
           
-          // If we're on the callback route, redirect to main route
+          // Clean up URL
           if (window.location.pathname === '/zoho-oauth-callback') {
             window.location.href = '/zoho-crm';
           } else {
-            // Clean up URL if we're already on main route
             window.history.replaceState({}, document.title, '/zoho-crm');
           }
-        }, 2000);
+        } catch (tokenError) {
+          console.error('Error exchanging token:', tokenError);
+          // Fallback to demo mode
+          zohoCrmService.setAccessToken('demo_token_' + Date.now());
+          setIsAuthenticated(true);
+          setError('Unable to complete OAuth flow. Running in demo mode with sample data.');
+        }
+        setIsLoading(false);
       }
     } catch (error) {
       console.error('Error handling OAuth callback:', error);
       setError('Error processing OAuth callback');
+      setIsLoading(false);
     }
   };
 
@@ -570,7 +642,22 @@ const ZohoCRM: React.FC = () => {
             </Typography>
           </Box>
           
-          <Box sx={{ display: 'flex', gap: 2 }}>
+          <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+            <Chip 
+              label={isDemoMode ? "Demo Mode" : "Live Data"} 
+              color={isDemoMode ? "warning" : "success"}
+              size="small"
+            />
+            <Button
+              variant="outlined"
+              size="small"
+              onClick={() => {
+                setIsDemoMode(!isDemoMode);
+                loadCRMData();
+              }}
+            >
+              {isDemoMode ? 'Switch to Live' : 'Switch to Demo'}
+            </Button>
             <Button
               variant="outlined"
               startIcon={<Sync />}
