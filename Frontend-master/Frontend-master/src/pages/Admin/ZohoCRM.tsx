@@ -200,7 +200,7 @@ const ZohoCRM: React.FC = () => {
         try {
           console.log('🔑 Attempting token exchange...');
           // Exchange code for real access token
-          const tokenData = await zohoCrmService.exchangeCodeForToken(code);
+          await zohoCrmService.exchangeCodeForToken(code);
           console.log('✅ Token exchange successful, setting authenticated state');
           setIsAuthenticated(true);
           
