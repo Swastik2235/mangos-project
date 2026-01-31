@@ -66,23 +66,18 @@ class ZohoCrmService {
   // Exchange authorization code for access token via backend
   async exchangeCodeForToken(code: string): Promise<any> {
     try {
-      console.log('🔄 Exchanging authorization code for token via backend...');
-      console.log('Code:', code.substring(0, 20) + '...');
-      
       // For now, we'll simulate the token exchange since we need a backend endpoint
       // In production, this should call your backend API
-      console.log('⚠️ Using temporary token simulation - backend integration needed');
       
       // Simulate successful token exchange
       const simulatedToken = `zoho_token_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
       
-      console.log('✅ Simulated token generated');
       this.setAccessToken(simulatedToken);
       
       return { access_token: simulatedToken, token_type: 'Bearer' };
       
     } catch (error) {
-      console.error('❌ Error in token exchange:', error);
+      console.error('Error in token exchange:', error);
       throw error;
     }
   }
@@ -212,11 +207,8 @@ class ZohoCrmService {
 
   // Contacts API
   async getContacts(_page: number = 1, _perPage: number = 200): Promise<any> {
-    console.log('📞 Getting contacts from Zoho CRM...');
-    
     // For now, return simulated data since we need proper backend integration
     // In production, this would make real API calls to Zoho
-    console.log('⚠️ Using simulated contact data - real API integration needed');
     
     return {
       data: [
@@ -262,9 +254,6 @@ class ZohoCrmService {
 
   // Leads API
   async getLeads(_page: number = 1, _perPage: number = 200): Promise<any> {
-    console.log('📞 Getting leads from Zoho CRM...');
-    console.log('⚠️ Using simulated lead data - real API integration needed');
-    
     return {
       data: [
         {
@@ -302,9 +291,6 @@ class ZohoCrmService {
 
   // Deals API
   async getDeals(_page: number = 1, _perPage: number = 200): Promise<any> {
-    console.log('📞 Getting deals from Zoho CRM...');
-    console.log('⚠️ Using simulated deal data - real API integration needed');
-    
     return {
       data: [
         {

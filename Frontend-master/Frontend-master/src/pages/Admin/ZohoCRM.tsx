@@ -88,30 +88,23 @@ const ZohoCRM: React.FC = () => {
 
   const loadCRMData = async () => {
     setIsDataLoading(true);
-    console.log('🔄 Starting CRM data load...');
     
     try {
       // Load real data from Zoho CRM
-      console.log('📞 Making API calls to Zoho CRM...');
       const [contactsResponse, leadsResponse, dealsResponse] = await Promise.all([
         zohoCrmService.getContacts().catch((error) => {
-          console.error('❌ Contacts API error:', error);
+          console.error('Contacts API error:', error);
           return { data: [] };
         }),
         zohoCrmService.getLeads().catch((error) => {
-          console.error('❌ Leads API error:', error);
+          console.error('Leads API error:', error);
           return { data: [] };
         }),
         zohoCrmService.getDeals().catch((error) => {
-          console.error('❌ Deals API error:', error);
+          console.error('Deals API error:', error);
           return { data: [] };
         })
       ]);
-
-      console.log('📊 Raw API responses:');
-      console.log('Contacts response:', contactsResponse);
-      console.log('Leads response:', leadsResponse);
-      console.log('Deals response:', dealsResponse);
 
       // Transform Zoho data to our format
       const transformedContacts = contactsResponse.data?.map((contact: any) => ({
@@ -140,11 +133,6 @@ const ZohoCRM: React.FC = () => {
         closeDate: deal.Closing_Date || ''
       })) || [];
 
-      console.log('✅ Transformed data:');
-      console.log(`Contacts: ${transformedContacts.length} records`);
-      console.log(`Leads: ${transformedLeads.length} records`);
-      console.log(`Deals: ${transformedDeals.length} records`);
-
       setContacts(transformedContacts);
       setLeads(transformedLeads);
       setDeals(transformedDeals);
@@ -157,7 +145,7 @@ const ZohoCRM: React.FC = () => {
       }
 
     } catch (error) {
-      console.error('💥 Error loading CRM data:', error);
+      console.error('Error loading CRM data:', error);
       const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
       setError(`Unable to connect to Zoho CRM: ${errorMessage}. Please check your connection and try syncing again.`);
       // Clear data on error
@@ -184,12 +172,6 @@ const ZohoCRM: React.FC = () => {
       const code = urlParams.get('code');
       const error = urlParams.get('error');
       
-      console.log('🔄 OAuth callback processing...');
-      console.log('Path:', window.location.pathname);
-      console.log('Code present:', !!code);
-      console.log('Error:', error);
-      console.log('Full URL:', window.location.href);
-      
       if (error) {
         setError(`OAuth error: ${error}`);
         return;
@@ -198,29 +180,25 @@ const ZohoCRM: React.FC = () => {
       if (code) {
         setIsLoading(true);
         try {
-          console.log('🔑 Attempting token exchange...');
           // Exchange code for real access token
           await zohoCrmService.exchangeCodeForToken(code);
-          console.log('✅ Token exchange successful, setting authenticated state');
           setIsAuthenticated(true);
           
           // Clean up URL
           if (window.location.pathname === '/zoho-oauth-callback') {
-            console.log('🔄 Redirecting from callback to main route');
             window.location.href = '/zoho-crm';
           } else {
-            console.log('🧹 Cleaning up URL parameters');
             window.history.replaceState({}, document.title, '/zoho-crm');
           }
         } catch (tokenError) {
-          console.error('❌ Token exchange failed:', tokenError);
+          console.error('Token exchange failed:', tokenError);
           const errorMessage = tokenError instanceof Error ? tokenError.message : 'Unknown error';
           setError(`Unable to complete OAuth flow: ${errorMessage}. Please try connecting again.`);
         }
         setIsLoading(false);
       }
     } catch (error) {
-      console.error('❌ Error handling OAuth callback:', error);
+      console.error('Error handling OAuth callback:', error);
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       setError(`Error processing OAuth callback: ${errorMessage}`);
       setIsLoading(false);
@@ -732,25 +710,6 @@ const ZohoCRM: React.FC = () => {
             {error}
           </Alert>
         )}
-
-        {/* Debug Panel - Remove in production */}
-        <Card sx={{ mb: 3, bgcolor: 'info.light', color: 'info.contrastText' }}>
-          <CardContent>
-            <Typography variant="h6" gutterBottom>🔧 Debug Information</Typography>
-            <Typography variant="body2" sx={{ mb: 1 }}>
-              <strong>Access Token:</strong> {zohoCrmService.getAccessToken() ? 'Present ✅' : 'Missing ❌'}
-            </Typography>
-            <Typography variant="body2" sx={{ mb: 1 }}>
-              <strong>API URL:</strong> https://www.zohoapis.in/crm/v2
-            </Typography>
-            <Typography variant="body2" sx={{ mb: 1 }}>
-              <strong>Client ID:</strong> {import.meta.env.VITE_ZOHO_CLIENT_ID?.substring(0, 20)}...
-            </Typography>
-            <Typography variant="body2">
-              <strong>Instructions:</strong> Open browser console (F12) and click "Sync Data" to see detailed API logs
-            </Typography>
-          </CardContent>
-        </Card>
 
         {/* Navigation Tabs */}
         <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
