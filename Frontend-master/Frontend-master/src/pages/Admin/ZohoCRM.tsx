@@ -337,7 +337,6 @@ const ZohoCRM: React.FC = () => {
       </Grid>
     </Grid>
   );
-  );
 
   const renderContacts = () => (
     <Box>
