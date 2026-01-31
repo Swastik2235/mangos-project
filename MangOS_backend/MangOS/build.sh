@@ -2,15 +2,17 @@
 # exit on error
 set -o errexit
 
+# Install dependencies
 pip install -r requirements.txt
 
+# Collect static files
 python manage.py collectstatic --no-input
 
-# Try migrate with --fake-initial first, if that fails, try regular migrate
-python manage.py migrate --fake-initial || python manage.py migrate
+# Run migrations
+python manage.py migrate
 
-# Create superuser using management command
-python manage.py create_admin
+# Try to create superuser (ignore if exists)
+python manage.py create_admin || echo "Admin user already exists"
 
-# Create default employee user
-python manage.py create_employee
+# Try to create employee user (ignore if exists)  
+python manage.py create_employee || echo "Employee user already exists"

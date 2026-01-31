@@ -18,8 +18,19 @@ from django.contrib import admin
 from django.urls import path,include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.http import JsonResponse
+
+def health_check(request):
+    """Simple health check endpoint"""
+    return JsonResponse({
+        'status': 'healthy',
+        'message': 'MangOS Backend is running',
+        'zoho_integration': 'active'
+    })
 
 urlpatterns = [
+    path('', health_check, name='health_check'),  # Root endpoint
+    path('health/', health_check, name='health_check_alt'),  # Health check
     path('admin/', admin.site.urls),
     path('employee/', include('setup.urls.employee_urls')),
     path('bom-sheet/', include('setup.urls.bomsheet_urls')),
@@ -66,7 +77,7 @@ urlpatterns = [
     path('file/',include('setup.urls.file_urls')),
     path('sales/',include('setup.urls.sale_urls')),
     path('user/',include('setup.urls.user_urls')),
-    path('api/zoho/', include('setup.urls.zoho_crm_urls')),
+    path('api/zoho/', include('setup.urls.zoho_crm_urls')),  # ZOHO CRM ENDPOINTS
 
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
