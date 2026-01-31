@@ -58,6 +58,7 @@ const ZohoCRM: React.FC = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [dialogType, setDialogType] = useState<'contact' | 'lead' | 'deal'>('contact');
   const [formData, setFormData] = useState<any>({});
+  const [lastSyncTime, setLastSyncTime] = useState<Date | null>(null);
 
   useEffect(() => {
     checkAuthentication();
@@ -69,6 +70,21 @@ const ZohoCRM: React.FC = () => {
       loadCRMData();
     }
   }, [isAuthenticated]);
+
+  // Auto-sync every 30 seconds when authenticated and tab is active
+  useEffect(() => {
+    if (!isAuthenticated) return;
+
+    const autoSync = setInterval(() => {
+      // Only sync if tab is visible and not currently loading
+      if (!document.hidden && !isDataLoading) {
+        console.log('Auto-syncing CRM data...');
+        loadCRMData();
+      }
+    }, 30000); // 30 seconds
+
+    return () => clearInterval(autoSync);
+  }, [isAuthenticated, isDataLoading]);
 
   const loadCRMData = async () => {
     setIsDataLoading(true);
@@ -112,6 +128,7 @@ const ZohoCRM: React.FC = () => {
       setLeads(transformedLeads);
       setDeals(transformedDeals);
       setError('');
+      setLastSyncTime(new Date());
 
       // Show helpful message if no data found
       if (transformedContacts.length === 0 && transformedLeads.length === 0 && transformedDeals.length === 0) {
@@ -651,6 +668,11 @@ const ZohoCRM: React.FC = () => {
             <Typography variant="body1" color="text.secondary">
               Manage your customer relationships seamlessly
             </Typography>
+            {lastSyncTime && (
+              <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+                Last synced: {lastSyncTime.toLocaleTimeString()} • Auto-sync every 30s
+              </Typography>
+            )}
           </Box>
           
           <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
